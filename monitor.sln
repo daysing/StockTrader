@@ -11,13 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockStrategy", "StockStrat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockCommon", "StockCommon\StockCommon.csproj", "{822279CE-076E-46BF-85CF-FA30AD427D46}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{53BCCFB2-9D0F-40B4-8B64-E3EB8C79A4D2}"
-	ProjectSection(SolutionItems) = preProject
-		Local.testsettings = Local.testsettings
-		monitor.vsmdi = monitor.vsmdi
-		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = monitor.vsmdi
