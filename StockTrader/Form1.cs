@@ -64,9 +64,11 @@ namespace StockTrader
                 tsmi.Text = sd.name;
                 tsmi.Tag = sd;
                 tsmi.Click += new EventHandler(AddStrategyToListView);
-                this.miFfjjStrategy.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                tsmi});
-             }
+                if(sd.group ==0)
+                    this.miFfjjStrategy.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { tsmi});
+                else if(sd.group == 1)
+                    this.miGpStrategy.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { tsmi});
+            }
         }
 
         /// <summary>
