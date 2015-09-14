@@ -1,6 +1,5 @@
 ﻿/*
- * This library is part of OpenCms -
- * the Open Source Content Management System
+ * This library is part of Stock Trader System
  *
  * Copyright (c) qiujoe (http://www.github.com/qiujoe)
  *
@@ -29,10 +28,52 @@ using System.Text;
 
 namespace Stock.Market
 {
+    /// <summary>
+    /// 股票实时交易数据
+    /// </summary>
     public class StockData
     {
-        private String code;
+        /// <summary>
+        /// 每价格挂单的数据
+        /// </summary>
+        public class GoodsData
+        {
+            private float price;
+            private int orderAmount;
+        }
 
-        // 成交价, 买一价,及挂单......,卖一价及挂单.......
+        public String Code {get; set;}    // 证券代码
+        private float price;    // 成交价
+        private int volume;     // 成交量
+        private DateTime pushTime;  // 推送时间
+
+        private ICollection<GoodsData> buyList = new List<GoodsData>();
+        private ICollection<GoodsData> sellList = new List<GoodsData>();
+
+        public GoodsData[] BuyList
+        {
+            get
+            {
+                return this.buyList.ToArray<GoodsData>();   
+            }
+        }
+
+        public GoodsData[] SellList
+        {
+            get
+            {
+                return this.sellList.ToArray<GoodsData>();   
+            }
+        }
+
+        public void AddBuyGoodsData(GoodsData data)
+        {
+            this.buyList.Add(data);
+        }
+
+        public void AddSellGoodsData(GoodsData data)
+        {
+            this.sellList.Add(data);
+        }
     }
 }

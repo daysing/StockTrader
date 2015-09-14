@@ -1,6 +1,5 @@
 ﻿/*
- * This library is part of OpenCms -
- * the Open Source Content Management System
+ * This library is part of Stock Trader System
  *
  * Copyright (c) qiujoe (http://www.github.com/qiujoe)
  *
@@ -22,6 +21,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,13 +29,27 @@ using System.Text;
 
 namespace Stock.Common
 {
-    class LogHelper
+    /// <summary>
+    /// 
+    /// </summary>
+    public class LogHelper
     {
+        /// <summary>
+        /// 写LOG
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="message"></param>
         public static void WriteLog(Type t, String message)
         {
             Console.WriteLine(t.ToString() + ": " + message);
         }
 
+        /// <summary>
+        /// 写错误发生时的LOG
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="message"></param>
+        /// <param name="ex"></param>
         public static void WriteErrorLog(Type t, String message, Exception ex)
         {
             Console.WriteLine(t.ToString() + ": " + message);

@@ -1,6 +1,5 @@
 ﻿/*
- * This library is part of OpenCms -
- * the Open Source Content Management System
+ * This library is part of Stock Trader System
  *
  * Copyright (c) qiujoe (http://www.github.com/qiujoe)
  *
@@ -85,10 +84,7 @@ namespace Stock.Strategy
             string[] top5Funds = null;
             String sellA = null;
             String buyA = null;
-            foreach (var item in fundHolders)
-            {
-                top5Funds.Contains(item);
-            }
+           
             
             
             // 计算并保存 隐含收益率，并重新排序分级A，排序结果，去除折价率小于5的品种

@@ -1,6 +1,5 @@
 ﻿/*
- * This library is part of OpenCms -
- * the Open Source Content Management System
+ * This library is part of Stock Trader System
  *
  * Copyright (c) qiujoe (http://www.github.com/qiujoe)
  *
