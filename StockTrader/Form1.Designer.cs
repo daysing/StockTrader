@@ -53,23 +53,11 @@ namespace StockTrader
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("基金组", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("股票组", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("基金组", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("股票组", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
             "轮动策略",
             "本策略从轮动中获取相对收益，战胜单个标的的涨幅"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
-            "150171",
-            "证券A"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
-            "150221",
-            "中航军A"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
-            "150171",
-            "证券A"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem(new string[] {
-            "150221",
-            "中航军A"}, -1);
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -84,17 +72,6 @@ namespace StockTrader
             this.删除策略ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.启用策略ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.暂停策略ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.listView2 = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.listView3 = new System.Windows.Forms.ListView();
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.btnSetup = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
@@ -113,6 +90,7 @@ namespace StockTrader
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.ctxStrategyMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -162,16 +140,16 @@ namespace StockTrader
             this.columnHeader3,
             this.columnHeader4});
             this.listView1.ContextMenuStrip = this.ctxStrategyMenu;
-            listViewGroup1.Header = "基金组";
-            listViewGroup1.Name = "jjz";
-            listViewGroup2.Header = "股票组";
-            listViewGroup2.Name = "gpz";
+            listViewGroup3.Header = "基金组";
+            listViewGroup3.Name = "jjz";
+            listViewGroup4.Header = "股票组";
+            listViewGroup4.Name = "gpz";
             this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2});
-            listViewItem1.Group = listViewGroup2;
+            listViewGroup3,
+            listViewGroup4});
+            listViewItem2.Group = listViewGroup4;
             this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
+            listViewItem2});
             this.listView1.Location = new System.Drawing.Point(22, 17);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(180, 248);
@@ -210,13 +188,13 @@ namespace StockTrader
             // miFfjjStrategy
             // 
             this.miFfjjStrategy.Name = "miFfjjStrategy";
-            this.miFfjjStrategy.Size = new System.Drawing.Size(152, 22);
+            this.miFfjjStrategy.Size = new System.Drawing.Size(148, 22);
             this.miFfjjStrategy.Text = "分级基金策略";
             // 
             // miGpStrategy
             // 
             this.miGpStrategy.Name = "miGpStrategy";
-            this.miGpStrategy.Size = new System.Drawing.Size(152, 22);
+            this.miGpStrategy.Size = new System.Drawing.Size(148, 22);
             this.miGpStrategy.Text = "股票策略";
             // 
             // 删除策略ToolStripMenuItem
@@ -236,101 +214,6 @@ namespace StockTrader
             this.暂停策略ToolStripMenuItem.Name = "暂停策略ToolStripMenuItem";
             this.暂停策略ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.暂停策略ToolStripMenuItem.Text = "暂停策略";
-            // 
-            // listView2
-            // 
-            this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2});
-            this.listView2.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem2,
-            listViewItem3});
-            this.listView2.Location = new System.Drawing.Point(243, 30);
-            this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(392, 73);
-            this.listView2.TabIndex = 5;
-            this.listView2.UseCompatibleStateImageBehavior = false;
-            this.listView2.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "代码";
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "名称";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(247, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 12);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "系统推荐池子";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(247, 130);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 12);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "策略执行池";
-            // 
-            // listView3
-            // 
-            this.listView3.CheckBoxes = true;
-            this.listView3.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader5,
-            this.columnHeader6});
-            listViewItem4.StateImageIndex = 0;
-            listViewItem5.StateImageIndex = 0;
-            this.listView3.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem4,
-            listViewItem5});
-            this.listView3.Location = new System.Drawing.Point(243, 145);
-            this.listView3.Name = "listView3";
-            this.listView3.Size = new System.Drawing.Size(392, 82);
-            this.listView3.TabIndex = 8;
-            this.listView3.UseCompatibleStateImageBehavior = false;
-            this.listView3.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "代码";
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "名称";
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(248, 240);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 9;
-            this.button5.Text = "增加";
-            this.button5.UseVisualStyleBackColor = true;
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(345, 240);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 23);
-            this.button6.TabIndex = 10;
-            this.button6.Text = "删除";
-            this.button6.UseVisualStyleBackColor = true;
-            // 
-            // btnSetup
-            // 
-            this.btnSetup.Location = new System.Drawing.Point(446, 240);
-            this.btnSetup.Name = "btnSetup";
-            this.btnSetup.Size = new System.Drawing.Size(75, 23);
-            this.btnSetup.TabIndex = 11;
-            this.btnSetup.Text = "设置";
-            this.btnSetup.UseVisualStyleBackColor = true;
-            this.btnSetup.Click += new System.EventHandler(this.btnSetup_Click);
             // 
             // button8
             // 
@@ -496,11 +379,19 @@ namespace StockTrader
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             // 
+            // panel1
+            // 
+            this.panel1.Location = new System.Drawing.Point(214, 17);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(458, 247);
+            this.panel1.TabIndex = 29;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 417);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -518,13 +409,6 @@ namespace StockTrader
             this.Controls.Add(this.button11);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.button8);
-            this.Controls.Add(this.btnSetup);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.listView3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.listView2);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -547,17 +431,6 @@ namespace StockTrader
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.ListView listView2;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ListView listView3;
-        private System.Windows.Forms.ColumnHeader columnHeader5;
-        private System.Windows.Forms.ColumnHeader columnHeader6;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button btnSetup;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
@@ -583,6 +456,7 @@ namespace StockTrader
         private System.Windows.Forms.ToolStripMenuItem 启用策略ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 暂停策略ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 

@@ -43,7 +43,7 @@ namespace Stock.Trader
         #endregion
 
         private static XiaDan instance = new XiaDan();
-        I_StockTrader trader =  new HuaTaiStockTrader();
+        IStockTrader trader =  new HuaTaiStockTrader();
 
         public void Init()
         {

@@ -29,7 +29,7 @@ using System.Text;
 using Stock.Market;
 using System.Collections;
 
-namespace Stock.Strategy
+namespace Stock.Strategy.Rotation
 {
     public class RotationStrategy : BaseStrategy
     {

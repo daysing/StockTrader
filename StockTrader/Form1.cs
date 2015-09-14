@@ -36,6 +36,7 @@ using Stock.Trader.WeiTuo.HuaTai;
 using Stock.Trader;
 using Stock.Strategy;
 using Stock.Strategy.Settings;
+using Stock.Strategy.Python;
 
 namespace StockTrader
 {
@@ -98,7 +99,7 @@ namespace StockTrader
         }
 
         /// <summary>
-        /// 加入策略到列表视图。
+        /// 加入策略到列表视图，同时生成一个策略实例
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -106,15 +107,15 @@ namespace StockTrader
         {
             StrategyDesc sd = (StrategyDesc)((ToolStripMenuItem)sender).Tag;
 
-            BaseSettingForm form = new Stock.Strategy.Settings.RotationStrategyForm();
+            PythonStrategyControl control = new Stock.Strategy.Rotation.RatationStrategyControl();
 
-            StrategyManager.Instance.AddMyStrategy(form.Strategy);
+            StrategyManager.Instance.AddMyStrategy(control.Strategy);
 
             System.Windows.Forms.ListViewItem lvi = new System.Windows.Forms.ListViewItem(new string[] {
             sd.name,
             sd.desc}, -1);
             lvi.Group = this.listView1.Groups[sd.group];
-            lvi.Tag = form;
+            lvi.Tag = control;
             this.listView1.Items.Add(lvi);
 
         }
@@ -197,20 +198,14 @@ namespace StockTrader
         private void listView1_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             if (!e.IsSelected) return;
-            
-            MessageBox.Show("获取" + e.Item.Text + "池子");
 
-            // 获取策略相关的系统推荐池
-            // 获取个人池
+            if (this.panel1.HasChildren)
+                this.panel1.Controls.Clear();
+
+            this.panel1.Controls.Add((Control)e.Item.Tag);
 
         }
 
-        private void btnSetup_Click(object sender, EventArgs e)
-        {
-            BaseSettingForm form = (BaseSettingForm)this.listView1.SelectedItems[0].Tag;
-            if(form != null)
-                form.ShowDialog();
-        }
 
     }
 }

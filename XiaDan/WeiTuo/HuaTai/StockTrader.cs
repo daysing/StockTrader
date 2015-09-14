@@ -37,7 +37,7 @@ namespace Stock.Trader.WeiTuo.HuaTai
     /// <summary>
     /// 华泰的外挂交易接口
     /// </summary>
-    public class HuaTaiStockTrader : BaseStockTrader, I_StockTrader
+    public class HuaTaiStockTrader : BaseStockTrader, IStockTrader
     {
         const int MDI_FRAME = 0xE900;
 

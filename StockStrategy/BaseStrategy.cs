@@ -27,15 +27,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Stock.Strategy;
+using Stock.Trader.WeiTuo;
+using Stock.Trader.WeiTuo.HuaTai;
+using Stock.Common;
 
 namespace Stock.Strategy
 {
-    public abstract class BaseStrategy : IStrategy
+    public abstract class BaseStrategy : IStrategy, IStockTrader
     {
         private bool isValid;
         protected ICollection<string> stockPool;
 
-        #region 实现接口
+        #region 实现策略描述接口
 
         public event StockRemoveHandler OnStockRemove;
         public event StockAddHandler OnStockAdd;
@@ -90,5 +93,96 @@ namespace Stock.Strategy
         #endregion
 
 
+        public BaseStrategy()
+        {
+            this.Init();
+        }
+
+        #region 交易接口的实现
+
+        IStockTrader trader = new HuaTaiStockTrader();
+
+        public void Init()
+        {
+            trader.Init();
+        }
+
+        public void SellStock(string code, float price, int num)
+        {
+            LogHelper.WriteLog(this.GetType(),"BaseStrategy.SellStock");
+            trader.SellStock(code, price, num);
+        }
+
+        public void BuyStock(string code, float price, int num)
+        {
+            LogHelper.WriteLog(this.GetType(), "BaseStrategy.BuyStock");
+        }
+
+        public void CancelStock(string code, float price, int num)
+        {
+            LogHelper.WriteLog(this.GetType(), "BaseStrategy.CancelStock");
+        }
+
+        public void GetTransactionInfo()
+        {
+            LogHelper.WriteLog(this.GetType(), "BaseStrategy.GetTransactionInfo");
+        }
+
+        public void Keep()
+        {
+            // NOTHING TODO
+        }
+
+        public void GetStockPositionList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetCashInfo()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PurchaseFundSZ(string code, float total)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RedempteFundSZ(string code, int num)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MergeFundSZ(string code, int num)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PartFundSZ(string code, int num)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PurchaseFundSH(string code, float total)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RedempteFundSH(string code, int num)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MergeFundSH(string code, int num)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PartFundSH(string code, int num)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

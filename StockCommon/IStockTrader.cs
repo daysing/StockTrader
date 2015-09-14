@@ -32,7 +32,7 @@ namespace Stock.Trader.WeiTuo
     /// <summary>
     /// 所有的交易实现 必须实现这个接口
     /// </summary>
-    public interface I_StockTrader
+    public interface IStockTrader
     {
         void Init();
 

@@ -29,8 +29,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Stock.Strategy.Settings;
 
-namespace Stock.Strategy.Settings
+namespace Stock.Strategy.Rotation
 {
     public partial class RotationStrategyForm : BaseSettingForm
     {

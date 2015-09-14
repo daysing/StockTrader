@@ -21,7 +21,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace Stock.Strategy.Settings
+namespace Stock.Strategy.Rotation
 {
     partial class RotationStrategyForm
     {
@@ -104,7 +104,7 @@ namespace Stock.Strategy.Settings
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(103, 139);
+            this.btnOK.Location = new System.Drawing.Point(111, 167);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 4;
@@ -114,7 +114,7 @@ namespace Stock.Strategy.Settings
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(202, 139);
+            this.btnCancel.Location = new System.Drawing.Point(210, 167);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 5;
@@ -126,7 +126,7 @@ namespace Stock.Strategy.Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(314, 169);
+            this.ClientSize = new System.Drawing.Size(315, 202);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.label2);

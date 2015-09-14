@@ -29,14 +29,21 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Stock.Strategy.Python;
 
-namespace StockStrategy.RotationStrategy
+namespace Stock.Strategy.Rotation
 {
-    public partial class RatationStrategyControl : UserControl
+    public partial class RatationStrategyControl : PythonStrategyControl
     {
         public RatationStrategyControl()
         {
             InitializeComponent();
+            this.Strategy = new RotationStrategy();
+        }
+
+        private void btnSetup_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
