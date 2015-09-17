@@ -25,20 +25,54 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace Stock.Market
 {
-    public enum MarketType
+    public struct MarketInfo
     {
-        MARKET_FIRST,
-        MARKET_SHANGHAI_A = MARKET_FIRST,
-        MARKET_SHANGHAI_B,
-        MARKET_SHENZHEN_A,
-        MARKET_SHENZHEN_B,
-        MARKET_WARRANT,		// 权证
-        MARKET_INDEX,			// 指数
-        MARKET_MAX,
-        MARKET_UNKNOWN = MARKET_MAX,
-    };
+        public enum MarketType
+        {
+            MARKET_FIRST,
+            MARKET_SHANGHAI_A = MARKET_FIRST,
+            MARKET_SHANGHAI_B,
+            MARKET_SHENZHEN_A,
+            MARKET_SHENZHEN_B,
+            MARKET_WARRANT,		// 权证
+            MARKET_INDEX,			// 指数
+            MARKET_MAX,
+            MARKET_UNKNOWN = MARKET_MAX,
+        };
+
+        public static char get_block_from_market_type(MarketType t)
+	    {
+		    switch(t)
+		    {
+		    case MarketType.MARKET_SHANGHAI_A:
+			    return (char)0;
+		    case MarketType.MARKET_SHANGHAI_B:
+			    return (char)1;
+		    case MarketType.MARKET_SHENZHEN_A:
+			    return (char)2;
+		    case MarketType.MARKET_SHENZHEN_B:
+			    return (char)3;
+		    case MarketType.MARKET_INDEX:
+			    return (char)11;			// 所有指数
+		    case MarketType.MARKET_WARRANT:
+			    return (char)13;			// 权证
+		    default:
+			    return (char)0;
+		    }
+	    }
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+	public static uint[] stocks_count;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+	public static HashSet<string>[] stocks_set;
+
+	public static int StocksCodeLen = 6;	// 100  股一手
+	public static int StocksPerHand = 100;	// 100  股一手.
+    public static float tax;				// 0.3 %
+
+    }
 
 }

@@ -29,23 +29,33 @@ using System.Text;
 namespace Stock.Market
 {
     /// <summary>
-    /// 股票实时交易数据
+    /// 股票盘口数据
     /// </summary>
-    public class StockData
+    public class Bid
     {
         /// <summary>
         /// 每价格挂单的数据
         /// </summary>
         public class GoodsData
         {
-            private float price;
-            private int orderAmount;
+            public decimal Price { get; set; }
+            public int OrderAmount {get; set;}
+
+            public GoodsData(decimal price, int amount)
+            {
+                Price = price;
+                OrderAmount = amount;
+            }
+
         }
 
         public String Code {get; set;}    // 证券代码
-        private float price;    // 成交价
-        private int volume;     // 成交量
-        private DateTime pushTime;  // 推送时间
+        public string Name { get; set; }    // 名称
+
+        public decimal CurrentPrice { get; set; }    // 成交价
+        public int Volumn { get; set; }     // 成交量
+        public decimal Turnover { get; set; }      // 成交金额
+        public DateTime PushTime;  // 推送时间
 
         private ICollection<GoodsData> buyList = new List<GoodsData>();
         private ICollection<GoodsData> sellList = new List<GoodsData>();

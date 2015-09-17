@@ -58,13 +58,15 @@ namespace Stock.Strategy
             return null;
         }
 
+        ICollection<IStrategy> myStrategies = new List<IStrategy>();
+
         /// <summary>
         /// 读取个人用的策略
         /// </summary>
         /// <returns></returns>
         public IStrategy[] ReadMyStrategies()
         {
-            return null;
+            return myStrategies.ToArray(); ;
         }
 
         /// <summary>
@@ -73,7 +75,7 @@ namespace Stock.Strategy
         /// <param name="strategy"></param>
         public void AddMyStrategy(IStrategy strategy)
         {
-
+            this.myStrategies.Add(strategy);
         }
 
         /// <summary>

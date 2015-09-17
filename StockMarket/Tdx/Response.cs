@@ -27,24 +27,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Stock.Market
+namespace Stock.Market.Tdx
 {
-    /// <summary>
-    /// 基金盘口数据
-    /// </summary>
-    class FundData : Bid
+    class Response
     {
-        private float netValue;     // 基金净值
-
-        /// <summary>
-        ///  隐含收益率
-        /// </summary>
-        public float Yhsyl
-        {
-            get
-            {
-                return 0f;
-            }
-        }
     }
+    class StockHeartBeatResponse : Response
+    {
+    }
+
+    class StockListResponse : Response
+    {
+    }
+
+    class StockHoldChgResponse : Response
+    {
+    }
+
+    class InstantTransResponse : Response
+    {
+    }
+
 }

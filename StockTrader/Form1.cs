@@ -37,6 +37,7 @@ using Stock.Trader;
 using Stock.Strategy;
 using Stock.Strategy.Settings;
 using Stock.Strategy.Python;
+using Stock.Market;
 
 namespace StockTrader
 {
@@ -98,6 +99,16 @@ namespace StockTrader
             return sd;
         }
 
+        private void loadMyStrategyList()
+        {
+            StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc(), new StrategyDesc() };
+            sd[0].clazz = "Stock.Strategy.Settings.RotationStrategyForm";
+            sd[0].desc = "说明：西胖子轮动策略";
+            sd[0].name = "西胖子轮动策略";
+            sd[0].group = 0;
+        }
+
+
         /// <summary>
         /// 加入策略到列表视图，同时生成一个策略实例
         /// </summary>
@@ -117,7 +128,6 @@ namespace StockTrader
             lvi.Group = this.listView1.Groups[sd.group];
             lvi.Tag = control;
             this.listView1.Items.Add(lvi);
-
         }
 
         #region 测试下单
@@ -203,6 +213,23 @@ namespace StockTrader
                 this.panel1.Controls.Clear();
 
             this.panel1.Controls.Add((Control)e.Item.Tag);
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            //ReadTdxStockMarketThread target = new ReadTdxStockMarketThread(); // TODO: 初始化为适当的值
+            //int r = target.testrun();
+
+            StockMarketManager smm = new StockMarketManager();
+            IStrategy[] strategies = StrategyManager.Instance.ReadMyStrategies();
+
+            foreach (IStrategy strategy in strategies)
+            {
+                smm.AddStrategy(strategy);
+            }
+
+            smm.Start();
 
         }
 

@@ -21,30 +21,43 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Stock.Market
+namespace Stock.Common
 {
-    /// <summary>
-    /// 基金盘口数据
-    /// </summary>
-    class FundData : Bid
+    public class StockUtil
     {
-        private float netValue;     // 基金净值
-
-        /// <summary>
-        ///  隐含收益率
-        /// </summary>
-        public float Yhsyl
+        public static string GetFullCode(String stockCode)
         {
-            get
+            if (stockCode.Length == 6)
             {
-                return 0f;
+                switch (stockCode.Substring(0, 2))
+                {
+                    case "60":
+                        stockCode = "sh" + stockCode;
+                        return stockCode;
+
+                    case "00":
+                        stockCode = "sz" + stockCode;
+                        return stockCode;
+
+                    case "15":
+                        stockCode = "sz" + stockCode;
+                        return stockCode;
+
+                    case "30":
+                        stockCode = "sz" + stockCode;
+                        return stockCode;
+
+                    case "51":
+                        stockCode = "sh" + stockCode;
+                        return stockCode;
+                }
             }
+            return stockCode;
         }
     }
 }

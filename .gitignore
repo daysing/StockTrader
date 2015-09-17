@@ -3,6 +3,7 @@ bin
 obj
 monitor.suo
 StockTraderModel
+StockMemo
 TestStockTrader
 TestResults
 *.testsettings

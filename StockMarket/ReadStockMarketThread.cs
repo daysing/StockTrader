@@ -32,5 +32,12 @@ namespace Stock.Market
     public abstract class ReadStockMarketThread
     {
         public abstract void Run();
+
+        protected IList<string> codes = new List<string>();
+        public void AddStock(String code)
+        {
+            if(!codes.Contains(code))
+                this.codes.Add(code);
+        }
     }
 }

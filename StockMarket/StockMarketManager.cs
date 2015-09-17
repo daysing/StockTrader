@@ -29,25 +29,56 @@ using System.Text;
 using System.Collections;
 
 using Stock.Strategy;
+using System.Threading;
 
 namespace Stock.Market
 {
     public sealed class StockMarketManager
     {
-        IDictionary<String, StockDataQueue> stockDataCache;
+        public static IDictionary<String, StockDataQueue> stockDataCache = new Dictionary<String, StockDataQueue>();
+
+        public void StartListenStockMarket(int i)
+        {
+
+        }
+
+        public static void AddBid(Bid bid) {
+            if(!stockDataCache.ContainsKey(bid.Code))
+                   stockDataCache.Add(bid.Code, new StockDataQueue());
+
+            stockDataCache[bid.Code].Enqueue(bid);
+        }
+
+        public void Start()
+        {
+            ReadStockMarketThread rsmt = new ReadSinaStockMarketThread();
+            foreach (string code in StockMarketManager.stockDataCache.Keys)
+	        {
+                rsmt.AddStock(code);
+	        } 
+
+            while (true)
+            {
+                Thread.Sleep(2000);
+                rsmt.Run();
+            }
+        }
 
         /// <summary>
         /// 增加一个策略,和关注的股票价格
         /// </summary>
         /// <param name="code">股票代码</param>
         /// <param name="strategy">策略实例</param>
-        public void AddStock(String code, IStrategy strategy)
+        public void AddStrategy(IStrategy strategy)
         {
-            if (stockDataCache[code] == null)
+            foreach (string code in strategy.StockPool)
             {
-                stockDataCache[code] = new StockDataQueue();
+                if (!StockMarketManager.stockDataCache.ContainsKey(code))
+                {
+                    StockMarketManager.stockDataCache.Add(code, new StockDataQueue());
+                }
+                StockMarketManager.stockDataCache[code].OnStockDataChange += strategy.OnStockDataChanged;
             }
-            stockDataCache[code].OnStockDataChange += strategy.OnStockDataChanged;
         }
         
 

@@ -21,30 +21,34 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
-namespace Stock.Market
+namespace Stock.Market.Yj
 {
-    /// <summary>
-    /// 基金盘口数据
-    /// </summary>
-    class FundData : Bid
+    class YjStockMarketService
     {
-        private float netValue;     // 基金净值
-
-        /// <summary>
-        ///  隐含收益率
-        /// </summary>
-        public float Yhsyl
+        public void WndProc(ref Message m)
         {
-            get
+            if (m.Msg == 0x8001)    // 银江的数据
             {
-                return 0f;
+//                m.GetLParam(typeof(RCV_DATA));
+
+                switch (m.WParam.ToInt32())
+                {
+                    case 0x3f001234:
+                    case 0x3f001301:
+                    case 0x3f001235:
+                        break;
+                    default:
+                        break;
+                }
             }
+
         }
+
     }
 }

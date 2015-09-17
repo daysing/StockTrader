@@ -27,21 +27,58 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using Stock.Market.Tdx;
 
 namespace Stock.Market
 {
     public class ReadTdxStockMarketThread : ReadStockMarketThread
     {
-        TcpClient client;
-
         public override void Run()
         {
             TcpClient tcpClient = new TcpClient();
             tcpClient.Connect(IPAddress.Parse("218.18.103.38"), 7709);
 
-            NetworkStream ns = tcpClient.GetStream();
-            Console.WriteLine(ns.ToString());
+            if (tcpClient.Connected)
+            {
+                Console.WriteLine("成功连接");
+                NetworkStream ns = tcpClient.GetStream();
+                Console.WriteLine(ns.ToString());
+
+                tcpClient.SendBufferSize = 1024;
+             
+            }
         }
 
+        public int testrun()
+        {
+            TcpClient tcpClient = new TcpClient();
+            tcpClient.Connect(IPAddress.Parse("218.18.103.38"), 7709);
+
+            if (tcpClient.Connected)
+            {
+                Console.WriteLine("成功连接");
+
+                // InstantTransReq req = new InstantTransReq(1);
+                StockListReq req = new StockListReq(MarketInfo.MarketType.MARKET_SHANGHAI_A);
+                req.Send(tcpClient);
+
+                Read(tcpClient);
+            }
+
+            return 0;
+        }
+
+        public void Read(TcpClient client)
+        {
+            NetworkStream st = client.GetStream();
+            if ((client != null) && (client.Connected))
+            {
+                // asyncread(client);
+                byte[] bytes = new Byte[1024];
+                string data = string.Empty;
+                int length = st.Read(bytes, 0, bytes.Length);
+                Console.WriteLine("读取到数据");
+            }
+        }
     }
 }

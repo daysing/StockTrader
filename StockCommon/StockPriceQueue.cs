@@ -36,30 +36,31 @@ namespace Stock.Market
     public class StockDataQueue
     {
         ///<summary>定义一个委托类型</summary>
-        public delegate void StockDataChangeHandler(object sender, StockData data);
+        public delegate void StockDataChangeHandler(object sender, Bid data);
  
          /// <summary>定义一个事件</summary>
         public event StockDataChangeHandler OnStockDataChange;
 
-        private StockData lastData;
-        private Queue<StockData> queue;
+        private Bid lastData;
+        private Queue<Bid> queue = new Queue<Bid>();
 
-        public StockData LastData
+        public Bid LastData
         {
             get { return lastData; }
-            set { lastData = value; }
+          //  set { lastData = value; }
         }
 
-        public void Enqueue(StockData obj)
+        public void Enqueue(Bid obj)
         {
             queue.Enqueue(obj);
+            lastData = obj;
             if (OnStockDataChange != null)
             {
                 OnStockDataChange(this, obj);
             }
         }
 
-        public StockData Dequeue()
+        public Bid Dequeue()
         {
             return queue.Dequeue();
         }

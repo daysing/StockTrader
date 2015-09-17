@@ -36,7 +36,7 @@ namespace Stock.Strategy
     public abstract class BaseStrategy : IStrategy, IStockTrader
     {
         private bool isValid;
-        protected ICollection<string> stockPool;
+        protected ICollection<string> stockPool = new List<string>();
 
         #region 实现策略描述接口
 
@@ -44,19 +44,24 @@ namespace Stock.Strategy
         public event StockAddHandler OnStockAdd;
 
         public abstract void Run();
-        public abstract void OnStockDataChanged(object sender, Stock.Market.StockData data);
+        public abstract void OnStockDataChanged(object sender, Stock.Market.Bid data);
 
 
         public void AddStock(string code)
         {
             if (OnStockAdd != null)
                 OnStockAdd(this, code);
+
+            if(!stockPool.Contains(code))
+                stockPool.Add(code);
         }
 
         public void RemoveStock(string code)
         {
             if (OnStockRemove != null)
                 OnStockRemove(this, code);
+
+            stockPool.Remove(code);
         }
 
         public abstract string Name

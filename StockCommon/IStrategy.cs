@@ -68,6 +68,6 @@ namespace Stock.Strategy
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        void OnStockDataChanged(object sender, StockData data);
+        void OnStockDataChanged(object sender, Bid data);
     }
 }
