@@ -64,10 +64,10 @@ namespace Stock.Strategy.Python
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "150171",
             "证券A"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
             "150221",
             "中航军A"}, -1);
             this.btnSetup = new System.Windows.Forms.Button();
@@ -111,6 +111,7 @@ namespace Stock.Strategy.Python
             this.btnAdd.TabIndex = 12;
             this.btnAdd.Text = "增加";
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // listView3
             // 
@@ -120,11 +121,11 @@ namespace Stock.Strategy.Python
             this.columnHeader6,
             this.columnHeader1,
             this.columnHeader2});
-            listViewItem7.StateImageIndex = 0;
-            listViewItem8.StateImageIndex = 0;
+            listViewItem1.StateImageIndex = 0;
+            listViewItem2.StateImageIndex = 0;
             this.listView3.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem7,
-            listViewItem8});
+            listViewItem1,
+            listViewItem2});
             this.listView3.Location = new System.Drawing.Point(25, 99);
             this.listView3.Name = "listView3";
             this.listView3.Size = new System.Drawing.Size(403, 82);
@@ -232,12 +233,18 @@ namespace Stock.Strategy.Python
             set { strategy = value; }
         }
 
+        ScriptEngine engine = null;
+        ScriptScope scope = null;
+
         #endregion
 
 
         public PythonStrategyControl()
         {
             InitializeComponent();
+
+            engine = IronPython.Hosting.Python.CreateEngine();
+            scope = engine.CreateScope();
         }
 
         private void btnSetup_Click(object sender, EventArgs e)
@@ -247,11 +254,16 @@ namespace Stock.Strategy.Python
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ScriptEngine engine = IronPython.Hosting.Python.CreateEngine();
-            ScriptScope scope = engine.CreateScope();
-            scope.SetVariable("Ipy_this", this.Strategy);//将this Set 到Ipy脚本的Ipy_this值中
+            scope.SetVariable("WeiTuo", this.Strategy);// 将this Set 到Ipy脚本的WeiTuo值中
+            scope.SetVariable("Bids", this.Strategy);    // 多个股票的盘口数据,TODO:
             ScriptSource code = engine.CreateScriptSourceFromFile(this.textBox1.Text);
             code.Execute(scope);
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            this.strategy.AddStock("150022");
+            this.strategy.AddStock("150023");
         }
     }
 }
