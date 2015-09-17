@@ -48,6 +48,7 @@ namespace StockTrader
         {
             InitializeComponent();
             InitStrategyMenu();
+            InitListView();
             xiadan = XiaDan.Instance;
             xiadan.Init();
         }
@@ -58,7 +59,7 @@ namespace StockTrader
         private void InitStrategyMenu()
         {
             // 从服务器获取策略数据，
-            StrategyDesc[] sds = loadStrategyList();
+            StrategyDesc[] sds = LoadStrategyList();
 
             foreach (var sd in sds)
             {
@@ -84,7 +85,7 @@ namespace StockTrader
             public int group;
         }
 
-        private StrategyDesc[] loadStrategyList()
+        private StrategyDesc[] LoadStrategyList()
         {
             StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc(), new StrategyDesc() };
             sd[0].clazz = "Stock.Strategy.Settings.RotationStrategyForm";
@@ -99,15 +100,31 @@ namespace StockTrader
             return sd;
         }
 
-        private void loadMyStrategyList()
+        private StrategyDesc[] LoadMyStrategyList()
         {
             StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc(), new StrategyDesc() };
             sd[0].clazz = "Stock.Strategy.Settings.RotationStrategyForm";
             sd[0].desc = "说明：西胖子轮动策略";
             sd[0].name = "西胖子轮动策略";
             sd[0].group = 0;
+
+            return sd;
         }
 
+        private void InitListView()
+        {
+            StrategyDesc[] sds = LoadMyStrategyList();
+            foreach (StrategyDesc sd in sds)
+            {
+                this.AddStrategyToListView(sd);
+            }
+
+            // this.listView1.Items[0].Selected = true;
+            this.panel1.Controls.Add((Control)this.listView1.Items[0].Tag);
+
+        }
+
+       
 
         /// <summary>
         /// 加入策略到列表视图，同时生成一个策略实例
@@ -118,6 +135,11 @@ namespace StockTrader
         {
             StrategyDesc sd = (StrategyDesc)((ToolStripMenuItem)sender).Tag;
 
+            AddStrategyToListView(sd);
+        }
+
+        private void AddStrategyToListView(StrategyDesc sd)
+        {
             PythonStrategyControl control = new Stock.Strategy.Rotation.RatationStrategyControl();
 
             StrategyManager.Instance.AddMyStrategy(control.Strategy);
@@ -226,7 +248,7 @@ namespace StockTrader
 
             foreach (IStrategy strategy in strategies)
             {
-                smm.AddStrategy(strategy);
+                smm.RegisterStrategy(strategy);
             }
 
             smm.Start();

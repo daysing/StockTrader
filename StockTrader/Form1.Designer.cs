@@ -53,11 +53,8 @@ namespace StockTrader
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("基金组", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("股票组", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
-            "轮动策略",
-            "本策略从轮动中获取相对收益，战胜单个标的的涨幅"}, -1);
+            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("基金组", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("股票组", System.Windows.Forms.HorizontalAlignment.Left);
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -141,16 +138,13 @@ namespace StockTrader
             this.columnHeader3,
             this.columnHeader4});
             this.listView1.ContextMenuStrip = this.ctxStrategyMenu;
-            listViewGroup1.Header = "基金组";
-            listViewGroup1.Name = "jjz";
-            listViewGroup2.Header = "股票组";
-            listViewGroup2.Name = "gpz";
+            listViewGroup3.Header = "基金组";
+            listViewGroup3.Name = "jjz";
+            listViewGroup4.Header = "股票组";
+            listViewGroup4.Name = "gpz";
             this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2});
-            listViewItem1.Group = listViewGroup2;
-            this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
+            listViewGroup3,
+            listViewGroup4});
             this.listView1.Location = new System.Drawing.Point(22, 17);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(180, 248);
@@ -389,11 +383,11 @@ namespace StockTrader
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(565, 317);
+            this.button5.Location = new System.Drawing.Point(567, 314);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 30;
-            this.button5.Text = "button5";
+            this.button5.Text = "启动交易";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 

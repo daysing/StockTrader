@@ -82,13 +82,15 @@ namespace Stock.Strategy.Rotation
         public override void OnStockDataChanged(object sender, Stock.Market.Bid data)
         {
             // 调用python 策略
+            // TODO: 50毫秒内不重复调用
             ScriptEngine engine = null;
             ScriptScope scope = null;
-            scope = engine.CreateScope();
-            scope.SetVariable("WeiTuo", this);// 将this Set 到Ipy脚本的WeiTuo值中
-            scope.SetVariable("Bids", this);    // 多个股票的盘口数据,TODO:
-            ScriptSource code = engine.CreateScriptSourceFromFile("");
-            code.Execute(scope);
+            Console.WriteLine(Bids.ToString());
+            //scope = engine.CreateScope();
+            //scope.SetVariable("WeiTuo", this);// 将this Set 到Ipy脚本的WeiTuo值中
+            //scope.SetVariable("Bids", this);    // 多个股票的盘口数据,TODO:
+            //ScriptSource code = engine.CreateScriptSourceFromFile("");
+            //code.Execute(scope);
 
 
         }

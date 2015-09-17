@@ -72,6 +72,10 @@
       <Project>{822279CE-076E-46BF-85CF-FA30AD427D46}</Project>
       <Name>StockCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\StockMarket\StockMarket.csproj">
+      <Project>{E3D8C170-E27D-4E0E-828D-E60E9C58EAF8}</Project>
+      <Name>StockMarket</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XiaDan\XiaDan.csproj">
       <Project>{CA5AEBAD-BDCF-4047-B3DC-6DC9D18B2874}</Project>
       <Name>XiaDan</Name>

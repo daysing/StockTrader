@@ -37,11 +37,6 @@ namespace Stock.Market
     {
         public static IDictionary<String, StockDataQueue> stockDataCache = new Dictionary<String, StockDataQueue>();
 
-        public void StartListenStockMarket(int i)
-        {
-
-        }
-
         public static void AddBid(Bid bid) {
             if(!stockDataCache.ContainsKey(bid.Code))
                    stockDataCache.Add(bid.Code, new StockDataQueue());
@@ -57,19 +52,16 @@ namespace Stock.Market
                 rsmt.AddStock(code);
 	        } 
 
-            while (true)
-            {
-                Thread.Sleep(2000);
-                rsmt.Run();
-            }
+                Thread t = new Thread(new ThreadStart(rsmt.Run));
+                t.Start();
+
         }
 
         /// <summary>
-        /// 增加一个策略,和关注的股票价格
+        /// 在行情市场中登记一个策略，股票价格发生变动的时候，即时提醒策略。
         /// </summary>
-        /// <param name="code">股票代码</param>
         /// <param name="strategy">策略实例</param>
-        public void AddStrategy(IStrategy strategy)
+        public void RegisterStrategy(IStrategy strategy)
         {
             foreach (string code in strategy.StockPool)
             {

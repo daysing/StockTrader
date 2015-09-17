@@ -30,6 +30,8 @@ using Stock.Strategy;
 using Stock.Trader.WeiTuo;
 using Stock.Trader.WeiTuo.HuaTai;
 using Stock.Common;
+using Stock.Market;
+using System.Collections;
 
 namespace Stock.Strategy
 {
@@ -37,6 +39,7 @@ namespace Stock.Strategy
     {
         private bool isValid;
         protected ICollection<string> stockPool = new List<string>();
+        private IDictionary<String, StockDataQueue> bids;
 
         #region 实现策略描述接口
 
@@ -101,6 +104,28 @@ namespace Stock.Strategy
         public BaseStrategy()
         {
             this.Init();
+        }
+
+        /// <summary>
+        /// 股票池中的盘口数据
+        /// </summary>
+        public IDictionary<String, StockDataQueue> Bids
+        {
+            get
+            {
+                if (bids == null)
+                {
+                    bids = new Dictionary<String, StockDataQueue>();
+                    
+                    foreach (string code in StockMarketManager.stockDataCache.Keys)
+	                {
+		                if(stockPool.Contains(code)) {
+                            bids.Add(code, StockMarketManager.stockDataCache[code]);
+                        }
+	                }
+                }
+                return bids;
+            }
         }
 
         #region 交易接口的实现

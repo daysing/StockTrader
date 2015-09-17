@@ -27,6 +27,7 @@ using System.Linq;
 using System.Text;
 using Stock.Common;
 using System.Net;
+using System.Threading;
 
 namespace Stock.Market
 {
@@ -35,10 +36,23 @@ namespace Stock.Market
         private CookieContainer Cookie = new CookieContainer();
 
         private const string dataurl = "http://hq.sinajs.cn/list={0}";
+        private HttpClient client = null;
+        public ReadSinaStockMarketThread()
+        {
+            client = new HttpClient(this.Cookie);
+        }
 
         public override void Run()
         {
-            HttpClient client = new HttpClient(this.Cookie);
+            while (true)
+            {
+                Thread.Sleep(2000);
+                internalRun();
+            }
+        } 
+        public  void internalRun()
+        {
+                       
             IList<String> t_codes = new List<String>();
             foreach (string c in codes)
             {
@@ -55,7 +69,6 @@ namespace Stock.Market
                 {
                     Bid bid = Parse(data[i]);
                     StockMarketManager.AddBid(bid);
-                    // dictionary2.Add(codes[i], info);
                 }
             }
         }
