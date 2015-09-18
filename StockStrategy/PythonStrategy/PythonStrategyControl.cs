@@ -64,7 +64,6 @@ namespace Stock.Strategy.Python
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnSetup = new System.Windows.Forms.Button();
             this.BtnDelete = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.listView3 = new System.Windows.Forms.ListView();
@@ -75,31 +74,21 @@ namespace Stock.Strategy.Python
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btnFile = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // btnSetup
-            // 
-            this.btnSetup.Location = new System.Drawing.Point(353, 212);
-            this.btnSetup.Name = "btnSetup";
-            this.btnSetup.Size = new System.Drawing.Size(75, 23);
-            this.btnSetup.TabIndex = 14;
-            this.btnSetup.Text = "设置";
-            this.btnSetup.UseVisualStyleBackColor = true;
-            this.btnSetup.Click += new System.EventHandler(this.btnSetup_Click);
             // 
             // BtnDelete
             // 
-            this.BtnDelete.Location = new System.Drawing.Point(122, 212);
+            this.BtnDelete.Location = new System.Drawing.Point(122, 188);
             this.BtnDelete.Name = "BtnDelete";
             this.BtnDelete.Size = new System.Drawing.Size(75, 23);
             this.BtnDelete.TabIndex = 13;
             this.BtnDelete.Text = "删除";
             this.BtnDelete.UseVisualStyleBackColor = true;
+            this.BtnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(25, 212);
+            this.btnAdd.Location = new System.Drawing.Point(25, 188);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 12;
@@ -115,7 +104,7 @@ namespace Stock.Strategy.Python
             this.columnHeader6,
             this.columnHeader1,
             this.columnHeader2});
-            this.listView3.Location = new System.Drawing.Point(25, 99);
+            this.listView3.Location = new System.Drawing.Point(25, 83);
             this.listView3.Name = "listView3";
             this.listView3.Size = new System.Drawing.Size(403, 82);
             this.listView3.TabIndex = 15;
@@ -165,30 +154,18 @@ namespace Stock.Strategy.Python
             this.btnFile.Text = "...";
             this.btnFile.UseVisualStyleBackColor = true;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(241, 212);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 19;
-            this.button1.Text = "测试python";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // PythonStrategyControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnFile);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.listView3);
-            this.Controls.Add(this.btnSetup);
             this.Controls.Add(this.BtnDelete);
             this.Controls.Add(this.btnAdd);
             this.Name = "PythonStrategyControl";
-            this.Size = new System.Drawing.Size(452, 256);
+            this.Size = new System.Drawing.Size(454, 240);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -196,7 +173,6 @@ namespace Stock.Strategy.Python
 
         #endregion
 
-        private System.Windows.Forms.Button btnSetup;
         private System.Windows.Forms.Button BtnDelete;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.ListView listView3;
@@ -209,7 +185,7 @@ namespace Stock.Strategy.Python
         private System.Windows.Forms.ColumnHeader columnHeader2;
 
         #endregion
-        private Button button1;
+
 
 
         #region properties
@@ -246,18 +222,9 @@ namespace Stock.Strategy.Python
         }
 
         private void LoadMyStockPool() {
-            ListViewItem item = new ListViewItem(new string[] {
-            "150022",
-            "深成指A"}, -1);
-            this.listView3.Items.Add(item);
-            this.strategy.AddStock("150022");
-
-            item = new ListViewItem(new string[] {
-            "150023",
-            "深成指B"}, -1);
-            this.listView3.Items.Add(item);
-            this.strategy.AddStock("150023");
-        }
+            this.AddStock("150022", "深成指A");
+            this.AddStock("150023", "深成指B");
+         }
 
         private void btnSetup_Click(object sender, EventArgs e)
         {
@@ -274,6 +241,30 @@ namespace Stock.Strategy.Python
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-       }
+            new AddStockForm(this).ShowDialog();
+        }
+
+        public void AddStock(string code, string name)
+        {
+            ListViewItem item = new ListViewItem(new string[] {
+            code,
+            name}, -1);
+            this.listView3.Items.Add(item);
+            this.strategy.AddStock(code);
+        }
+
+        private void BtnDelete_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in this.listView3.Items)
+	        {
+                
+                if (item.Checked)
+                {
+                    listView3.Items.Remove(item);
+                    
+                    this.strategy.RemoveStock(item.Text);
+                }
+	        }    
+        }
     }
 }

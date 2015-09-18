@@ -81,7 +81,7 @@ namespace Stock.Strategy.Rotation
 
         public override void OnStockDataChanged(object sender, Stock.Market.Bid data)
         {
-            // 调用python 策略
+            // 调用 python 策略
             // TODO: 50毫秒内不重复调用
             ScriptEngine engine = null;
             ScriptScope scope = null;
@@ -91,7 +91,6 @@ namespace Stock.Strategy.Rotation
             //scope.SetVariable("Bids", this);    // 多个股票的盘口数据,TODO:
             //ScriptSource code = engine.CreateScriptSourceFromFile("");
             //code.Execute(scope);
-
 
         }
     }

@@ -91,8 +91,8 @@ namespace StockTrader
         {
             StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc(), new StrategyDesc() };
             sd[0].clazz = "Stock.Strategy.Settings.RotationStrategyForm";
-            sd[0].desc = "说明：西胖子轮动策略";
-            sd[0].name = "西胖子轮动策略";
+            sd[0].desc = "说明：分级A轮动策略";
+            sd[0].name = "分级A轮动策略";
             sd[0].group = 0;
             sd[1].clazz = "Stock.Strategy.Settings.RotationStrategyForm";
             sd[1].desc = "说明：箱体高抛低吸策略";
@@ -106,8 +106,8 @@ namespace StockTrader
         {
             StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc(), new StrategyDesc() };
             sd[0].clazz = "Stock.Strategy.Settings.RotationStrategyForm";
-            sd[0].desc = "说明：西胖子轮动策略";
-            sd[0].name = "西胖子轮动策略";
+            sd[0].desc = "说明：分级A轮动策略";
+            sd[0].name = "分级A轮动策略";
             sd[0].group = 0;
 
             return sd;

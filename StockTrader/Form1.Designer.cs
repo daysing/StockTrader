@@ -53,8 +53,8 @@ namespace StockTrader
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("基金组", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("股票组", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("基金组", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("股票组", System.Windows.Forms.HorizontalAlignment.Left);
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -138,14 +138,19 @@ namespace StockTrader
             this.columnHeader3,
             this.columnHeader4});
             this.listView1.ContextMenuStrip = this.ctxStrategyMenu;
-            listViewGroup3.Header = "基金组";
-            listViewGroup3.Name = "jjz";
-            listViewGroup4.Header = "股票组";
-            listViewGroup4.Name = "gpz";
+            this.listView1.FullRowSelect = true;
+            this.listView1.GridLines = true;
+            listViewGroup1.Header = "基金组";
+            listViewGroup1.Name = "jjz";
+            listViewGroup2.Header = "股票组";
+            listViewGroup2.Name = "gpz";
             this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup3,
-            listViewGroup4});
+            listViewGroup1,
+            listViewGroup2});
+            this.listView1.HideSelection = false;
+            this.listView1.LabelEdit = true;
             this.listView1.Location = new System.Drawing.Point(22, 17);
+            this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(180, 248);
             this.listView1.TabIndex = 4;
@@ -156,6 +161,7 @@ namespace StockTrader
             // columnHeader3
             // 
             this.columnHeader3.Text = "策略名";
+            this.columnHeader3.Width = 132;
             // 
             // columnHeader4
             // 
