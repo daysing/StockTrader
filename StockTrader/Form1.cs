@@ -38,6 +38,7 @@ using Stock.Strategy;
 using Stock.Strategy.Settings;
 using Stock.Strategy.Python;
 using Stock.Market;
+using System.Reflection;
 
 namespace StockTrader
 {
@@ -83,6 +84,7 @@ namespace StockTrader
             public String desc;
             public String clazz;
             public int group;
+            public int id;
         }
 
         private StrategyDesc[] LoadStrategyList()
@@ -141,6 +143,9 @@ namespace StockTrader
         private void AddStrategyToListView(StrategyDesc sd)
         {
             PythonStrategyControl control = new Stock.Strategy.Rotation.RatationStrategyControl();
+            // Assembly asm = Assembly.LoadFile("E:\\projects\\StockTrader\\StockTrader\\bin\\Debug\\StockStrategy.dll");
+            // PythonStrategyControl control = (PythonStrategyControl)asm.GetType(sd.clazz).Assembly.CreateInstance(sd.clazz);
+            
 
             StrategyManager.Instance.AddMyStrategy(control.Strategy);
 

@@ -64,12 +64,6 @@ namespace Stock.Strategy.Python
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
-            "150171",
-            "证券A"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
-            "150221",
-            "中航军A"}, -1);
             this.btnSetup = new System.Windows.Forms.Button();
             this.BtnDelete = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
@@ -121,11 +115,6 @@ namespace Stock.Strategy.Python
             this.columnHeader6,
             this.columnHeader1,
             this.columnHeader2});
-            listViewItem1.StateImageIndex = 0;
-            listViewItem2.StateImageIndex = 0;
-            this.listView3.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2});
             this.listView3.Location = new System.Drawing.Point(25, 99);
             this.listView3.Name = "listView3";
             this.listView3.Size = new System.Drawing.Size(403, 82);
@@ -239,12 +228,35 @@ namespace Stock.Strategy.Python
         #endregion
 
 
+        protected virtual IStrategy createStrategy()
+        {
+            throw new NotImplementedException();
+        }
+
         public PythonStrategyControl()
         {
             InitializeComponent();
+            this.strategy = createStrategy();
 
             engine = IronPython.Hosting.Python.CreateEngine();
             scope = engine.CreateScope();
+
+            // load my stock pool
+            LoadMyStockPool();
+        }
+
+        private void LoadMyStockPool() {
+            ListViewItem item = new ListViewItem(new string[] {
+            "150022",
+            "深成指A"}, -1);
+            this.listView3.Items.Add(item);
+            this.strategy.AddStock("150022");
+
+            item = new ListViewItem(new string[] {
+            "150023",
+            "深成指B"}, -1);
+            this.listView3.Items.Add(item);
+            this.strategy.AddStock("150023");
         }
 
         private void btnSetup_Click(object sender, EventArgs e)
@@ -262,8 +274,6 @@ namespace Stock.Strategy.Python
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            this.strategy.AddStock("150022");
-            this.strategy.AddStock("150023");
-        }
+       }
     }
 }

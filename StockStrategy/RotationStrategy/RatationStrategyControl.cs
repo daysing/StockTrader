@@ -38,7 +38,11 @@ namespace Stock.Strategy.Rotation
         public RatationStrategyControl()
         {
             InitializeComponent();
-            this.Strategy = new RotationStrategy();
+        }
+
+        protected override IStrategy createStrategy()
+        {
+            return new RotationStrategy();
         }
 
         private void btnSetup_Click(object sender, EventArgs e)
