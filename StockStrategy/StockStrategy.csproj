@@ -82,9 +82,9 @@
       <Project>{E3D8C170-E27D-4E0E-828D-E60E9C58EAF8}</Project>
       <Name>StockMarket</Name>
     </ProjectReference>
-    <ProjectReference Include="..\XiaDan\XiaDan.csproj">
+    <ProjectReference Include="..\XiaDan\StockTrader.csproj">
       <Project>{CA5AEBAD-BDCF-4047-B3DC-6DC9D18B2874}</Project>
-      <Name>XiaDan</Name>
+      <Name>StockTrader</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -138,6 +138,8 @@ namespace System.Window
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
             public static extern int PostMessage(IntPtr hWnd, int msg, int wParam, string lParam);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern int PostMessage(IntPtr hWnd, int msg, int wParam, ref POINT lParam);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
 			public static extern IntPtr SetWindowsHookEx(int hookid, HookProc pfnhook, IntPtr hinst, int threadid);
 		[DllImport("user32.dll", CharSet=CharSet.Auto, ExactSpelling=true)]
 			public static extern bool UnhookWindowsHookEx(IntPtr hhook);

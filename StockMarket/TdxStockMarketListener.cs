@@ -31,7 +31,7 @@ using Stock.Market.Tdx;
 
 namespace Stock.Market
 {
-    public class ReadTdxStockMarketThread : ReadStockMarketThread
+    public class TdxStockMarketListener : StockMarketListener
     {
         public override void Run()
         {

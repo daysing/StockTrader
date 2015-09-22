@@ -29,7 +29,7 @@ using System.Threading;
 
 namespace Stock.Market
 {
-    public abstract class ReadStockMarketThread
+    public abstract class StockMarketListener
     {
         public abstract void Run();
 

@@ -44,13 +44,13 @@ namespace StockTrader
 {
     public partial class Form1 : Form
     {
-        XiaDan xiadan = null;
+        Stock.Trader.XiaDan xiadan = null;
         public Form1()
         {
             InitializeComponent();
             InitStrategyMenu();
             InitListView();
-            xiadan = XiaDan.Instance;
+            xiadan = Stock.Trader.XiaDan.Instance;
             xiadan.Init();
         }
 
@@ -160,7 +160,7 @@ namespace StockTrader
         #region 测试下单
         private void button16_Click(object sender, EventArgs e)
         {
-            xiadan = XiaDan.Instance;
+            xiadan = Stock.Trader.XiaDan.Instance;
             xiadan.Init();
         }
 

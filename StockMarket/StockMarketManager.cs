@@ -35,41 +35,47 @@ namespace Stock.Market
 {
     public sealed class StockMarketManager
     {
-        public static IDictionary<String, StockDataQueue> stockDataCache = new Dictionary<String, StockDataQueue>();
+        public static IDictionary<String, BidCacheQueue> bidCache = new Dictionary<String, BidCacheQueue>();
+        private bool started = false;
 
         public static void AddBid(Bid bid) {
-            if(!stockDataCache.ContainsKey(bid.Code))
-                   stockDataCache.Add(bid.Code, new StockDataQueue());
+            if(!bidCache.ContainsKey(bid.Code))
+                   bidCache.Add(bid.Code, new BidCacheQueue());
 
-            stockDataCache[bid.Code].Enqueue(bid);
-        }
-
-        public void Start()
-        {
-            ReadStockMarketThread rsmt = new ReadSinaStockMarketThread();
-            foreach (string code in StockMarketManager.stockDataCache.Keys)
-	        {
-                rsmt.AddStock(code);
-	        } 
-
-                Thread t = new Thread(new ThreadStart(rsmt.Run));
-                t.Start();
-
+            bidCache[bid.Code].Enqueue(bid);
         }
 
         /// <summary>
-        /// 在行情市场中登记一个策略，股票价格发生变动的时候，即时提醒策略。
+        /// 启动行情监听器
+        /// </summary>
+        public void Start()
+        {
+            if (started)
+                throw new Exception();
+
+            StockMarketListener rsmt = new SinaStockMarketListener();
+            foreach (string code in StockMarketManager.bidCache.Keys)
+            {
+                rsmt.AddStock(code);
+            }
+
+            Thread t = new Thread(new ThreadStart(rsmt.Run));
+            t.Start();
+        }
+
+        /// <summary>
+        /// 在行情市场中登记一个策略，当关注股票价格发生变动的时候，即时提醒策略。
         /// </summary>
         /// <param name="strategy">策略实例</param>
         public void RegisterStrategy(IStrategy strategy)
         {
             foreach (string code in strategy.StockPool)
             {
-                if (!StockMarketManager.stockDataCache.ContainsKey(code))
+                if (!StockMarketManager.bidCache.ContainsKey(code))
                 {
-                    StockMarketManager.stockDataCache.Add(code, new StockDataQueue());
+                    StockMarketManager.bidCache.Add(code, new BidCacheQueue());
                 }
-                StockMarketManager.stockDataCache[code].OnStockDataChange += strategy.OnStockDataChanged;
+                StockMarketManager.bidCache[code].OnBidChange += strategy.OnStockDataChanged;
             }
         }
         

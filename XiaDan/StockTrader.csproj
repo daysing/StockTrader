@@ -47,6 +47,7 @@
     <Compile Include="System.Window\Structs.cs" />
     <Compile Include="System.Window\Win32API.cs" />
     <Compile Include="System.Window\Win32Code.cs" />
+    <Compile Include="TradingAccount.cs" />
     <Compile Include="WeiTuo\BaseStockTrader.cs" />
     <Compile Include="WeiTuo\HuaTai\StockTrader.cs" />
   </ItemGroup>
@@ -55,6 +56,10 @@
       <Project>{822279CE-076E-46BF-85CF-FA30AD427D46}</Project>
       <Name>StockCommon</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CTP\Future\" />
+    <Folder Include="LTS\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

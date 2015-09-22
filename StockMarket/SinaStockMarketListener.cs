@@ -31,13 +31,13 @@ using System.Threading;
 
 namespace Stock.Market
 {
-    public class ReadSinaStockMarketThread : ReadStockMarketThread
+    public class SinaStockMarketListener : StockMarketListener
     {
         private CookieContainer Cookie = new CookieContainer();
 
         private const string dataurl = "http://hq.sinajs.cn/list={0}";
         private HttpClient client = null;
-        public ReadSinaStockMarketThread()
+        public SinaStockMarketListener()
         {
             client = new HttpClient(this.Cookie);
         }

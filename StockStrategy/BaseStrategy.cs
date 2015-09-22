@@ -39,7 +39,7 @@ namespace Stock.Strategy
     {
         private bool isValid;
         protected ICollection<string> stockPool = new List<string>();
-        private IDictionary<String, StockDataQueue> bids;
+        private IDictionary<String, BidCacheQueue> bids;
 
         #region 实现策略描述接口
 
@@ -106,21 +106,22 @@ namespace Stock.Strategy
             this.Init();
         }
 
+
         /// <summary>
         /// 股票池中的盘口数据
         /// </summary>
-        public IDictionary<String, StockDataQueue> Bids
+        public IDictionary<String, BidCacheQueue> Bids
         {
             get
             {
                 if (bids == null)
                 {
-                    bids = new Dictionary<String, StockDataQueue>();
+                    bids = new Dictionary<String, BidCacheQueue>();
                     
-                    foreach (string code in StockMarketManager.stockDataCache.Keys)
+                    foreach (string code in StockMarketManager.bidCache.Keys)
 	                {
 		                if(stockPool.Contains(code)) {
-                            bids.Add(code, StockMarketManager.stockDataCache[code]);
+                            bids.Add(code, StockMarketManager.bidCache[code]);
                         }
 	                }
                 }

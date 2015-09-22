@@ -33,13 +33,13 @@ namespace Stock.Market
     /// <summary>
     /// 股票价格队列, 当价格发生变动时,发送给观察者
     /// </summary>
-    public class StockDataQueue
+    public class BidCacheQueue
     {
         ///<summary>定义一个委托类型</summary>
-        public delegate void StockDataChangeHandler(object sender, Bid data);
+        public delegate void BidChangeHandler(object sender, Bid data);
  
          /// <summary>定义一个事件</summary>
-        public event StockDataChangeHandler OnStockDataChange;
+        public event BidChangeHandler OnBidChange;
 
         private Bid lastData;
         private Queue<Bid> queue = new Queue<Bid>();
@@ -54,9 +54,9 @@ namespace Stock.Market
         {
             queue.Enqueue(obj);
             lastData = obj;
-            if (OnStockDataChange != null)
+            if (OnBidChange != null)
             {
-                OnStockDataChange(this, obj);
+                OnBidChange(this, obj);
             }
         }
 

@@ -100,6 +100,7 @@ namespace Stock.Trader.WeiTuo.HuaTai
             const int LIST_VIEW = 0x0417;
 
             IntPtr h1 = GetDetailPanel();
+            Thread.Sleep(1000);
             h1 = Win32API.GetDlgItem(h1, HEXIN_SCROLL_WND);
             h1 = Win32API.GetDlgItem(h1, HEXIN_SCROLL_WND_2);
             h1 = Win32API.GetDlgItem(h1, LIST_VIEW);
@@ -344,34 +345,41 @@ namespace Stock.Trader.WeiTuo.HuaTai
         public void GetCashInfo()
         {
             Win32API.SendMessage(htvi, Win32Code.TVM_SELECTITEM, Win32Code.TVGN_CARET, hQueryZjgp);
-            /*
+            
                         // TODO:发送复制命令,这里不能正常复制
                         IntPtr list = GetPositonList();
-                        Win32API.SendMessage(list, Win32Code.WM_LBUTTONDOWN, 0, 0);
-                        Win32API.SendMessage(list, Win32Code.WM_LBUTTONUP, 0, 0);
-                        Win32API.SendMessage(list, Win32Code.WM_SETFOCUS, 0, 0);
+                        Thread.Sleep(50);
+            POINT p = new POINT();
+            p.x = 1;
+            p.y = 1;
+            Win32API.PostMessage(list, Win32Code.WM_MOUSEMOVE, 0, ref p);
+                        Win32API.PostMessage(list, Win32Code.WM_LBUTTONDOWN, 0, ref p);
+                        Win32API.PostMessage(list, Win32Code.WM_LBUTTONUP, 0, 0);
                         //Win32API.SendMessage(list, Win32Code.WM_RENDERFORMAT, Win32Code.CF_UNICODETEXT, 0);
 
                         // Win32API.SendMessage(new IntPtr(0x00270bb2), Win32Code.WM_RENDERFORMAT, Win32Code.CF_UNICODETEXT, 0);
 
-                        Win32API.SendMessage(list, Win32Code.WM_KEYDOWN, Win32Code.VK_CONTROL, 0);
-                        Win32API.SendMessage(list, Win32Code.WM_KEYDOWN, Win32Code.VK_C, 0);
-                        Win32API.SendMessage(list, Win32Code.WM_CHAR, Win32Code.VK_C, 0);
-                        Win32API.SendMessage(list, Win32Code.WM_KEYUP, Win32Code.VK_C, 0);
-                        Win32API.SendMessage(list, Win32Code.WM_KEYUP, Win32Code.VK_CONTROL, 0);
-            */
-            Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018C6A0);
-            Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018C654);
-            Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBFC);
-            Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBDC);
-            Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018AD90);
-            Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018AD44);
-            Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBFC);
-            Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBDC);
-            Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018D098);
-            Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018D04C);
-            Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBFC);
-            Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBDC);
+
+                        Win32API.PostMessage(list, Win32Code.WM_KEYDOWN, Win32Code.VK_CONTROL, 0x101D0001);
+                        Thread.Sleep(80);
+                        Win32API.PostMessage(list, Win32Code.WM_KEYDOWN, Win32Code.VK_C, 0x102E0001);
+                        Win32API.PostMessage(list, Win32Code.WM_CHAR, Win32Code.VK_C, 0x102E0001);
+                        Win32API.PostMessage(list, Win32Code.WM_KEYUP, Win32Code.VK_C, 0x102E0001);
+                        Thread.Sleep(80);
+                        Win32API.PostMessage(list, Win32Code.WM_KEYUP, Win32Code.VK_CONTROL, 0x101D0001);
+           
+            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018C6A0);
+            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018C654);
+            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBFC);
+            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBDC);
+            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018AD90);
+            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018AD44);
+            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBFC);
+            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBDC);
+            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018D098);
+            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018D04C);
+            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBFC);
+            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBDC);
            
         }
 

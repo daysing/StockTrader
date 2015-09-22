@@ -98,9 +98,9 @@
       <Project>{4F326B65-142C-4303-A38E-279E382B9CC0}</Project>
       <Name>StockStrategy</Name>
     </ProjectReference>
-    <ProjectReference Include="..\XiaDan\XiaDan.csproj">
+    <ProjectReference Include="..\XiaDan\StockTrader.csproj">
       <Project>{CA5AEBAD-BDCF-4047-B3DC-6DC9D18B2874}</Project>
-      <Name>XiaDan</Name>
+      <Name>StockTrader</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

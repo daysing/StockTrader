@@ -28,7 +28,7 @@ using System.Text;
 
 namespace Stock.Market
 {
-    public class ReadTushareStockMarketThread : ReadStockMarketThread
+    public class LTSStockMarketListener : StockMarketListener
     {
         public override void Run()
         {
