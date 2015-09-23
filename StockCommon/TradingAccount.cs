@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace XiaDan
+namespace Stock.Trader.WeiTuo
 {
     /// <summary>
     /// 账户信息,包括
@@ -67,7 +67,6 @@ namespace XiaDan
 
         private IList<StockHolderInfo> stockHolders = new List<StockHolderInfo>();
         private MoneyInfo moneyInfo = new MoneyInfo();
-
         public StockHolderInfo[] StockHolders
         {
             get
