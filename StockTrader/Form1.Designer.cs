@@ -22,6 +22,7 @@
  */
 
 
+using System.Window;
 namespace StockTrader
 {
     partial class Form1
@@ -37,6 +38,7 @@ namespace StockTrader
         /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
         protected override void Dispose(bool disposing)
         {
+            Win32API.ChangeClipboardChain(this.Handle, nextClipboardViewer);
             if (disposing && (components != null))
             {
                 components.Dispose();

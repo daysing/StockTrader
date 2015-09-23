@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace System.Window
 {
@@ -18,7 +19,8 @@ namespace System.Window
 
         #region CallBacks
 		public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
-		#endregion
+        public delegate bool EnumWindowsProc(IntPtr hWnd, int lParam);
+        #endregion
 
 		#region Kernel32.dll functions
 		[DllImport("kernel32.dll", ExactSpelling=true, CharSet=CharSet.Auto)]
@@ -82,8 +84,15 @@ namespace System.Window
 	
 		#region User32.dll functions
         [DllImport("User32.dll", EntryPoint = "FindWindow")]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-		[DllImport("user32.dll", CharSet=CharSet.Auto)]
+            public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        [DllImport("User32.dll", EntryPoint = "FindWindowEx")]
+            public static extern IntPtr FindWindowEx(IntPtr hWnd, IntPtr hwndChildAfter, string lpClassName, string lpWindowName);
+        [DllImport("User32.dll", EntryPoint = "EnumWindows")]
+            public static extern IntPtr EnumWindows(EnumWindowsProc ewp, int lParam);
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool EnumChildWindows(IntPtr hwndParent, EnumWindowsProc lpEnumFunc, IntPtr lParam);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
 			public static extern IntPtr GetDC(IntPtr hWnd);
 		[DllImport("user32.dll", CharSet=CharSet.Auto)]
 			public static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
@@ -99,7 +108,9 @@ namespace System.Window
 			static public extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int Width, int Height, uint flags);
 		[DllImport("user32.dll", CharSet=CharSet.Auto)]
 			static public extern bool OpenClipboard(IntPtr hWndNewOwner);
-		[DllImport("user32.dll", CharSet=CharSet.Auto)]
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+            static public extern IntPtr GetClipboardData(int p);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
 			static public extern bool CloseClipboard();
 		[DllImport("user32.dll", CharSet=CharSet.Auto)]
 			static public extern bool EmptyClipboard();
@@ -111,6 +122,9 @@ namespace System.Window
 			public static extern IntPtr GetParent(IntPtr hWnd);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+
+        public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, StringBuilder lParam); 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, string lParam);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -207,7 +221,7 @@ namespace System.Window
 			public static extern int GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT wp);
 		[DllImport("User32.dll", CharSet=CharSet.Auto)]
 			public static extern int SetWindowText(IntPtr hWnd, string text);
-		[DllImport("User32.dll", CharSet=CharSet.Auto)]
+        [DllImport("User32.dll", CharSet = CharSet.Auto)]
 			public static extern int GetWindowText(IntPtr hWnd, out STRINGBUFFER text, int maxCount);
 		[DllImport("user32.dll", CharSet=CharSet.Auto)]
 			static public extern int SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam); 
@@ -297,6 +311,7 @@ namespace System.Window
 		}
 
 		#endregion
+
 
 
 

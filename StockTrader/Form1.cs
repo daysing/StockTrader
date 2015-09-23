@@ -39,12 +39,14 @@ using Stock.Strategy.Settings;
 using Stock.Strategy.Python;
 using Stock.Market;
 using System.Reflection;
+using System.Window;
 
 namespace StockTrader
 {
     public partial class Form1 : Form
     {
         Stock.Trader.XiaDan xiadan = null;
+        IntPtr nextClipboardViewer;
         public Form1()
         {
             InitializeComponent();
@@ -52,7 +54,57 @@ namespace StockTrader
             InitListView();
             xiadan = Stock.Trader.XiaDan.Instance;
             xiadan.Init();
+
+           // nextClipboardViewer = (IntPtr)Win32API.SetClipboardViewer(this.Handle);
         }
+
+        protected override void WndProc(ref Message m)
+        {
+            const int WM_DRAWCLIPBOARD = 0x308;
+            const int WM_CHANGECBCHAIN = 0x030D;
+
+            switch (m.Msg)
+            {
+                case WM_DRAWCLIPBOARD:
+                    DisplayClipboardData();
+                    Win32API.SendMessage(nextClipboardViewer, m.Msg, m.WParam, m.LParam);
+                    break;
+
+                case WM_CHANGECBCHAIN:
+                    if (m.WParam == nextClipboardViewer)
+                        nextClipboardViewer = m.LParam;
+                    else
+                        Win32API.SendMessage(nextClipboardViewer, m.Msg, m.WParam, m.LParam);
+                    break;
+
+                default:
+                    base.WndProc(ref m);
+                    break;
+            }
+        }
+
+        private void DisplayClipboardData()
+        {
+            try
+            {
+                IDataObject iData = new DataObject();
+                iData = Clipboard.GetDataObject();
+
+                MessageBox.Show(iData.GetData(DataFormats.UnicodeText).ToString());
+
+                //if (iData.GetDataPresent(DataFormats.Rtf))
+                //    richTextBox1.Rtf = (string)iData.GetData(DataFormats.Rtf);
+                //else if (iData.GetDataPresent(DataFormats.Text))
+                //    richTextBox1.Text = (string)iData.GetData(DataFormats.Text);
+                //else
+                //    richTextBox1.Text = "[Clipboard data is not RTF or ASCII Text]";
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+        }
+
 
         /// <summary>
         /// 初始化右键菜单策略

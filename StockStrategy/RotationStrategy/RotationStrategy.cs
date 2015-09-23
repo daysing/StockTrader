@@ -86,10 +86,12 @@ namespace Stock.Strategy.Rotation
             ScriptEngine engine = IronPython.Hosting.Python.CreateEngine();
             ScriptScope scope = engine.CreateScope();
             Console.WriteLine(Bids.ToString());
-            //scope = engine.CreateScope();
+
             scope.SetVariable("WeiTuo", this);// 将this Set 到Ipy脚本的WeiTuo值中
             scope.SetVariable("Bids", this.Bids);    // 多个股票的盘口数据
-            scope.SetVariable("StockPool", this.StockPool);
+            scope.SetVariable("StockPool", this.StockPool); // 股票池
+            scope.SetVariable("TradeAccount", this);   // 账户信息
+
             ScriptSource code = engine.CreateScriptSourceFromFile("e:\\projects\\test.py");
             code.Execute(scope);
 

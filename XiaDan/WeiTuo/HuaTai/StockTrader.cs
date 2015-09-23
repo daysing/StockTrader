@@ -342,31 +342,88 @@ namespace Stock.Trader.WeiTuo.HuaTai
             throw new NotImplementedException();
         }
 
+        public bool ADA_EnumWindowsProc(IntPtr hWnd, int lParam)
+        {
+
+            STRINGBUFFER sb ;
+            Win32API.GetClassName(hWnd, out sb, 15);
+            if (sb.szText.ToUpper().Equals("CLIPBRDWNDCLASS"))
+            {
+                MessageBox.Show(sb.szText);
+            }
+         //   Console.WriteLine(sb.szText);
+
+            return true;
+        }
+
+        private IntPtr findWndClass(IntPtr hWnd, IntPtr child)
+        {
+            IntPtr hc = Win32API.FindWindowEx(hWnd, child, "CLIPBRDWNDCLASS", null);
+            STRINGBUFFER sb;
+            Win32API.GetClassName(hc, out sb, 15);
+            if (sb.szText.ToUpper().Equals("CLIPBRDWNDCLASS"))
+            {
+                MessageBox.Show(sb.szText);
+            }
+            else
+            {
+                findWndClass(hWnd, hc);
+            }
+            Console.WriteLine(sb.szText);
+
+            return hc;
+      }
+
         public void GetCashInfo()
         {
             Win32API.SendMessage(htvi, Win32Code.TVM_SELECTITEM, Win32Code.TVGN_CARET, hQueryZjgp);
             
-                        // TODO:发送复制命令,这里不能正常复制
-                        IntPtr list = GetPositonList();
-                        Thread.Sleep(50);
-            POINT p = new POINT();
-            p.x = 1;
-            p.y = 1;
-            Win32API.PostMessage(list, Win32Code.WM_MOUSEMOVE, 0, ref p);
-                        Win32API.PostMessage(list, Win32Code.WM_LBUTTONDOWN, 0, ref p);
-                        Win32API.PostMessage(list, Win32Code.WM_LBUTTONUP, 0, 0);
-                        //Win32API.SendMessage(list, Win32Code.WM_RENDERFORMAT, Win32Code.CF_UNICODETEXT, 0);
+            // TODO:发送复制命令,这里不能正常复制
+            IntPtr list = GetPositonList();
 
-                        // Win32API.SendMessage(new IntPtr(0x00270bb2), Win32Code.WM_RENDERFORMAT, Win32Code.CF_UNICODETEXT, 0);
+            Win32API.EnumChildWindows(hWnd, ADA_EnumWindowsProc, IntPtr.Zero);
+            //Win32API.EnumWindowsProc ewp = new Win32API.EnumWindowsProc(ADA_EnumWindowsProc);
+            //Win32API.EnumWindows(ewp, 0);
+
+            // findWndClass(list, IntPtr.Zero);
+            IntPtr hClip = Win32API.FindWindowEx(list, IntPtr.Zero, "CLIPBRDWNDCLASS", null);
+            hClip = Win32API.FindWindow("CLIPBRDWNDCLASS", null);
+
+            Win32API.OpenClipboard(hClip);
+            Win32API.SetClipboardData(13, IntPtr.Zero);
+            Thread.Sleep(100);
+            IntPtr hm = Win32API.GetClipboardData(13);
+
+            StringBuilder sb = new StringBuilder(2000);
+            Win32API.SendMessage(list,Win32Code.WM_GETTEXT, 2000, sb);  
+//            String s = Clipboard.GetDataObject().GetData(DataFormats.UnicodeText).ToString();
+            MessageBox.Show(hm.ToString());
+            Win32API.EmptyClipboard();
+            Win32API.CloseClipboard();
+            //IntPtr p = Win32API.GetClipboardData(13);
+            // Win32API.SetClipboardViewer(new Form().Handle);
+
+//            String s = Clipboard.GetDataObject().GetData(DataFormats.UnicodeText).ToString();
+            //MessageBox.Show(s);
+            //            Thread.Sleep(50);
+            //POINT p = new POINT();
+            //p.x = 1;
+            //p.y = 1;
+            //Win32API.PostMessage(list, Win32Code.WM_MOUSEMOVE, 0, ref p);
+            //            Win32API.PostMessage(list, Win32Code.WM_LBUTTONDOWN, 0, ref p);
+            //            Win32API.PostMessage(list, Win32Code.WM_LBUTTONUP, 0, 0);
+            //            //Win32API.SendMessage(list, Win32Code.WM_RENDERFORMAT, Win32Code.CF_UNICODETEXT, 0);
+
+            //            // Win32API.SendMessage(new IntPtr(0x00270bb2), Win32Code.WM_RENDERFORMAT, Win32Code.CF_UNICODETEXT, 0);
 
 
-                        Win32API.PostMessage(list, Win32Code.WM_KEYDOWN, Win32Code.VK_CONTROL, 0x101D0001);
-                        Thread.Sleep(80);
-                        Win32API.PostMessage(list, Win32Code.WM_KEYDOWN, Win32Code.VK_C, 0x102E0001);
-                        Win32API.PostMessage(list, Win32Code.WM_CHAR, Win32Code.VK_C, 0x102E0001);
-                        Win32API.PostMessage(list, Win32Code.WM_KEYUP, Win32Code.VK_C, 0x102E0001);
-                        Thread.Sleep(80);
-                        Win32API.PostMessage(list, Win32Code.WM_KEYUP, Win32Code.VK_CONTROL, 0x101D0001);
+            //            Win32API.PostMessage(list, Win32Code.WM_KEYDOWN, Win32Code.VK_CONTROL, 0x101D0001);
+            //            Thread.Sleep(80);
+            //            Win32API.PostMessage(list, Win32Code.WM_KEYDOWN, Win32Code.VK_C, 0x102E0001);
+            //            Win32API.PostMessage(list, Win32Code.WM_CHAR, Win32Code.VK_C, 0x102E0001);
+            //            Win32API.PostMessage(list, Win32Code.WM_KEYUP, Win32Code.VK_C, 0x102E0001);
+            //            Thread.Sleep(80);
+            //            Win32API.PostMessage(list, Win32Code.WM_KEYUP, Win32Code.VK_CONTROL, 0x101D0001);
            
             //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018C6A0);
             //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018C654);
@@ -504,7 +561,11 @@ namespace Stock.Trader.WeiTuo.HuaTai
 
         public void PartFundSH(string code, int num)
         {
-            ClickShFcjjTreeViewItem();
+            // ClickShFcjjTreeViewItem();
+            //IntPtr p = Win32API.GetClipboardData(13);
+            // Win32API.SetClipboardViewer(new Form().Handle);
+
+
         }
 
         #endregion
