@@ -52,7 +52,10 @@ namespace System.Window
         public const string PROGRESSBARCLASSNAME = "msctls_progress32";
         public const string SCROLLBAR = "SCROLLBAR";
 
-
+        public const int WM_SETFOCUS = 0x0007;
+        public const int WM_KILLFOCUS = 0x0008;
+        public const int WM_SETTEXT = 0x000C;
+        public const int WM_GETTEXT = 0x000D;
         public const int WM_KEYDOWN = 0x0100;
         public const int WM_KEYUP = 0x0101;
         public const int WM_CHAR = 0x00102;
@@ -60,9 +63,6 @@ namespace System.Window
         public const int WM_SYSKEYUP = 0x0105;
         public const int WM_SYSCHAR = 0x0106;
 
-        public const int WM_SETTEXT = 0x000C;
-        public const int WM_SETFOCUS = 0x0007;
-        public const int WM_KILLFOCUS = 0x0008;
 
         public const int WM_COPY = 0x0301;
         public const int WM_RENDERFORMAT = 0x0305;

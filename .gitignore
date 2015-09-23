@@ -5,6 +5,8 @@ monitor.suo
 StockTraderModel
 StockMemo
 TestStockTrader
+OCR
 TestResults
 *.testsettings
+*.dll
 monitor.vsmdi

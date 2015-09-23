@@ -38,9 +38,9 @@ namespace XiaDan
     public class TradingAccount
     {
         public class StockHolderInfo {
-            private decimal cost;
-            private int holder;
-            private decimal shizhi;
+            public String Code { get; set; }
+            public int Amount { get; set; }
+            public decimal Cost { get; set; }
             /// <summary>
             /// 计算手续费
             /// </summary>
@@ -60,7 +60,20 @@ namespace XiaDan
             
         }
 
-        public class CashInfo {
+        public class MoneyInfo {
+            public decimal AvailableMoney { get; set; }
+        }
+
+
+        private IList<StockHolderInfo> stockHolders = new List<StockHolderInfo>();
+        private MoneyInfo moneyInfo = new MoneyInfo();
+
+        public StockHolderInfo[] StockHolders
+        {
+            get
+            {
+                return stockHolders.ToArray();
+            }
         }
 
     }
