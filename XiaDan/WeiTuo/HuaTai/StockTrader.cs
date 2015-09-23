@@ -334,12 +334,8 @@ namespace Stock.Trader.WeiTuo.HuaTai
 
         public void Keep()
         {
-            throw new NotImplementedException();
-        }
-
-        public void GetStockPositionList()
-        {
-            throw new NotImplementedException();
+            // 刷新
+            Win32API.PostMessage(hWnd, Win32Code.WM_KEYDOWN, Win32Code.VK_F5, 0);
         }
 
         public bool ADA_EnumWindowsProc(IntPtr hWnd, int lParam)
@@ -374,7 +370,7 @@ namespace Stock.Trader.WeiTuo.HuaTai
             return hc;
       }
 
-        public void GetCashInfo()
+        public TradingAccount GetTradingAccountInfo()
         {
             Win32API.SendMessage(htvi, Win32Code.TVM_SELECTITEM, Win32Code.TVGN_CARET, hQueryZjgp);
             
@@ -437,6 +433,8 @@ namespace Stock.Trader.WeiTuo.HuaTai
             //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018D04C);
             //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBFC);
             //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBDC);
+
+            return null;
            
         }
 

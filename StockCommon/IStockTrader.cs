@@ -71,14 +71,9 @@ namespace Stock.Trader.WeiTuo
         void Keep();
 
         /// <summary>
-        /// 持仓列表
-        /// </summary>
-        void GetStockPositionList();
-
-        /// <summary>
         /// 获取资金信息
         /// </summary>
-        void GetCashInfo();
+        TradingAccount GetTradingAccountInfo();
 
         /// <summary>
         /// 申购基金 深圳

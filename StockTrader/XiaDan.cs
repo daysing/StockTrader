@@ -171,7 +171,7 @@ namespace Stock.Trader
 
         internal void GetCashInfo()
         {
-            trader.GetCashInfo();
+            trader.GetTradingAccountInfo();
         }
     }
 }

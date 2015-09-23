@@ -45,7 +45,7 @@ namespace Stock.Trader.WeiTuo.HuaTai
                 MessageBox.Show("获取验证码失败");
             }
 
-            string str4 = this.httpClient.UploadString(address, data);
+            // string str4 = this.httpClient.UploadString(address, data);
 
         }
 
@@ -94,12 +94,8 @@ namespace Stock.Trader.WeiTuo.HuaTai
             throw new NotImplementedException();
         }
 
-        public void GetStockPositionList()
-        {
-            throw new NotImplementedException();
-        }
 
-        public void GetCashInfo()
+        public TradingAccount GetTradingAccountInfo()
         {
             throw new NotImplementedException();
         }

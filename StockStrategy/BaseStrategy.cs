@@ -161,15 +161,11 @@ namespace Stock.Strategy
 
         public void Keep()
         {
-            // NOTHING TODO
+            LogHelper.WriteLog(this.GetType(), "BaseStrategy.Keep");
+            trader.Keep();
         }
 
-        public void GetStockPositionList()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void GetCashInfo()
+        public TradingAccount GetTradingAccountInfo()
         {
             throw new NotImplementedException();
         }
