@@ -44,13 +44,13 @@
     <Compile Include="SinaStockMarketListener.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Stock.Market\Stock.Market.csproj">
+      <Project>{5264AE9F-AC38-4B53-9103-2F58CFB6171E}</Project>
+      <Name>Stock.Market</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StockCommon\StockCommon.csproj">
       <Project>{822279CE-076E-46BF-85CF-FA30AD427D46}</Project>
       <Name>StockCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StockMarket\StockMarket.csproj">
-      <Project>{E3D8C170-E27D-4E0E-828D-E60E9C58EAF8}</Project>
-      <Name>StockMarket</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

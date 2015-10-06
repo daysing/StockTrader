@@ -43,26 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\DataHelper.cs" />
-    <Compile Include="Common\HttpClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Common\DllUtils.cs" />
-    <Compile Include="Market\Bid.cs" />
-    <Compile Include="Market\BidCacheQueue.cs" />
-    <Compile Include="Market\FundData.cs" />
-    <Compile Include="Strategy\IStrategy.cs" />
-    <Compile Include="Strategy\IStrategyDesc.cs" />
-    <Compile Include="Strategy\IStrategyGroup.cs" />
-    <Compile Include="System.Window\Enums.cs" />
-    <Compile Include="System.Window\Structs.cs" />
-    <Compile Include="System.Window\Win32API.cs" />
-    <Compile Include="System.Window\Win32Code.cs" />
-    <Compile Include="Trader\IStockTrader.cs" />
-    <Compile Include="Common\LogHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Common\StockUtil.cs" />
-    <Compile Include="TradingAccount.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
