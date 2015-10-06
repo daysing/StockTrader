@@ -74,20 +74,6 @@
     <Compile Include="StrategyManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StockCommon\StockCommon.csproj">
-      <Project>{822279CE-076E-46BF-85CF-FA30AD427D46}</Project>
-      <Name>StockCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StockMarket\StockMarket.csproj">
-      <Project>{E3D8C170-E27D-4E0E-828D-E60E9C58EAF8}</Project>
-      <Name>StockMarket</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\XiaDan\StockTrader.csproj">
-      <Project>{CA5AEBAD-BDCF-4047-B3DC-6DC9D18B2874}</Project>
-      <Name>StockTrader</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="PythonStrategy\AddStockForm.resx">
       <DependentUpon>AddStockForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -100,6 +86,20 @@
     <EmbeddedResource Include="RotationStrategy\RotationStrategyForm.resx">
       <DependentUpon>RotationStrategyForm.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Stock.Common\Stock.Common.csproj">
+      <Project>{20C7D12A-F795-454C-8437-C09FDEA02839}</Project>
+      <Name>Stock.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stock.Market\Stock.Market.csproj">
+      <Project>{5264AE9F-AC38-4B53-9103-2F58CFB6171E}</Project>
+      <Name>Stock.Market</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stock.Trader\Stock.Trader.csproj">
+      <Project>{4F2CB782-B29C-4D6D-A04A-D0ADA2970AAB}</Project>
+      <Name>Stock.Trader</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
