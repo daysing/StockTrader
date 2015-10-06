@@ -8,8 +8,8 @@
     <ProjectGuid>{4F326B65-142C-4303-A38E-279E382B9CC0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StockStrategy</RootNamespace>
-    <AssemblyName>StockStrategy</AssemblyName>
+    <RootNamespace>Stock.Strategy</RootNamespace>
+    <AssemblyName>Stock.Strategy</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -46,30 +46,15 @@
   <ItemGroup>
     <Compile Include="BaseStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PythonStrategy\PythonStrategy.cs" />
     <Compile Include="PythonStrategy\AddStockForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PythonStrategy\AddStockForm.Designer.cs">
       <DependentUpon>AddStockForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PythonStrategy\PythonStrategyControl.cs">
+    <Compile Include="PythonStrategy\StrategyControl.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="RotationStrategy\RatationStrategyControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="RotationStrategy\RatationStrategyControl.Designer.cs">
-      <DependentUpon>RatationStrategyControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="RotationStrategy\RotationStrategy.cs" />
-    <Compile Include="Settings\BaseSettingForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="RotationStrategy\RotationStrategyForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="RotationStrategy\RotationStrategyForm.Designer.cs">
-      <DependentUpon>RotationStrategyForm.cs</DependentUpon>
     </Compile>
     <Compile Include="StrategyManager.cs" />
   </ItemGroup>
@@ -77,14 +62,8 @@
     <EmbeddedResource Include="PythonStrategy\AddStockForm.resx">
       <DependentUpon>AddStockForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PythonStrategy\PythonStrategyControl.resx">
-      <DependentUpon>PythonStrategyControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RotationStrategy\RatationStrategyControl.resx">
-      <DependentUpon>RatationStrategyControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RotationStrategy\RotationStrategyForm.resx">
-      <DependentUpon>RotationStrategyForm.cs</DependentUpon>
+    <EmbeddedResource Include="PythonStrategy\StrategyControl.resx">
+      <DependentUpon>StrategyControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

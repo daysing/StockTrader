@@ -34,7 +34,7 @@ using Microsoft.Scripting.Hosting;
 
 namespace Stock.Strategy.Python
 {
-    public class PythonStrategyControl : UserControl
+    public class StrategyControl : UserControl
     {
         #region 初始化界面
 
@@ -74,6 +74,7 @@ namespace Stock.Strategy.Python
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btnFile = new System.Windows.Forms.Button();
+            this.btnSetup = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // BtnDelete
@@ -154,10 +155,21 @@ namespace Stock.Strategy.Python
             this.btnFile.Text = "...";
             this.btnFile.UseVisualStyleBackColor = true;
             // 
+            // btnSetup
+            // 
+            this.btnSetup.Location = new System.Drawing.Point(353, 188);
+            this.btnSetup.Name = "btnSetup";
+            this.btnSetup.Size = new System.Drawing.Size(75, 23);
+            this.btnSetup.TabIndex = 19;
+            this.btnSetup.Text = "设置";
+            this.btnSetup.UseVisualStyleBackColor = true;
+            this.btnSetup.Click += new System.EventHandler(this.btnSetup_Click_1);
+            // 
             // PythonStrategyControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnSetup);
             this.Controls.Add(this.btnFile);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
@@ -175,6 +187,7 @@ namespace Stock.Strategy.Python
 
         private System.Windows.Forms.Button BtnDelete;
         private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Button btnSetup;
         private System.Windows.Forms.ListView listView3;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeader6;
@@ -186,36 +199,22 @@ namespace Stock.Strategy.Python
 
         #endregion
 
-
-
         #region properties
 
-        private IStrategy strategy;
+        private PythonStrategy strategy;
 
-        public IStrategy Strategy
+        public PythonStrategy Strategy
         {
             get { return strategy; }
             set { strategy = value; }
         }
-
-        ScriptEngine engine = null;
-        ScriptScope scope = null;
-
+ 
         #endregion
 
-
-        protected virtual IStrategy createStrategy()
-        {
-            throw new NotImplementedException();
-        }
-
-        public PythonStrategyControl()
+        public StrategyControl(PythonStrategy strategy)
         {
             InitializeComponent();
-            this.strategy = createStrategy();
-
-            engine = IronPython.Hosting.Python.CreateEngine();
-            scope = engine.CreateScope();
+            this.strategy = strategy;
 
             // load my stock pool
             LoadMyStockPool();
@@ -229,14 +228,6 @@ namespace Stock.Strategy.Python
         private void btnSetup_Click(object sender, EventArgs e)
         {
 
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            scope.SetVariable("WeiTuo", this.Strategy);// 将this Set 到Ipy脚本的WeiTuo值中
-            scope.SetVariable("Bids", this.Strategy);    // 多个股票的盘口数据,TODO:
-            ScriptSource code = engine.CreateScriptSourceFromFile(this.textBox1.Text);
-            code.Execute(scope);
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -265,6 +256,11 @@ namespace Stock.Strategy.Python
                     this.strategy.RemoveStock(item.Text);
                 }
 	        }    
+        }
+
+        private void btnSetup_Click_1(object sender, EventArgs e)
+        {
+            this.strategy.Setup();
         }
     }
 }

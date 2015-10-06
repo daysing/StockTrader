@@ -23,38 +23,28 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
-using Stock.Strategy.Settings;
+using Microsoft.Scripting.Hosting;
+using Stock.Strategy.Python;
 
-namespace Stock.Strategy.Rotation
+namespace Stock.Strategy.Python
 {
-    public partial class RotationStrategyForm : BaseSettingForm
+    public abstract class PythonStrategy : BaseStrategy
     {
-        public RotationStrategyForm()
+        protected ScriptEngine engine = null;
+        protected ScriptScope scope = null;
+        public PythonStrategy() : base()
         {
-            this.Strategy = new RotationStrategy();
-
-            InitializeComponent();
+            engine = IronPython.Hosting.Python.CreateEngine();
+            scope = engine.CreateScope();
+            control = new StrategyControl(this);
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        public virtual void Setup()
         {
-            RotationStrategy rs = (RotationStrategy)this.Strategy;
-            rs.IsValid = this.chkEnable.Checked;
-            rs.BasePoint = (int)this.numBasePoint.Value;
-            if(rs.IsValid)
-                
-            this.Close();
+            // nothing todo
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
     }
 }

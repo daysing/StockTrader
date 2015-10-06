@@ -21,28 +21,41 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Stock.Strategy.Settings
+
+namespace Stock.Strategy.Python.Rotation
 {
-    public class BaseSettingForm : Form
+    public partial class RotationStrategyForm : Form
     {
-        #region properties
-
         private IStrategy strategy;
-
-        public IStrategy Strategy
+        public RotationStrategyForm(IStrategy strategy)
         {
-            get { return strategy; }
-            set { strategy = value; }
+            this.strategy = strategy;
+
+            InitializeComponent();
         }
 
-        #endregion
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            RotationStrategy rs = (RotationStrategy)this.strategy;
+            rs.IsValid = this.chkEnable.Checked;
+            rs.BasePoint = (int)this.numBasePoint.Value;
+            if(rs.IsValid)
+                
+            this.Close();
+        }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

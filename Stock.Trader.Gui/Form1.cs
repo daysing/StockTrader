@@ -33,11 +33,11 @@ using System.Windows.Forms;
 
 using Stock.Trader;
 using Stock.Strategy;
-using Stock.Strategy.Settings;
 using Stock.Strategy.Python;
 using Stock.Market;
 using System.Reflection;
 using System.Window;
+using Stock.Common;
 
 namespace StockTrader
 {
@@ -53,33 +53,33 @@ namespace StockTrader
             xiadan = Stock.Trader.XiaDan.Instance;
             xiadan.Init();
 
-            nextClipboardViewer = (IntPtr)Win32API.SetClipboardViewer(this.Handle);
+  //          nextClipboardViewer = (IntPtr)Win32API.SetClipboardViewer(this.Handle);
         }
 
-        protected override void WndProc(ref Message m)
-        {
-            const int WM_DRAWCLIPBOARD = 0x308;
-            const int WM_CHANGECBCHAIN = 0x030D;
+        //protected override void WndProc(ref Message m)
+        //{
+        //    const int WM_DRAWCLIPBOARD = 0x308;
+        //    const int WM_CHANGECBCHAIN = 0x030D;
 
-            switch (m.Msg)
-            {
-                case WM_DRAWCLIPBOARD:
-                    DisplayClipboardData();
-                    Win32API.SendMessage(nextClipboardViewer, m.Msg, m.WParam, m.LParam);
-                    break;
+        //    switch (m.Msg)
+        //    {
+        //        case WM_DRAWCLIPBOARD:
+        //            DisplayClipboardData();
+        //            Win32API.SendMessage(nextClipboardViewer, m.Msg, m.WParam, m.LParam);
+        //            break;
 
-                case WM_CHANGECBCHAIN:
-                    if (m.WParam == nextClipboardViewer)
-                        nextClipboardViewer = m.LParam;
-                    else
-                        Win32API.SendMessage(nextClipboardViewer, m.Msg, m.WParam, m.LParam);
-                    break;
+        //        case WM_CHANGECBCHAIN:
+        //            if (m.WParam == nextClipboardViewer)
+        //                nextClipboardViewer = m.LParam;
+        //            else
+        //                Win32API.SendMessage(nextClipboardViewer, m.Msg, m.WParam, m.LParam);
+        //            break;
 
-                default:
-                    base.WndProc(ref m);
-                    break;
-            }
-        }
+        //        default:
+        //            base.WndProc(ref m);
+        //            break;
+        //    }
+        //}
 
         private void DisplayClipboardData()
         {
@@ -133,6 +133,7 @@ namespace StockTrader
             public String name;
             public String desc;
             public String clazz;
+            public String dllPath;
             public int group;
             public int id;
         }
@@ -140,11 +141,13 @@ namespace StockTrader
         private StrategyDesc[] LoadStrategyList()
         {
             StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc(), new StrategyDesc() };
-            sd[0].clazz = "Stock.Strategy.Settings.RotationStrategyForm";
+            sd[0].clazz = "Stock.Strategy.Python.Rotation.RotationStrategy";
+            sd[0].dllPath = "Stock.Strategy.Python.Ratation.dll";
             sd[0].desc = "说明：分级A轮动策略";
             sd[0].name = "分级A轮动策略";
             sd[0].group = 0;
-            sd[1].clazz = "Stock.Strategy.Settings.RotationStrategyForm";
+            sd[1].clazz = "Stock.Strategy.Python.Rotation.RotationStrategy";
+            sd[1].dllPath = "Stock.Strategy.Python.Ratation.dll";
             sd[1].desc = "说明：箱体高抛低吸策略";
             sd[1].name = "箱体策略";
             sd[1].group = 1;
@@ -154,9 +157,9 @@ namespace StockTrader
 
         private StrategyDesc[] LoadMyStrategyList()
         {
-            StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc(), new StrategyDesc() };
-            sd[0].clazz = "Stock.Strategy.Settings.RotationStrategyForm";
-            sd[0].desc = "说明：分级A轮动策略";
+            StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc() };
+            sd[0].clazz = "Stock.Strategy.Python.Rotation.RotationStrategy";
+            sd[0].dllPath = "Stock.Strategy.Python.Ratation.dll";
             sd[0].name = "分级A轮动策略";
             sd[0].group = 0;
 
@@ -192,18 +195,13 @@ namespace StockTrader
 
         private void AddStrategyToListView(StrategyDesc sd)
         {
-            PythonStrategyControl control = new Stock.Strategy.Rotation.RatationStrategyControl();
-            // Assembly asm = Assembly.LoadFile("E:\\projects\\StockTrader\\StockTrader\\bin\\Debug\\StockStrategy.dll");
-            // PythonStrategyControl control = (PythonStrategyControl)asm.GetType(sd.clazz).Assembly.CreateInstance(sd.clazz);
-            
-
-            StrategyManager.Instance.AddMyStrategy(control.Strategy);
+            BaseStrategy strategy = (BaseStrategy)StrategyManager.Instance.AddMyStrategy(sd.dllPath, sd.clazz);
 
             System.Windows.Forms.ListViewItem lvi = new System.Windows.Forms.ListViewItem(new string[] {
             sd.name,
             sd.desc}, -1);
             lvi.Group = this.listView1.Groups[sd.group];
-            lvi.Tag = control;
+            lvi.Tag = strategy.Control;
             this.listView1.Items.Add(lvi);
         }
 

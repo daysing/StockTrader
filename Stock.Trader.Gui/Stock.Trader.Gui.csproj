@@ -54,12 +54,6 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="QuanShang\FormHuaTai.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="QuanShang\FormHuaTai.Designer.cs">
-      <DependentUpon>FormHuaTai.cs</DependentUpon>
-    </Compile>
     <Compile Include="XiaDan.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,9 +70,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="QuanShang\FormHuaTai.resx">
-      <DependentUpon>FormHuaTai.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -124,13 +115,13 @@
       <Project>{5264AE9F-AC38-4B53-9103-2F58CFB6171E}</Project>
       <Name>Stock.Market</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Stock.Strategy\Stock.Strategy.csproj">
+      <Project>{4F326B65-142C-4303-A38E-279E382B9CC0}</Project>
+      <Name>Stock.Strategy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Stock.Trader\Stock.Trader.csproj">
       <Project>{4F2CB782-B29C-4D6D-A04A-D0ADA2970AAB}</Project>
       <Name>Stock.Trader</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StockStrategy\Stock.Strategy.csproj">
-      <Project>{4F326B65-142C-4303-A38E-279E382B9CC0}</Project>
-      <Name>Stock.Strategy</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
