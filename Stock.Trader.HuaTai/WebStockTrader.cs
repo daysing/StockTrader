@@ -89,7 +89,8 @@ namespace Stock.Trader.HuaTai
         private HttpClient httpClient = new HttpClient();
         private RespAccountInfo resAccountInfo;
         private static string SuccessCode = "success";
-        
+        FormInputValidateCode fivc = null;
+
         public void Init()
         {
             Login();
@@ -105,15 +106,17 @@ namespace Stock.Trader.HuaTai
             {
                 MessageBox.Show("获取验证码失败");
             }
-//            t.vcode = verifyCode;
+
             LoginPostInfo t = new LoginPostInfo
             {
-                macaddr = "00:26:c6:87:15:ce",
+                // TODO: 自动获取MAC, HDD INFO
+                macaddr = "00:0C:29:1A:B4:32",
                 hddInfo = "CVCV434102MF120BGN++",
-                servicePwd = "123445",
-                trdpwd = "8f572f18e6b09c54fc347f96fbd61564",
-                trdpwdEns = "8f572f18e6b09c54fc347f96fbd61564",
-                userName = "123445",
+                
+                servicePwd = fivc.txtServicePwd.Text,
+                trdpwd = fivc.txtTrdpwd.GetEncPswAes(),
+                trdpwdEns = fivc.txtTrdpwd.GetEncPswAes(),
+                userName = fivc.txtUsername.Text,
                 vcode = verifyCode
             };
 
@@ -159,7 +162,7 @@ namespace Stock.Trader.HuaTai
             Bitmap bitmap = new Bitmap(stream);
             Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
             Bitmap image = bitmap.Clone(rect, PixelFormat.Format8bppIndexed);
-            FormInputValidateCode fivc = new FormInputValidateCode();
+            fivc = new FormInputValidateCode();
             fivc.picValidateCode.Image = image;
             fivc.ShowDialog();
             return fivc.txtValidateCode.Text;
