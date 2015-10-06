@@ -110,10 +110,10 @@ namespace Stock.Trader.HuaTai
             {
                 macaddr = "00:26:c6:87:15:ce",
                 hddInfo = "CVCV434102MF120BGN++",
-                servicePwd = "750404",
+                servicePwd = "123445",
                 trdpwd = "8f572f18e6b09c54fc347f96fbd61564",
                 trdpwdEns = "8f572f18e6b09c54fc347f96fbd61564",
-                userName = "666600164015",
+                userName = "123445",
                 vcode = verifyCode
             };
 
