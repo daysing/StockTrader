@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Stock.Trader.WeiTuo
+namespace Stock.Trader
 {
     public abstract class BaseStockTrader 
     {
