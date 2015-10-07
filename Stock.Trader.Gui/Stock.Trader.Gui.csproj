@@ -111,18 +111,6 @@
       <Project>{20C7D12A-F795-454C-8437-C09FDEA02839}</Project>
       <Name>Stock.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Stock.Market\Stock.Market.csproj">
-      <Project>{5264AE9F-AC38-4B53-9103-2F58CFB6171E}</Project>
-      <Name>Stock.Market</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Stock.Strategy\Stock.Strategy.csproj">
-      <Project>{4F326B65-142C-4303-A38E-279E382B9CC0}</Project>
-      <Name>Stock.Strategy</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Stock.Trader\Stock.Trader.csproj">
-      <Project>{4F2CB782-B29C-4D6D-A04A-D0ADA2970AAB}</Project>
-      <Name>Stock.Trader</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B20A5FA7-F000-4914-B9FC-C768FA1A6D04}</ProjectGuid>
+    <ProjectGuid>{CE770480-5744-4DB0-AA0C-62705F84C3EB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Stock.Strategy.Python.Ratation</RootNamespace>
-    <AssemblyName>Stock.Strategy.Python.Ratation</AssemblyName>
+    <RootNamespace>Stock.Market.Server</RootNamespace>
+    <AssemblyName>Stock.Market.Server</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Stock.Trader.Gui\bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -31,12 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IronPython, Version=2.7.5.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.Scripting, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,28 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RotationStrategy.cs" />
-    <Compile Include="RotationStrategyForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="RotationStrategyForm.Designer.cs">
-      <DependentUpon>RotationStrategyForm.cs</DependentUpon>
-    </Compile>
+    <Compile Include="ServerStockMarketListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Stock.Common\Stock.Common.csproj">
       <Project>{20C7D12A-F795-454C-8437-C09FDEA02839}</Project>
       <Name>Stock.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Stock.Strategy\Stock.Strategy.csproj">
-      <Project>{4F326B65-142C-4303-A38E-279E382B9CC0}</Project>
-      <Name>Stock.Strategy</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="RotationStrategyForm.resx">
-      <DependentUpon>RotationStrategyForm.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

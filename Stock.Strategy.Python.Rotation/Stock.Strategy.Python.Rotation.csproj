@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4F326B65-142C-4303-A38E-279E382B9CC0}</ProjectGuid>
+    <ProjectGuid>{B20A5FA7-F000-4914-B9FC-C768FA1A6D04}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Stock.Strategy</RootNamespace>
-    <AssemblyName>Stock.Strategy</AssemblyName>
+    <RootNamespace>Stock.Strategy.Python.Rotation</RootNamespace>
+    <AssemblyName>Stock.Strategy.Python.Rotation</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\Stock.Trader.Gui\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -44,41 +44,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PythonStrategy\PythonStrategy.cs" />
-    <Compile Include="PythonStrategy\AddStockForm.cs">
+    <Compile Include="RotationStrategy.cs" />
+    <Compile Include="RotationStrategyForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PythonStrategy\AddStockForm.Designer.cs">
-      <DependentUpon>AddStockForm.cs</DependentUpon>
+    <Compile Include="RotationStrategyForm.Designer.cs">
+      <DependentUpon>RotationStrategyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PythonStrategy\StrategyControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="StrategyManager.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="PythonStrategy\AddStockForm.resx">
-      <DependentUpon>AddStockForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PythonStrategy\StrategyControl.resx">
-      <DependentUpon>StrategyControl.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Stock.Common\Stock.Common.csproj">
       <Project>{20C7D12A-F795-454C-8437-C09FDEA02839}</Project>
       <Name>Stock.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Stock.Market\Stock.Market.csproj">
-      <Project>{5264AE9F-AC38-4B53-9103-2F58CFB6171E}</Project>
-      <Name>Stock.Market</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Stock.Trader\Stock.Trader.csproj">
-      <Project>{4F2CB782-B29C-4D6D-A04A-D0ADA2970AAB}</Project>
-      <Name>Stock.Trader</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="RotationStrategyForm.resx">
+      <DependentUpon>RotationStrategyForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
