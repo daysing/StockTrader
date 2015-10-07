@@ -221,7 +221,7 @@ namespace Stock.Trader.HuaTai
 
     public class SellQueryInfo : Request
     {
-        // uid=153-1fb4-7915165&cssweb_type=STOCK_SALE&version=1&custid=666600164015&op_branch_no=17&branch_no=17&op_entrust_way=7&op_station=IP$183.206.203.123;MAC$00-0C-29-1A-B4-32;HDD$                    &function_id=302&fund_account=666600164015&password=ojCz+oMyzH00kXNZv4/iTA$$&identity_type=&exchange_type=1&stock_account=A763438769&stock_code=600717&entrust_amount=100&entrust_price=10&entrust_prop=0&entrust_bs=2&ram=0.21561731165274978
+        // uid=153-1fb4-7915165&cssweb_type=STOCK_SALE&version=1&custid=xxxxxxxx&op_branch_no=17&branch_no=17&op_entrust_way=7&op_station=IP$183.206.203.123;MAC$00-0C-29-1A-B4-32;HDD$                    &function_id=302&fund_account=xxxx&password=ojCz+xxxxx/iTA$$&identity_type=&exchange_type=1&stock_account=xxxx&stock_code=xxx&entrust_amount=100&entrust_price=10&entrust_prop=0&entrust_bs=2&ram=0.21561731165274978
 
         public SellQueryInfo()
         {
