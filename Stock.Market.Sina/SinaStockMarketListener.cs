@@ -94,6 +94,7 @@ namespace Stock.Market.Sina
         const int SELL_4_P = SELL_4_A + 1;
         const int SELL_5_A = SELL_4_P + 1;
         const int SELL_5_P = SELL_5_A + 1;
+
         private Bid Parse(string data)
         {
             Bid bid = new Bid();
@@ -101,11 +102,11 @@ namespace Stock.Market.Sina
 
             bid.Code = data.Substring(13, 6);
             bid.Name = items[0];
-            // bid.TodayOpen = decimal.Parse(items[1]);
-            // bid.YesterdayClose = decimal.Parse(items[2]);
+            bid.Open = float.Parse(items[1]);
+            bid.LastClose = float.Parse(items[2]);
             bid.CurrentPrice = float.Parse(items[3]);
-            // bid.High = decimal.Parse(items[4]);
-            // bid.Low = decimal.Parse(items[5]);
+            bid.High = float.Parse(items[4]);
+            bid.Low = float.Parse(items[5]);
             //bid.Buy = decimal.Parse(items[6]);
             //bid.Sell = decimal.Parse(items[7]);
             bid.Volumn = int.Parse(items[8]);

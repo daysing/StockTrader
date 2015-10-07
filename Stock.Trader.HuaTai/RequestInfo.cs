@@ -221,7 +221,7 @@ namespace Stock.Trader.HuaTai
 
     public class SellQueryInfo : Request
     {
-        // uid=153-1fb4-7915165&cssweb_type=STOCK_SALE&version=1&custid=xxxxxxxx&op_branch_no=17&branch_no=17&op_entrust_way=7&op_station=IP$183.206.203.123;MAC$00-0C-29-1A-B4-32;HDD$                    &function_id=302&fund_account=xxxx&password=ojCz+xxxxx/iTA$$&identity_type=&exchange_type=1&stock_account=xxxx&stock_code=xxx&entrust_amount=100&entrust_price=10&entrust_prop=0&entrust_bs=2&ram=0.21561731165274978
+        // uid=153-1f64-7915165&cssweb_type=STOCK_SALE&version=1&custid=666600111111&op_branch_no=17&branch_no=17&op_entrust_way=7&op_station=IP$183.206.203.123;MAC$00-0C-29-1A-B4-32;HDD$                    &function_id=302&fund_account=666600111111&password=ojCz+oMyzH50kXNZv4/iTA$$&identity_type=&exchange_type=1&stock_account=A763438769&stock_code=600717&entrust_amount=100&entrust_price=10&entrust_prop=0&entrust_bs=2&ram=0.21561731165274978
 
         public SellQueryInfo()
         {
@@ -257,7 +257,7 @@ namespace Stock.Trader.HuaTai
 
     public class CancelQueryInfo : Request
     {
-        //uid=152-5821-6976124&version=1&custid=666600164015&op_branch_no=17&branch_no=17&op_entrust_way=7&op_station=IP$183.206.203.123;MAC$00-0C-29-1A-B4-32;HDD$                    &function_id=401&fund_account=666600164015&password=ojCz+oMyzH00kXNZv4/iTA$$&identity_type=&exchange_type=&stock_account=&stock_code=&locate_entrust_no=&query_direction=&
+        //uid=152-5841-6976124&version=1&custid=666600111111&op_branch_no=17&branch_no=17&op_entrust_way=7&op_station=IP$183.206.203.123;MAC$00-0C-29-1A-B4-32;HDD$                    &function_id=401&fund_account=66660111111&password=ojCz+oMyzH05kXNZv4/iTA$$&identity_type=&exchange_type=&stock_account=&stock_code=&locate_entrust_no=&query_direction=&
         //sort_direction=0&request_num=100&position_str=&ram=0.5226608067750931
         public CancelQueryInfo()
         {
