@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\StockTrader\bin\Debug\</OutputPath>
+    <OutputPath>..\Stock.Trader.Gui\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -35,7 +35,7 @@
       <HintPath>..\..\..\dd\source\lib\AxInterop.CSSWEBLOGINHTLib.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\XiaDan\lib\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -68,13 +68,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StockCommon\StockCommon.csproj">
-      <Project>{822279CE-076E-46BF-85CF-FA30AD427D46}</Project>
-      <Name>StockCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\XiaDan\StockTrader.csproj">
-      <Project>{CA5AEBAD-BDCF-4047-B3DC-6DC9D18B2874}</Project>
-      <Name>StockTrader</Name>
+    <ProjectReference Include="..\Stock.Common\Stock.Common.csproj">
+      <Project>{20C7D12A-F795-454C-8437-C09FDEA02839}</Project>
+      <Name>Stock.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
