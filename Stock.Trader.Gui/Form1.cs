@@ -38,6 +38,7 @@ using Stock.Market;
 using System.Reflection;
 using System.Window;
 using Stock.Common;
+using Stock.Trader.Settings;
 
 namespace StockTrader
 {
@@ -50,12 +51,30 @@ namespace StockTrader
             InitializeComponent();
             InitStrategyMenu();
             InitListView();
-            xiadan = Stock.Trader.XiaDan.Instance;
-            xiadan.Init();
 
   //          nextClipboardViewer = (IntPtr)Win32API.SetClipboardViewer(this.Handle);
         }
 
+        private void _Start()
+        {
+            xiadan = Stock.Trader.XiaDan.Instance;
+            xiadan.Init();
+
+            int span = int.Parse(Configure.GetStockTraderItem(Configure.KEEP_TIME_SPAN));
+            this.keepLoginTimer.Interval = span;
+            this.keepLoginTimer.Enabled = true;
+
+            StockMarketManager smm = StockMarketManager.Instance;
+            IStrategy[] strategies = StrategyManager.Instance.ReadMyStrategies();
+
+            foreach (IStrategy strategy in strategies)
+            {
+                smm.RegisterStrategy(strategy);
+            }
+
+            smm.Start();
+
+        }
         //protected override void WndProc(ref Message m)
         //{
         //    const int WM_DRAWCLIPBOARD = 0x308;
@@ -142,12 +161,12 @@ namespace StockTrader
         {
             StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc(), new StrategyDesc() };
             sd[0].clazz = "Stock.Strategy.Python.Rotation.RotationStrategy";
-            sd[0].dllPath = "Stock.Strategy.Python.Ratation.dll";
+            sd[0].dllPath = "Stock.Strategy.Python.Rotation.dll";
             sd[0].desc = "说明：分级A轮动策略";
             sd[0].name = "分级A轮动策略";
             sd[0].group = 0;
             sd[1].clazz = "Stock.Strategy.Python.Rotation.RotationStrategy";
-            sd[1].dllPath = "Stock.Strategy.Python.Ratation.dll";
+            sd[1].dllPath = "Stock.Strategy.Python.Rotation.dll";
             sd[1].desc = "说明：箱体高抛低吸策略";
             sd[1].name = "箱体策略";
             sd[1].group = 1;
@@ -159,7 +178,7 @@ namespace StockTrader
         {
             StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc() };
             sd[0].clazz = "Stock.Strategy.Python.Rotation.RotationStrategy";
-            sd[0].dllPath = "Stock.Strategy.Python.Ratation.dll";
+            sd[0].dllPath = "Stock.Strategy.Python.Rotation.dll";
             sd[0].name = "分级A轮动策略";
             sd[0].group = 0;
 
@@ -294,16 +313,6 @@ namespace StockTrader
         private void button5_Click(object sender, EventArgs e)
         {
 
-            StockMarketManager smm = new StockMarketManager();
-            IStrategy[] strategies = StrategyManager.Instance.ReadMyStrategies();
-
-            foreach (IStrategy strategy in strategies)
-            {
-                smm.RegisterStrategy(strategy);
-            }
-
-            smm.Start();
-
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -316,6 +325,9 @@ namespace StockTrader
 
         private void GetStockPosition()
         {
+            if (this.xiadan == null)
+                return;
+
             lvStockPosition.Items.Clear();
             TradingAccount account = this.xiadan.GetCashInfo();
             foreach (TradingAccount.StockHolderInfo shi in account.StockHolders)
@@ -333,13 +345,15 @@ namespace StockTrader
                      shi.MarketValue.ToString(),
                      shi.ExchangeName,
                      shi.StockAccount
-
                 });
                 lvStockPosition.Items.Add(lvi);
             }
         }
 
- 
+        private void keepLoginTimer_Tick(object sender, EventArgs e)
+        {
+            StockTraderManager.Instance.GetStockTrader().Keep();
+        }
 
     }
 }

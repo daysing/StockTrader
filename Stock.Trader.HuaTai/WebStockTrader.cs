@@ -98,8 +98,8 @@ namespace Stock.Trader.HuaTai
 
         private void Login()
         {
-            string address = "https://service.htsc.com.cn/service/loginAction.do?method=login";
-            this.httpClient.DownloadString(address);
+            string loginUrl = "https://service.htsc.com.cn/service/loginAction.do?method=login";
+            this.httpClient.DownloadString(loginUrl);
             
             string verifyCode = this.GetVerifyCode();
             if (verifyCode == "")
@@ -126,17 +126,17 @@ namespace Stock.Trader.HuaTai
             this.httpClient.Encoding = this.encoding;
 
             // string str4 = this.httpClient.UploadString(address, data);
-            byte[] responseData = this.httpClient.UploadData(address, "POST", postData);
-            string str4 = Encoding.UTF8.GetString(responseData);//解码  
+            byte[] responseData = this.httpClient.UploadData(loginUrl, "POST", postData);
+            string resp = Encoding.UTF8.GetString(responseData);//解码  
 
-            if (str4.IndexOf("上次登录时间") != -1)
+            if (resp.IndexOf("上次登录时间") != -1)
             {
                 string input = this.httpClient.DownloadString("https://service.htsc.com.cn/service/flashbusiness_new3.jsp?etfCode=");
                 String infoStr = StockUtil.Base64Decode(this.GetData(input), this.GB2312);
                 Console.WriteLine(infoStr);
                 resAccountInfo = JsonConvert.DeserializeObject<RespAccountInfo>(infoStr);                
             }
-            else if (str4.IndexOf("系统升级中") != -1)
+            else if (resp.IndexOf("系统升级中") != -1)
             {
                 MessageBox.Show("系统升级中");
                 return ;
@@ -184,6 +184,18 @@ namespace Stock.Trader.HuaTai
 
         public void SellStock(string code, float price, int num)
         {
+            bool ret = _SellStock(code, price, num);
+            if (!ret)
+            {
+                // LOG
+                Login();
+                _SellStock(code, price, num);  
+            }
+
+        }
+
+        private bool _SellStock(string code, float price, int num)
+        {
             int exchange_type = StockUtil.GetExchangeType(code);
             StockHolder holder = GetStockHolder(exchange_type);
             SellQueryInfo t = new SellQueryInfo
@@ -201,15 +213,16 @@ namespace Stock.Trader.HuaTai
                 entrust_amount = num,
                 entrust_price = (float)price
             };
-            string str2 = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<SellQueryInfo>(t), this.GB2312);
-            string address = "https://tradegw.htsc.com.cn/?" + str2;
-            string str5 = StockUtil.Base64Decode(this.httpClient.DownloadString(address), this.GB2312);
+            string queryParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<SellQueryInfo>(t), this.GB2312);
+            string sellUrl = "https://tradegw.htsc.com.cn/?" + queryParams;
+            string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(sellUrl), this.GB2312);
 
-            if (JsonConvert.DeserializeObject<RespSellStockResult>(str5).cssweb_code == SuccessCode)
-           {
-                // TODO
-           }
-           
+            if (JsonConvert.DeserializeObject<RespSellStockResult>(resp).cssweb_code == SuccessCode)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public void BuyStock(string code, float price, int num)
@@ -233,15 +246,14 @@ namespace Stock.Trader.HuaTai
                 entrust_price = price
             };
 
-            string str2 = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<BuyQueryInfo>(t), this.GB2312);
-            string address = "https://tradegw.htsc.com.cn/?" + str2;
-            string str5 = StockUtil.Base64Decode(this.httpClient.DownloadString(address),this.GB2312);
+            string queryParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<BuyQueryInfo>(t), this.GB2312);
+            string buyUrl = "https://tradegw.htsc.com.cn/?" + queryParams;
+            string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(buyUrl),this.GB2312);
 
-            if (JsonConvert.DeserializeObject<RespBuyStockResult>(str5).cssweb_code == SuccessCode)
+            if (JsonConvert.DeserializeObject<RespBuyStockResult>(resp).cssweb_code == SuccessCode)
             {
                 // TODO:
             }
-
        }
 
         public void CancelStock(string code, float price, int num)
@@ -290,8 +302,8 @@ namespace Stock.Trader.HuaTai
             };
             string str2 = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<StockQueryInfo>(t), this.encoding);
 
-            string address = "https://tradegw.htsc.com.cn/?" + str2;
-            RespStockResult result = JsonConvert.DeserializeObject<RespStockResult>(StockUtil.Base64Decode(this.httpClient.DownloadString(address), this.GB2312));
+            string positionUrl = "https://tradegw.htsc.com.cn/?" + str2;
+            RespStockResult result = JsonConvert.DeserializeObject<RespStockResult>(StockUtil.Base64Decode(this.httpClient.DownloadString(positionUrl), this.GB2312));
             List<TradingAccount.StockHolderInfo> list = new List<TradingAccount.StockHolderInfo>();
             foreach (HtStockInfo si in result.Item)
             {

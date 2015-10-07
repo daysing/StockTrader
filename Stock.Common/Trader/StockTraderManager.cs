@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Stock.Common;
+using Stock.Trader.Settings;
 
 namespace Stock.Trader
 {
@@ -46,7 +47,7 @@ namespace Stock.Trader
         {
             if (stockTrader == null)
             {
-                stockTrader = DllUtils.CreateInstance<IStockTrader>("Stock.Trader.HuaTai.dll", "Stock.Trader.HuaTai.ThsStockTrader");
+                stockTrader = DllUtils.CreateInstance<IStockTrader>(Configure.GetCurrentStock().Dll, Configure.GetCurrentStock().ClazzName);
                 stockTrader.Init();
             }
             return stockTrader;

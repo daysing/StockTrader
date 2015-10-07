@@ -75,5 +75,10 @@ namespace Stock.Strategy
         /// </summary>
         /// <param name="sender"></param>
         void OnTicket(object sender);
+
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        void Init();
     }
 }

@@ -31,6 +31,7 @@ using System.Collections;
 using Stock.Strategy;
 using System.Threading;
 using Stock.Common;
+using Stock.Trader.Settings;
 
 namespace Stock.Market
 {
@@ -44,10 +45,12 @@ namespace Stock.Market
         public event TicketHandler OnTicket;
 
         private System.Timers.Timer timer = null;
+        public static StockMarketManager Instance = new StockMarketManager();
 
-        public StockMarketManager()
+        private StockMarketManager()
         {
-            timer = new System.Timers.Timer(5000);
+            int span = int.Parse(Configure.GetStockTraderItem(Configure.TICKET_TIME_SPAN));
+            timer = new System.Timers.Timer(span);
         }
 
         /// <summary>
@@ -75,8 +78,7 @@ namespace Stock.Market
             if (started)
                 throw new Exception();
 
-            // StockMarketListener rsmt = DllUtils.CreateInstance<StockMarketListener>("Stock.Market.Wjf", "Stock.Market.Wjf.WjfStockMarketListener"); // new WjfStockMarketListener();
-            StockMarketListener rsmt = DllUtils.CreateInstance<StockMarketListener>("Stock.Market.Sina.dll", "Stock.Market.Sina.SinaStockMarketListener"); // new WjfStockMarketListener();
+            StockMarketListener rsmt = DllUtils.CreateInstance<StockMarketListener>(Configure.GetCurrentMarketListener().Dll, Configure.GetCurrentMarketListener().ClazzName);
             foreach (string code in StockMarketManager.bidCache.Keys)
             {
                 rsmt.AddStock(code);

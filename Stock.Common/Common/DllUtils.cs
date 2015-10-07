@@ -33,7 +33,7 @@ namespace Stock.Common
     {
         public static T CreateInstance<T>(string dllPath, String className)
         {
-            Assembly ass = Assembly.LoadFrom(dllPath);                     //利用dll的路径加载(fullname)
+            Assembly ass = Assembly.LoadFrom(dllPath); 
 
             Type type = ass.GetType(className);
             object obj = Activator.CreateInstance(type);

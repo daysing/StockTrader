@@ -91,5 +91,9 @@ namespace Stock.Strategy.Python.Rotation
         {
             new RotationStrategyForm(this).ShowDialog();
         }
+
+        public override void Init()
+        {
+        }
     }
 }

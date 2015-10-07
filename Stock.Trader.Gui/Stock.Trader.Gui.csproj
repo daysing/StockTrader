@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -110,6 +111,10 @@
     <ProjectReference Include="..\Stock.Common\Stock.Common.csproj">
       <Project>{20C7D12A-F795-454C-8437-C09FDEA02839}</Project>
       <Name>Stock.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stock.Strategy.Python.Rotation\Stock.Strategy.Python.Rotation.csproj">
+      <Project>{B20A5FA7-F000-4914-B9FC-C768FA1A6D04}</Project>
+      <Name>Stock.Strategy.Python.Rotation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

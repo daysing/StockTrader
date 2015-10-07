@@ -149,7 +149,7 @@ namespace Stock.Strategy
 
         IStockTrader trader = StockTraderManager.Instance.GetStockTrader();
 
-        public void Init()
+        public virtual void Init()
         {
             // trader.Init();
         }
