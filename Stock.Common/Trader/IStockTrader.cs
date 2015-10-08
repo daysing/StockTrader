@@ -43,7 +43,8 @@ namespace Stock.Trader
         /// <param name="code"></param>
         /// <param name="price"></param>
         /// <param name="num"></param>
-        void SellStock(String code, float price, int num);
+        /// <returns>合同号</returns>
+        string SellStock(String code, float price, int num);
 
         /// <summary>
         /// 买股票
@@ -51,15 +52,15 @@ namespace Stock.Trader
         /// <param name="code"></param>
         /// <param name="price"></param>
         /// <param name="num"></param>
-        void BuyStock(String code, float price, int num);
+        /// <returns>合同号</returns>
+        string BuyStock(String code, float price, int num);
 
         /// <summary>
         /// 撤单
         /// </summary>
-        /// <param name="code"></param>
-        /// <param name="price"></param>
-        /// <param name="num"></param>
-        void CancelStock(String code, float price, int num);
+        /// <param name="entrustNo">合约号</param>
+        /// <returns>合同号</returns>
+        string CancelStock(String entrustNo);
 
         /// <summary>
         /// 获取成交信息
@@ -81,28 +82,32 @@ namespace Stock.Trader
         /// </summary>
         /// <param name="code"></param>
         /// <param name="total"></param>
-        void PurchaseFundSZ(String code, float total);
+        /// <returns>合同号</returns>
+        string PurchaseFundSZ(String code, float total);
 
         /// <summary>
         /// 赎回基金 深圳
         /// </summary>
         /// <param name="code">代码</param>
         /// <param name="num">份额</param>
-        void RedempteFundSZ(String code, int num);
+        /// <returns>合同号</returns>
+        string RedempteFundSZ(String code, int num);
         
         /// <summary>
         /// 合并子基金 深圳
         /// </summary>
         /// <param name="code">母鸡代码</param>
         /// <param name="num">合并数量</param>
-        void MergeFundSZ(String code, int num);
+        /// <returns>合同号</returns>
+        string MergeFundSZ(String code, int num);
         
         /// <summary>
         /// 分拆母基金 深圳
         /// </summary>
         /// <param name="code">母鸡代码</param>
         /// <param name="num">分拆数量</param>
-        void PartFundSZ(String code, int num);
+        /// <returns>合同号</returns>
+        string PartFundSZ(String code, int num);
 
 
         /// <summary>
@@ -110,28 +115,32 @@ namespace Stock.Trader
         /// </summary>
         /// <param name="code"></param>
         /// <param name="total"></param>
-        void PurchaseFundSH(String code, float total);
+        /// <returns>合同号</returns>
+        string PurchaseFundSH(String code, float total);
         
         /// <summary>
         /// 赎回基金 上海
         /// </summary>
         /// <param name="code">代码</param>
         /// <param name="num">份额</param>
-        void RedempteFundSH(String code, int num);
+        /// <returns>合同号</returns>
+        string RedempteFundSH(String code, int num);
 
         /// <summary>
         /// 合并子基金 上海
         /// </summary>
         /// <param name="code">母鸡代码</param>
         /// <param name="num">合并数量</param>
-        void MergeFundSH(String code, int num);
+        /// <returns>合同号</returns>
+        string MergeFundSH(String code, int num);
 
         /// <summary>
         /// 分拆母基金 上海
         /// </summary>
         /// <param name="code">母鸡代码</param>
         /// <param name="num">分拆数量</param>
-        void PartFundSH(String code, int num);
+        /// <returns>合同号</returns>
+        string PartFundSH(String code, int num);
 
     }
 }

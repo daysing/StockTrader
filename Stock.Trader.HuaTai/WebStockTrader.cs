@@ -182,7 +182,7 @@ namespace Stock.Trader.HuaTai
             return holder;
         }
 
-        public void SellStock(string code, float price, int num)
+        public string SellStock(string code, float price, int num)
         {
             bool ret = _SellStock(code, price, num);
             if (!ret)
@@ -192,13 +192,14 @@ namespace Stock.Trader.HuaTai
                 _SellStock(code, price, num);  
             }
 
+            return null;
         }
 
         private bool _SellStock(string code, float price, int num)
         {
             int exchange_type = StockUtil.GetExchangeType(code);
             StockHolder holder = GetStockHolder(exchange_type);
-            SellQueryInfo t = new SellQueryInfo
+            SellRequest t = new SellRequest
             {
                 branch_no = this.resAccountInfo.branch_no,
                 custid = this.resAccountInfo.fund_account,
@@ -207,13 +208,13 @@ namespace Stock.Trader.HuaTai
                 op_station = this.resAccountInfo.op_station,
                 password = this.resAccountInfo.trdpwd,
                 uid = this.resAccountInfo.uid,
-                exchange_type = exchange_type,
+                exchange_type = exchange_type.ToString(),
                 stock_account = holder.stock_account,
                 stock_code = code,
                 entrust_amount = num,
                 entrust_price = (float)price
             };
-            string queryParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<SellQueryInfo>(t), this.GB2312);
+            string queryParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<SellRequest>(t), this.GB2312);
             string sellUrl = "https://tradegw.htsc.com.cn/?" + queryParams;
             string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(sellUrl), this.GB2312);
 
@@ -225,12 +226,24 @@ namespace Stock.Trader.HuaTai
             return false;
         }
 
-        public void BuyStock(string code, float price, int num)
+        public string BuyStock(string code, float price, int num)
+        {
+            bool ret = _BuyStock(code, price, num);
+            if (!ret)
+            {
+                // LOG
+                Login();
+                _BuyStock(code, price, num);
+            }
+            return null;
+       }
+
+        private bool _BuyStock(string code, float price, int num)
         {
             int exchange_type = StockUtil.GetExchangeType(code);
             StockHolder holder = GetStockHolder(exchange_type);
 
-            BuyQueryInfo t = new BuyQueryInfo
+            BuyRequest t = new BuyRequest
             {
                 branch_no = this.resAccountInfo.branch_no,
                 custid = this.resAccountInfo.fund_account,
@@ -239,26 +252,53 @@ namespace Stock.Trader.HuaTai
                 op_station = this.resAccountInfo.op_station,
                 password = this.resAccountInfo.trdpwd,
                 uid = this.resAccountInfo.uid,
-                exchange_type = exchange_type,
+                exchange_type = exchange_type.ToString(),
                 stock_account = holder.stock_account,
                 stock_code = code,
                 entrust_amount = num,
                 entrust_price = price
             };
 
-            string queryParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<BuyQueryInfo>(t), this.GB2312);
+            string queryParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<BuyRequest>(t), this.GB2312);
             string buyUrl = "https://tradegw.htsc.com.cn/?" + queryParams;
-            string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(buyUrl),this.GB2312);
+            string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(buyUrl), this.GB2312);
+
+            if (JsonConvert.DeserializeObject<RespBuyStockResult>(resp).cssweb_code == SuccessCode)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public string CancelStock(string entrust_no)
+        {
+            CancelQueryRequest t = new CancelQueryRequest
+            {
+                branch_no = this.resAccountInfo.branch_no,
+                custid = this.resAccountInfo.fund_account,
+                fund_account = this.resAccountInfo.fund_account,
+                op_branch_no = this.resAccountInfo.branch_no,
+                op_station = this.resAccountInfo.op_station,
+                password = this.resAccountInfo.trdpwd,
+                uid = this.resAccountInfo.uid,
+                exchange_type = "",
+                stock_account = "",
+                stock_code = "",
+            };
+            string queryParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<CancelQueryRequest>(t), this.GB2312);
+            string buyUrl = "https://tradegw.htsc.com.cn/?" + queryParams;
+            string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(buyUrl), this.GB2312);
 
             if (JsonConvert.DeserializeObject<RespBuyStockResult>(resp).cssweb_code == SuccessCode)
             {
                 // TODO:
             }
-       }
 
-        public void CancelStock(string code, float price, int num)
-        {
-            throw new NotImplementedException();
+
+            // uid=152-XXXXXXXXX&cssweb_type=STOCK_CANCEL&version=1&custid=XXXXXXX&op_branch_no=2XX3&branch_no=2XX3&op_entrust_way=7&op_station=IP$XXX.XXX.XXXXXX;MAC$00-2XXXXXXX7F-93;HXXXXXX &function_id=304&fund_account=XXXXXXXXXX&password=iuGXXXXXyA$$&identity_type=&batch_flag=0&exchange_type=&entrust_no=4250&ram=0.4980332753621042
+            // TODO: 撤指定的单
+
+            return "";
         }
 
         public void GetTransactionInfo()
@@ -290,7 +330,7 @@ namespace Stock.Trader.HuaTai
 
         private List<TradingAccount.StockHolderInfo> GetStocks()
         {
-            StockQueryInfo t = new StockQueryInfo
+            StockQueryRequest t = new StockQueryRequest
             {
                 branch_no = this.resAccountInfo.branch_no,
                 custid = this.resAccountInfo.fund_account,
@@ -300,12 +340,12 @@ namespace Stock.Trader.HuaTai
                 password = this.resAccountInfo.trdpwd,
                 uid = this.resAccountInfo.uid
             };
-            string str2 = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<StockQueryInfo>(t), this.encoding);
+            string str2 = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<StockQueryRequest>(t), this.encoding);
 
             string positionUrl = "https://tradegw.htsc.com.cn/?" + str2;
             RespStockResult result = JsonConvert.DeserializeObject<RespStockResult>(StockUtil.Base64Decode(this.httpClient.DownloadString(positionUrl), this.GB2312));
             List<TradingAccount.StockHolderInfo> list = new List<TradingAccount.StockHolderInfo>();
-            foreach (HtStockInfo si in result.Item)
+            foreach (StockInfo si in result.Item)
             {
                 if (si.stock_code != null)
                 {
@@ -329,42 +369,42 @@ namespace Stock.Trader.HuaTai
             return list;
         }
 
-        public void PurchaseFundSZ(string code, float total)
+        public string PurchaseFundSZ(string code, float total)
         {
             throw new NotImplementedException();
         }
 
-        public void RedempteFundSZ(string code, int num)
+        public string RedempteFundSZ(string code, int num)
         {
             throw new NotImplementedException();
         }
 
-        public void MergeFundSZ(string code, int num)
+        public string MergeFundSZ(string code, int num)
         {
             throw new NotImplementedException();
         }
 
-        public void PartFundSZ(string code, int num)
+        public string PartFundSZ(string code, int num)
         {
             throw new NotImplementedException();
         }
 
-        public void PurchaseFundSH(string code, float total)
+        public string PurchaseFundSH(string code, float total)
         {
             throw new NotImplementedException();
         }
 
-        public void RedempteFundSH(string code, int num)
+        public string RedempteFundSH(string code, int num)
         {
             throw new NotImplementedException();
         }
 
-        public void MergeFundSH(string code, int num)
+        public string MergeFundSH(string code, int num)
         {
             throw new NotImplementedException();
         }
 
-        public void PartFundSH(string code, int num)
+        public string PartFundSH(string code, int num)
         {
             throw new NotImplementedException();
         }

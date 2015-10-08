@@ -29,7 +29,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Stock.Strategy.Python
+namespace Stock.Strategy
 {
     public partial class AddStockForm : Form
     {

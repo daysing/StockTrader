@@ -45,7 +45,7 @@ namespace Stock.Trader
 
         public void Init()
         {
-            trader.Init();
+             trader.Init();
         }
 
         public static XiaDan Instance {
@@ -162,9 +162,9 @@ namespace Stock.Trader
             // 读取当日的操作日志文件，分析后上传到服务器
         }
 
-        internal void CancelStock(string code, float price, int num)
+        internal string CancelStock(string code)
         {
-            trader.CancelStock(code, price, num);
+            return trader.CancelStock(code);
         }
 
         internal TradingAccount GetCashInfo()

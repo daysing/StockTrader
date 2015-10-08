@@ -52,13 +52,13 @@ namespace StockTrader
             InitStrategyMenu();
             InitListView();
 
-  //          nextClipboardViewer = (IntPtr)Win32API.SetClipboardViewer(this.Handle);
+            xiadan = Stock.Trader.XiaDan.Instance;
+            //          nextClipboardViewer = (IntPtr)Win32API.SetClipboardViewer(this.Handle);
         }
 
         private void _Start()
         {
             xiadan = Stock.Trader.XiaDan.Instance;
-            xiadan.Init();
 
             int span = int.Parse(Configure.GetStockTraderItem(Configure.KEEP_TIME_SPAN));
             this.keepLoginTimer.Interval = span;
@@ -165,11 +165,11 @@ namespace StockTrader
             sd[0].desc = "说明：分级A轮动策略";
             sd[0].name = "分级A轮动策略";
             sd[0].group = 0;
-            sd[1].clazz = "Stock.Strategy.Python.Rotation.RotationStrategy";
-            sd[1].dllPath = "Stock.Strategy.Python.Rotation.dll";
-            sd[1].desc = "说明：箱体高抛低吸策略";
-            sd[1].name = "箱体策略";
-            sd[1].group = 1;
+            sd[1].clazz = "Stock.Strategy.RotationB.RotationBStrategy";
+            sd[1].dllPath = "Stock.Strategy.RotationB.dll";
+            sd[1].desc = "说明：分级B强势轮动策略";
+            sd[1].name = "分级B强势轮动策略";
+            sd[1].group = 0;
 
             return sd;
         }
@@ -243,7 +243,7 @@ namespace StockTrader
 
         private void button3_Click(object sender, EventArgs e)
         {
-            xiadan.CancelStock(textBox1.Text, float.Parse(textBox2.Text), int.Parse(textBox3.Text));
+            //xiadan.CancelStock(textBox1.Text, float.Parse(textBox2.Text), int.Parse(textBox3.Text));
 
         }
 

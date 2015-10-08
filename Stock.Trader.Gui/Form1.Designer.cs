@@ -112,10 +112,13 @@ namespace StockTrader
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.keepLoginTimer = new System.Windows.Forms.Timer(this.components);
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.textBox4 = new System.Windows.Forms.TextBox();
             this.ctxStrategyMenu.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            this.tabPage5.SuspendLayout();
             this.SuspendLayout();
             // 
             // listView1
@@ -220,7 +223,7 @@ namespace StockTrader
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(771, 179);
+            this.tabPage2.Size = new System.Drawing.Size(684, 179);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "持仓";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -246,7 +249,7 @@ namespace StockTrader
             this.lvStockPosition.Location = new System.Drawing.Point(3, 3);
             this.lvStockPosition.MultiSelect = false;
             this.lvStockPosition.Name = "lvStockPosition";
-            this.lvStockPosition.Size = new System.Drawing.Size(765, 173);
+            this.lvStockPosition.Size = new System.Drawing.Size(678, 173);
             this.lvStockPosition.TabIndex = 0;
             this.lvStockPosition.UseCompatibleStateImageBehavior = false;
             this.lvStockPosition.View = System.Windows.Forms.View.Details;
@@ -329,7 +332,7 @@ namespace StockTrader
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(771, 179);
+            this.tabPage1.Size = new System.Drawing.Size(684, 179);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -539,11 +542,12 @@ namespace StockTrader
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tabControl1.Location = new System.Drawing.Point(0, 310);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(779, 205);
+            this.tabControl1.Size = new System.Drawing.Size(692, 205);
             this.tabControl1.TabIndex = 31;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
@@ -551,7 +555,7 @@ namespace StockTrader
             // 
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(771, 179);
+            this.tabPage3.Size = new System.Drawing.Size(684, 179);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "成交";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -560,7 +564,7 @@ namespace StockTrader
             // 
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(771, 179);
+            this.tabPage4.Size = new System.Drawing.Size(684, 179);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "委托";
             // 
@@ -568,11 +572,30 @@ namespace StockTrader
             // 
             this.keepLoginTimer.Tick += new System.EventHandler(this.keepLoginTimer_Tick);
             // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.textBox4);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Size = new System.Drawing.Size(684, 179);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "交易日志";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // textBox4
+            // 
+            this.textBox4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox4.Location = new System.Drawing.Point(0, 0);
+            this.textBox4.Multiline = true;
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(684, 179);
+            this.textBox4.TabIndex = 0;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(779, 515);
+            this.ClientSize = new System.Drawing.Size(692, 515);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.listView1);
@@ -583,6 +606,8 @@ namespace StockTrader
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -642,6 +667,8 @@ namespace StockTrader
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.Timer keepLoginTimer;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.TextBox textBox4;
     }
 }
 

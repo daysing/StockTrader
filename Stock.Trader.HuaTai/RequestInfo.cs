@@ -52,7 +52,7 @@ namespace Stock.Trader.HuaTai
 
         public string op_entrust_way { get { return "7"; } }
 
-        public int exchange_type { get; set; }
+        public string exchange_type { get; set; }
 
         public string function_id { get; set; } 
 
@@ -124,11 +124,10 @@ namespace Stock.Trader.HuaTai
         public string vcode { get; set; }
     }
 
-
-    public class StockQueryInfo : Request
+    public class StockQueryRequest : Request
     {
 
-        public StockQueryInfo()
+        public StockQueryRequest()
         {
             cssweb_type = "GET_STOCK_POSITION";
             function_id = "403";
@@ -184,10 +183,9 @@ namespace Stock.Trader.HuaTai
 
     }
 
-  
-    public class BuyQueryInfo : Request
+    public class BuyRequest : Request
     {
-        public BuyQueryInfo() {
+        public BuyRequest() {
             this.cssweb_type = "STOCK_BUY";
             this.function_id = "302";
         }
@@ -218,12 +216,11 @@ namespace Stock.Trader.HuaTai
 
     }
 
-
-    public class SellQueryInfo : Request
+    public class SellRequest : Request
     {
         // uid=153-1f64-7915165&cssweb_type=STOCK_SALE&version=1&custid=666600111111&op_branch_no=17&branch_no=17&op_entrust_way=7&op_station=IP$183.206.203.123;MAC$00-0C-29-1A-B4-32;HDD$                    &function_id=302&fund_account=666600111111&password=ojCz+oMyzH50kXNZv4/iTA$$&identity_type=&exchange_type=1&stock_account=A763438769&stock_code=600717&entrust_amount=100&entrust_price=10&entrust_prop=0&entrust_bs=2&ram=0.21561731165274978
 
-        public SellQueryInfo()
+        public SellRequest()
         {
             cssweb_type = "STOCK_SELL";
             function_id = "302";
@@ -254,12 +251,11 @@ namespace Stock.Trader.HuaTai
      
     }
 
-
-    public class CancelQueryInfo : Request
+    public class CancelQueryRequest : Request
     {
         //uid=152-5841-6976124&version=1&custid=666600111111&op_branch_no=17&branch_no=17&op_entrust_way=7&op_station=IP$183.206.203.123;MAC$00-0C-29-1A-B4-32;HDD$                    &function_id=401&fund_account=66660111111&password=ojCz+oMyzH05kXNZv4/iTA$$&identity_type=&exchange_type=&stock_account=&stock_code=&locate_entrust_no=&query_direction=&
         //sort_direction=0&request_num=100&position_str=&ram=0.5226608067750931
-        public CancelQueryInfo()
+        public CancelQueryRequest()
         {
             cssweb_type = "GET_CANCEL_LIST";
             function_id = "401";
@@ -272,6 +268,23 @@ namespace Stock.Trader.HuaTai
         public int sort_direction { get { return 0; } }
         public int request_num { get { return 100; } }
         public string position_str { get{return "";}}
+    }
 
+    public class CancelStockRequest : Request
+    {
+        public CancelStockRequest()
+        {
+            cssweb_type = "STOCK_CANCEL";
+            function_id = "304";
+        }
+
+        public string batch_flag { get; set; }
+        public string entrust_no { get; set; }
+
+        // uid=153-759d-7924950&cssweb_type=STOCK_CANCEL&version=1&custid=666600111111&
+        // op_branch_no=17&branch_no=17&op_entrust_way=7&op_station=IP$183.206.203.55;MAC$00-0D-27-1A-B4-32;HDD$                    &
+        // function_id=304&fund_account=666600111111&password=ojCz+oMyzH00kXNZv4/iTA$$&
+        // identity_type=&
+        // batch_flag=0&exchange_type=&entrust_no=12140&ram=0.6111481911502779
     }
 }

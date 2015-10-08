@@ -279,12 +279,12 @@ namespace Stock.Trader.HuaTai
             InitQtjySzLOFjjFuncHandler();
 
             // 登录Web 接口
-           //  wst = new WebStockTrader();
-           // wst.Init();
+            wst = new WebStockTrader();
+            wst.Init();
 
         }
         
-        public void SellStock(string code, float price, int num)
+        public string SellStock(string code, float price, int num)
         {
             ClickSellTreeViewItem();
 
@@ -306,9 +306,10 @@ namespace Stock.Trader.HuaTai
             hCtrl = Win32API.GetDlgItem(hPanel, BUY_BTN_OK);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
+            return "";
         }
 
-        public void BuyStock(string code, float price, int num)
+        public string BuyStock(string code, float price, int num)
         {
             const int BUY_TXT_CODE = 0x0408;
             const int BUY_TXT_PRICE = 0x0409;
@@ -330,17 +331,20 @@ namespace Stock.Trader.HuaTai
             hCtrl = Win32API.GetDlgItem(hPanel, BUY_BTN_OK);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
+            return "";
         }
 
-        public void CancelStock(String code, float price, int num)
+        public string CancelStock(String entrust_no)
         {
-            ClickCancelTreeViewItem();
+            return wst.CancelStock(entrust_no);
+            // ClickCancelTreeViewItem();
         }
 
         public void Keep()
         {
             // 刷新
             Win32API.PostMessage(hWnd, Win32Code.WM_KEYDOWN, Win32Code.VK_F5, 0);
+            wst.Keep();
         }
 
         private IntPtr findWndClass(IntPtr hWnd, IntPtr child)
@@ -428,7 +432,6 @@ namespace Stock.Trader.HuaTai
             //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBDC);
             #endregion
 
-            //return null;
             return wst.GetTradingAccountInfo();
 
         }
@@ -438,7 +441,7 @@ namespace Stock.Trader.HuaTai
             throw new NotImplementedException();
         }
 
-        public void PurchaseFundSZ(string code, float total)
+        public string PurchaseFundSZ(string code, float total)
         {
             const int BUY_TXT_CODE = 0x0408;
             const int BUY_TXT_PRICE = 0x040A;
@@ -457,9 +460,10 @@ namespace Stock.Trader.HuaTai
             hCtrl = Win32API.GetDlgItem(hPanel, BUY_BTN_OK);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
+            return "";
         }
 
-        public void RedempteFundSZ(string code, int num)
+        public string RedempteFundSZ(string code, int num)
         {
             ClickSzShjjTreeViewItem();
             
@@ -478,9 +482,10 @@ namespace Stock.Trader.HuaTai
             hCtrl = Win32API.GetDlgItem(hPanel, BUY_BTN_OK);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
+            return "";
         }
 
-        public void MergeFundSZ(string code, int num)
+        public string MergeFundSZ(string code, int num)
         {
             ClickSzHbjjTreeViewItem();
 
@@ -499,9 +504,10 @@ namespace Stock.Trader.HuaTai
             hCtrl = Win32API.GetDlgItem(hPanel, BUY_BTN_OK);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
+            return "";
         }
 
-        public void PartFundSZ(string code, int num)
+        public string PartFundSZ(string code, int num)
         {
             ClickSzFcjjTreeViewItem();
 
@@ -520,9 +526,10 @@ namespace Stock.Trader.HuaTai
             hCtrl = Win32API.GetDlgItem(hPanel, BUY_BTN_OK);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
+            return "";
         }
 
-        public void PurchaseFundSH(string code, float total)
+        public string PurchaseFundSH(string code, float total)
         {
             ClickShSgjjTreeViewItem();
             const int BUY_TXT_CODE = 0x0408;
@@ -541,9 +548,10 @@ namespace Stock.Trader.HuaTai
             //hCtrl = Win32API.GetDlgItem(hPanel, BUY_BTN_OK);
             //Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
             //Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
+            return "";
         }
 
-        public void RedempteFundSH(string code, int num)
+        public string RedempteFundSH(string code, int num)
         {
             ClickShShjjTreeViewItem();
 
@@ -552,7 +560,8 @@ namespace Stock.Trader.HuaTai
 
             Win32API.PostMessage(hCtrl, Win32Code.WM_KEYDOWN, Win32Code.VK_0, 0);
             Win32API.PostMessage(hCtrl, Win32Code.WM_KEYUP, Win32Code.VK_0, 0);
-            
+
+            return "";
 
         }
 
@@ -561,7 +570,7 @@ namespace Stock.Trader.HuaTai
         /// </summary>
         /// <param name="code"></param>
         /// <param name="num"></param>
-        public void MergeFundSH(string code, int num)
+        public string MergeFundSH(string code, int num)
         {
             ClickShHbjjTreeViewItem();
 
@@ -569,14 +578,16 @@ namespace Stock.Trader.HuaTai
             IntPtr hCtrl = Win32API.GetDlgItem(hPanel, 0);
 
             Win32API.PostMessage(hCtrl, Win32Code.WM_KEYDOWN, Win32Code.VK_0, 0);
+            return "";
         }
 
-        public void PartFundSH(string code, int num)
+        public string PartFundSH(string code, int num)
         {
             // ClickShFcjjTreeViewItem();
             //IntPtr p = Win32API.GetClipboardData(13);
             // Win32API.SetClipboardViewer(new Form().Handle);
 
+            return "";
 
         }
 

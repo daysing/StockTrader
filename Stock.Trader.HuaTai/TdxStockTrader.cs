@@ -234,8 +234,8 @@ namespace Stock.Trader.HuaTai
             Win32API.SendMessage(htvi, Win32Code.TVM_SELECTITEM, Win32Code.TVGN_CARET, hQueryZqcx);
             Win32API.SendMessage(htvi, Win32Code.TVM_SELECTITEM, Win32Code.TVGN_CARET, hQueryLscjcx);
         }
-        
-        public void SellStock(string code, float price, int num)
+
+        public string SellStock(string code, float price, int num)
         {
             ClickSellTreeViewItem();
 
@@ -257,9 +257,10 @@ namespace Stock.Trader.HuaTai
             hCtrl = Win32API.GetDlgItem(hPanel, BUY_BTN_OK);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
+            return "";
         }
 
-        public void BuyStock(string code, float price, int num)
+        public string BuyStock(string code, float price, int num)
         {
             const int BUY_TXT_CODE = 0x0408;
             const int BUY_TXT_PRICE = 0x0409;
@@ -281,11 +282,14 @@ namespace Stock.Trader.HuaTai
             hCtrl = Win32API.GetDlgItem(hPanel, BUY_BTN_OK);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
+
+            return "";
         }
 
-        public void CancelStock(String code, float price, int num)
+        public string CancelStock(String entrust_no)
         {
             ClickCancelTreeViewItem();
+            return "";
         }
 
         public void Keep()
@@ -389,32 +393,38 @@ namespace Stock.Trader.HuaTai
             throw new NotImplementedException();
         }
 
-        public void PurchaseFundSZ(string code, float total)
+        public string PurchaseFundSZ(string code, float total)
         {
-          
+            return "";
+         
         }
 
-        public void RedempteFundSZ(string code, int num)
+        public string RedempteFundSZ(string code, int num)
         {
-        
+            return "";
+       
         }
 
-        public void MergeFundSZ(string code, int num)
+        public string MergeFundSZ(string code, int num)
         {
-        
+            return "";
+       
         }
 
-        public void PartFundSZ(string code, int num)
+        public string PartFundSZ(string code, int num)
         {
-        
+            return "";
+      
         }
 
-        public void PurchaseFundSH(string code, float total)
+        public string PurchaseFundSH(string code, float total)
         {
+            return "";
         }
 
-        public void RedempteFundSH(string code, int num)
+        public string RedempteFundSH(string code, int num)
         {
+            return "";
         }
 
         /// <summary>
@@ -422,12 +432,14 @@ namespace Stock.Trader.HuaTai
         /// </summary>
         /// <param name="code"></param>
         /// <param name="num"></param>
-        public void MergeFundSH(string code, int num)
+        public string MergeFundSH(string code, int num)
         {
+            return "";
         }
 
-        public void PartFundSH(string code, int num)
+        public string PartFundSH(string code, int num)
         {
+            return "";
         }
 
         #endregion

@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stock.Market.Server", "Stoc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stock.Strategy.Python.Rotation", "Stock.Strategy.Python.Rotation\Stock.Strategy.Python.Rotation.csproj", "{B20A5FA7-F000-4914-B9FC-C768FA1A6D04}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stock.Strategy.RotationB", "Stock.Strategy.RotationB\Stock.Strategy.RotationB.csproj", "{C10192F9-9EB4-44E5-90D6-DA8852F929F8}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = monitor.vsmdi
@@ -122,6 +124,16 @@ Global
 		{B20A5FA7-F000-4914-B9FC-C768FA1A6D04}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B20A5FA7-F000-4914-B9FC-C768FA1A6D04}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B20A5FA7-F000-4914-B9FC-C768FA1A6D04}.Release|x86.ActiveCfg = Release|Any CPU
+		{C10192F9-9EB4-44E5-90D6-DA8852F929F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C10192F9-9EB4-44E5-90D6-DA8852F929F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C10192F9-9EB4-44E5-90D6-DA8852F929F8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C10192F9-9EB4-44E5-90D6-DA8852F929F8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C10192F9-9EB4-44E5-90D6-DA8852F929F8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C10192F9-9EB4-44E5-90D6-DA8852F929F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C10192F9-9EB4-44E5-90D6-DA8852F929F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C10192F9-9EB4-44E5-90D6-DA8852F929F8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C10192F9-9EB4-44E5-90D6-DA8852F929F8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C10192F9-9EB4-44E5-90D6-DA8852F929F8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -69,14 +69,14 @@
     <Compile Include="Strategy\IStrategy.cs" />
     <Compile Include="Strategy\IStrategyDesc.cs" />
     <Compile Include="Strategy\IStrategyGroup.cs" />
-    <Compile Include="Strategy\PythonStrategy\AddStockForm.cs">
+    <Compile Include="Strategy\AddStockForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Strategy\PythonStrategy\AddStockForm.Designer.cs">
+    <Compile Include="Strategy\AddStockForm.Designer.cs">
       <DependentUpon>AddStockForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Strategy\PythonStrategy\PythonStrategy.cs" />
-    <Compile Include="Strategy\PythonStrategy\StrategyControl.cs">
+    <Compile Include="Strategy\StrategyControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Strategy\StrategyManager.cs" />
@@ -90,10 +90,10 @@
     <Compile Include="TradingAccount.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Strategy\PythonStrategy\AddStockForm.resx">
+    <EmbeddedResource Include="Strategy\AddStockForm.resx">
       <DependentUpon>AddStockForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Strategy\PythonStrategy\StrategyControl.resx">
+    <EmbeddedResource Include="Strategy\StrategyControl.resx">
       <DependentUpon>StrategyControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

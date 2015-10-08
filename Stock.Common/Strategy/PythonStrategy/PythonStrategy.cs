@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Scripting.Hosting;
-using Stock.Strategy.Python;
+using Stock.Strategy;
 
 namespace Stock.Strategy.Python
 {
@@ -38,13 +38,8 @@ namespace Stock.Strategy.Python
         {
             engine = IronPython.Hosting.Python.CreateEngine();
             scope = engine.CreateScope();
-            control = new StrategyControl(this);
         }
 
-        public virtual void Setup()
-        {
-            // nothing todo
-        }
 
     }
 }

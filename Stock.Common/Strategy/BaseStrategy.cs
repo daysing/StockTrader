@@ -114,14 +114,24 @@ namespace Stock.Strategy
             }
         }
 
+        public virtual void Setup()
+        {
+            // nothing to do
+        }
+
+        public virtual void ShowData()
+        {
+            // thing to do
+        }
+
         #endregion
 
 
         public BaseStrategy()
         {
+            control = new StrategyControl(this);
             this.Init();
         }
-
 
         /// <summary>
         /// 股票池中的盘口数据
@@ -154,20 +164,22 @@ namespace Stock.Strategy
             // trader.Init();
         }
 
-        public void SellStock(string code, float price, int num)
+        public string SellStock(string code, float price, int num)
         {
             LogHelper.WriteLog(this.GetType(),"BaseStrategy.SellStock");
-            trader.SellStock(code, price, num);
+            return trader.SellStock(code, price, num);
         }
 
-        public void BuyStock(string code, float price, int num)
+        public string BuyStock(string code, float price, int num)
         {
             LogHelper.WriteLog(this.GetType(), "BaseStrategy.BuyStock");
+            return trader.BuyStock(code, price, num);
         }
 
-        public void CancelStock(string code, float price, int num)
+        public string CancelStock(string code)
         {
             LogHelper.WriteLog(this.GetType(), "BaseStrategy.CancelStock");
+            return CancelStock(code);
         }
 
         public void GetTransactionInfo()
@@ -187,42 +199,42 @@ namespace Stock.Strategy
             // throw new NotImplementedException();
         }
 
-        public void PurchaseFundSZ(string code, float total)
+        public string PurchaseFundSZ(string code, float total)
         {
             throw new NotImplementedException();
         }
 
-        public void RedempteFundSZ(string code, int num)
+        public string RedempteFundSZ(string code, int num)
         {
             throw new NotImplementedException();
         }
 
-        public void MergeFundSZ(string code, int num)
+        public string MergeFundSZ(string code, int num)
         {
             throw new NotImplementedException();
         }
 
-        public void PartFundSZ(string code, int num)
+        public string PartFundSZ(string code, int num)
         {
             throw new NotImplementedException();
         }
 
-        public void PurchaseFundSH(string code, float total)
+        public string PurchaseFundSH(string code, float total)
         {
             throw new NotImplementedException();
         }
 
-        public void RedempteFundSH(string code, int num)
+        public string RedempteFundSH(string code, int num)
         {
             throw new NotImplementedException();
         }
 
-        public void MergeFundSH(string code, int num)
+        public string MergeFundSH(string code, int num)
         {
             throw new NotImplementedException();
         }
 
-        public void PartFundSH(string code, int num)
+        public string PartFundSH(string code, int num)
         {
             throw new NotImplementedException();
         }

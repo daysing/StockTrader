@@ -9,6 +9,7 @@ Stock.Market.Sc
 Stock.Market.Yj
 Stock.Trader.CTP
 TestStockTrader
+Stock.Strategy.RotationB
 OCR
 TestResults
 *.testsettings

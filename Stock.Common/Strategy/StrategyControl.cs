@@ -30,9 +30,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.Scripting.Hosting;
+using Stock.Strategy.Python;
 
 
-namespace Stock.Strategy.Python
+namespace Stock.Strategy
 {
     public class StrategyControl : UserControl
     {
@@ -75,6 +76,7 @@ namespace Stock.Strategy.Python
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btnFile = new System.Windows.Forms.Button();
             this.btnSetup = new System.Windows.Forms.Button();
+            this.btnShowData = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // BtnDelete
@@ -165,10 +167,21 @@ namespace Stock.Strategy.Python
             this.btnSetup.UseVisualStyleBackColor = true;
             this.btnSetup.Click += new System.EventHandler(this.btnSetup_Click_1);
             // 
-            // PythonStrategyControl
+            // btnShowData
+            // 
+            this.btnShowData.Location = new System.Drawing.Point(258, 188);
+            this.btnShowData.Name = "btnShowData";
+            this.btnShowData.Size = new System.Drawing.Size(75, 23);
+            this.btnShowData.TabIndex = 20;
+            this.btnShowData.Text = "显示数据";
+            this.btnShowData.UseVisualStyleBackColor = true;
+            this.btnShowData.Click += new System.EventHandler(this.btnShowData_Click);
+            // 
+            // StrategyControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnShowData);
             this.Controls.Add(this.btnSetup);
             this.Controls.Add(this.btnFile);
             this.Controls.Add(this.textBox1);
@@ -176,7 +189,7 @@ namespace Stock.Strategy.Python
             this.Controls.Add(this.listView3);
             this.Controls.Add(this.BtnDelete);
             this.Controls.Add(this.btnAdd);
-            this.Name = "PythonStrategyControl";
+            this.Name = "StrategyControl";
             this.Size = new System.Drawing.Size(454, 240);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -198,12 +211,13 @@ namespace Stock.Strategy.Python
         private System.Windows.Forms.ColumnHeader columnHeader2;
 
         #endregion
+        private Button btnShowData;
 
         #region properties
 
-        private PythonStrategy strategy;
+        private IStrategy strategy;
 
-        public PythonStrategy Strategy
+        public IStrategy Strategy
         {
             get { return strategy; }
             set { strategy = value; }
@@ -211,7 +225,7 @@ namespace Stock.Strategy.Python
  
         #endregion
 
-        public StrategyControl(PythonStrategy strategy)
+        public StrategyControl(IStrategy strategy)
         {
             InitializeComponent();
             this.strategy = strategy;
@@ -261,6 +275,11 @@ namespace Stock.Strategy.Python
         private void btnSetup_Click_1(object sender, EventArgs e)
         {
             this.strategy.Setup();
+        }
+
+        private void btnShowData_Click(object sender, EventArgs e)
+        {
+            this.strategy.ShowData();
         }
     }
 }
