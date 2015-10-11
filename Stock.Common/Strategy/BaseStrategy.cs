@@ -34,16 +34,35 @@ using Microsoft.Scripting.Hosting;
 using Stock.Trader;
 using System.Windows.Forms;
 using Stock.Strategy.Python;
+using Stock.Trader.Settings;
 
 namespace Stock.Strategy
 {
-    public abstract class BaseStrategy : IStrategy, IStockTrader
+    public abstract class BaseStrategy : IStrategy, IStockTrader, IControlOperation
     {
         private bool isValid;
         protected ICollection<string> stockPool = new List<string>();
         private IDictionary<String, BidCacheQueue> bids;
 
         protected StrategyControl control;
+
+        private IDictionary<string, EntrustInfo> entrustNos = new Dictionary<string, EntrustInfo>();
+        private class EntrustInfo
+        {
+            public string No;
+            public DateTime Time;
+        }
+
+        private void AddEntrustNo(string entrustNo)
+        {
+
+            entrustNos.Add(entrustNo, new EntrustInfo { No = entrustNo, Time = DateTime.Now});
+        }
+
+        private void RemoveEntrustNo(string entrustNo)
+        {
+            entrustNos.Remove(entrustNo);
+        }
 
         public StrategyControl Control
         {
@@ -57,7 +76,18 @@ namespace Stock.Strategy
         public event StockRemoveHandler OnStockRemove;
         public event StockAddHandler OnStockAdd;
 
-        public abstract void Run();
+        public virtual void Run()
+        {
+            // 检测挂单是否成交，指定时间内未成交撤单
+            DateTime now = DateTime.Now;
+            int span = int.Parse(Configure.GetStockTraderItem(Configure.CANCEL_TIME_SPAN));
+
+            foreach (EntrustInfo item in entrustNos.Values)
+            {
+                CancelStock(item.No);
+            }
+        }
+
         public virtual void OnStockDataChanged(object sender, Stock.Market.Bid data)
         {
             // NOTHING TO DO
@@ -94,6 +124,7 @@ namespace Stock.Strategy
             get;
             set;
         }
+
         public bool IsValid
         {
             get
@@ -114,23 +145,18 @@ namespace Stock.Strategy
             }
         }
 
-        public virtual void Setup()
-        {
-            // nothing to do
-        }
-
-        public virtual void ShowData()
-        {
-            // thing to do
-        }
-
         #endregion
 
 
         public BaseStrategy()
         {
-            control = new StrategyControl(this);
+            control = CreateControl();
             this.Init();
+        }
+
+        protected virtual StrategyControl CreateControl()
+        {
+            return new StrategyControl(this);
         }
 
         /// <summary>
@@ -167,19 +193,25 @@ namespace Stock.Strategy
         public string SellStock(string code, float price, int num)
         {
             LogHelper.WriteLog(this.GetType(),"BaseStrategy.SellStock");
-            return trader.SellStock(code, price, num);
+            string entrustNo = trader.SellStock(code, price, num);
+            AddEntrustNo(entrustNo);
+            return entrustNo;
         }
 
         public string BuyStock(string code, float price, int num)
         {
             LogHelper.WriteLog(this.GetType(), "BaseStrategy.BuyStock");
-            return trader.BuyStock(code, price, num);
+            string entrustNo = trader.BuyStock(code, price, num);
+            AddEntrustNo(entrustNo);
+            return entrustNo;
         }
 
-        public string CancelStock(string code)
+        public string CancelStock(string entrustNo)
         {
             LogHelper.WriteLog(this.GetType(), "BaseStrategy.CancelStock");
-            return CancelStock(code);
+            string eNo = trader.CancelStock(entrustNo);
+            RemoveEntrustNo(entrustNo);
+            return eNo;
         }
 
         public void GetTransactionInfo()
@@ -196,7 +228,6 @@ namespace Stock.Strategy
         public TradingAccount GetTradingAccountInfo()
         {
             return null;
-            // throw new NotImplementedException();
         }
 
         public string PurchaseFundSZ(string code, float total)
@@ -241,5 +272,30 @@ namespace Stock.Strategy
 
         #endregion
 
+
+        #region 控件操作接口
+
+        public virtual void Setup()
+        {
+            // nothing to do
+        }
+
+        public virtual void ShowData()
+        {
+            // thing to do
+        }
+
+        public virtual void ImportPool()
+        {
+            // 
+        }
+
+        public virtual IList<StockData> LoadData()
+        {
+            // nothing to do
+            return null;
+        }
+
+        #endregion
     }
 }

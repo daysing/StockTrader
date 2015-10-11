@@ -11,6 +11,7 @@ namespace Stock.Trader.Settings
     {
         public const String TICKET_TIME_SPAN = "Ticket.Time.Span";
         public const String KEEP_TIME_SPAN = "Keep.Time.Span";
+        public const String CANCEL_TIME_SPAN = "Cancel.Time.Span";
 
         public class Clazz
         {
@@ -43,5 +44,6 @@ namespace Stock.Trader.Settings
             IDictionary cs = (IDictionary)ConfigurationManager.GetSection("StockTrader");
             return cs[key].ToString();
         }
+
     }
 }

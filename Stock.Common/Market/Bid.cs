@@ -58,7 +58,7 @@ namespace Stock.Market
         public float Low { get; set; }
 
         public float CurrentPrice { get; set; }    // 成交价
-        public int Volumn { get; set; }     // 成交量
+        public long Volumn { get; set; }     // 成交量
         public float Turnover { get; set; }      // 成交金额
         public DateTime PushTime;  // 推送时间
 

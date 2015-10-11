@@ -77,11 +77,12 @@ namespace Stock.Strategy
             this.btnFile = new System.Windows.Forms.Button();
             this.btnSetup = new System.Windows.Forms.Button();
             this.btnShowData = new System.Windows.Forms.Button();
+            this.btnImport = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // BtnDelete
             // 
-            this.BtnDelete.Location = new System.Drawing.Point(122, 188);
+            this.BtnDelete.Location = new System.Drawing.Point(106, 188);
             this.BtnDelete.Name = "BtnDelete";
             this.BtnDelete.Size = new System.Drawing.Size(75, 23);
             this.BtnDelete.TabIndex = 13;
@@ -169,7 +170,7 @@ namespace Stock.Strategy
             // 
             // btnShowData
             // 
-            this.btnShowData.Location = new System.Drawing.Point(258, 188);
+            this.btnShowData.Location = new System.Drawing.Point(272, 188);
             this.btnShowData.Name = "btnShowData";
             this.btnShowData.Size = new System.Drawing.Size(75, 23);
             this.btnShowData.TabIndex = 20;
@@ -177,10 +178,21 @@ namespace Stock.Strategy
             this.btnShowData.UseVisualStyleBackColor = true;
             this.btnShowData.Click += new System.EventHandler(this.btnShowData_Click);
             // 
+            // btnImport
+            // 
+            this.btnImport.Location = new System.Drawing.Point(191, 188);
+            this.btnImport.Name = "btnImport";
+            this.btnImport.Size = new System.Drawing.Size(75, 23);
+            this.btnImport.TabIndex = 21;
+            this.btnImport.Text = "导入池子";
+            this.btnImport.UseVisualStyleBackColor = true;
+            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
+            // 
             // StrategyControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnImport);
             this.Controls.Add(this.btnShowData);
             this.Controls.Add(this.btnSetup);
             this.Controls.Add(this.btnFile);
@@ -212,6 +224,7 @@ namespace Stock.Strategy
 
         #endregion
         private Button btnShowData;
+        private Button btnImport;
 
         #region properties
 
@@ -235,14 +248,19 @@ namespace Stock.Strategy
         }
 
         private void LoadMyStockPool() {
-            this.AddStock("150022", "深成指A");
-            this.AddStock("150023", "深成指B");
+            IControlOperation co = (strategy as IControlOperation);
+            if (co != null)
+            {
+                IList<StockData> datas= co.LoadData();
+                foreach (StockData data in datas)
+                {
+                    this.AddStock(data.Code, data.Name);
+                }
+            }
+            else
+                MessageBox.Show("本策略不支持本操作");
+
          }
-
-        private void btnSetup_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
@@ -274,12 +292,29 @@ namespace Stock.Strategy
 
         private void btnSetup_Click_1(object sender, EventArgs e)
         {
-            this.strategy.Setup();
+            IControlOperation co = (strategy as IControlOperation);
+            if (co != null)
+                co.Setup();
+            else
+                MessageBox.Show("本策略不支持本操作");
         }
 
         private void btnShowData_Click(object sender, EventArgs e)
         {
-            this.strategy.ShowData();
+            IControlOperation co = (strategy as IControlOperation);
+            if (co != null)
+                co.ShowData();
+            else
+                MessageBox.Show("本策略不支持本操作");
+        }
+
+        private void btnImport_Click(object sender, EventArgs e)
+        {
+            IControlOperation co = (strategy as IControlOperation);
+            if (co != null)
+                co.ImportPool();
+            else
+                MessageBox.Show("本策略不支持本操作");
         }
     }
 }

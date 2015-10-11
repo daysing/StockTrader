@@ -47,23 +47,16 @@ namespace Stock.Common
             {
                 switch (stockCode.Substring(0, 2))
                 {
-                    case "60":
-                        stockCode = "sh" + stockCode;
-                        return stockCode;
-
                     case "00":
-                        stockCode = "sz" + stockCode;
-                        return stockCode;
-
                     case "15":
-                        stockCode = "sz" + stockCode;
-                        return stockCode;
-
+                    case "16":
                     case "30":
+                    case "39":
                         stockCode = "sz" + stockCode;
                         return stockCode;
 
                     case "51":
+                    case "60":
                         stockCode = "sh" + stockCode;
                         return stockCode;
                 }
