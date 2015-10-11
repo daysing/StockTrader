@@ -28,17 +28,20 @@ using System.Text;
 
 namespace Stock.Formula
 {
-    public class ValueList : List<float>
+    public class MACD : AbstractFormula, IFormula
     {
-
-        public static ValueList operator - (ValueList v1, ValueList v2) {
-            ValueList list = new ValueList();
-            for (int i = 0; i < v1.Count; i++)
-            {
-                list.Add(v1[i] - v1[i]);
-            }
-            return list;
+        private int s, l, m;
+        public MACD(ValueList values, int SHORT, int LONG, int M)
+        {
         }
 
+        public ValueList Calculate()
+        {
+            ValueList DIFF = EMA(CLOSE, s) - EMA(CLOSE, l);
+            ValueList DEA = EMA(DIFF, m);
+
+            ValueList MACD = DIFF - DEA;
+            return null;
+        }
     }
 }
