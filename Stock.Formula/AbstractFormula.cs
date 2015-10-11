@@ -37,9 +37,19 @@ namespace Stock.Formula
             get { return null; }
         }
 
+        public ValueList O
+        {
+            get { return OPEN; }
+        }
+
         public ValueList CLOSE
         {
             get { return null; }
+        }
+
+        public ValueList C
+        {
+            get { return CLOSE; }
         }
 
         public static ValueList HIGH
@@ -47,14 +57,29 @@ namespace Stock.Formula
             get { return null; }
         }
 
+        public static ValueList H
+        {
+            get { return HIGH; }
+        }
+
         public ValueList LOW
         {
             get { return null; }
         }
 
+        public ValueList L
+        {
+            get { return LOW; }
+        }
+
         public ValueList VOL
         {
             get { return null; }
+        }
+
+        public ValueList V
+        {
+            get { return VOL; }
         }
 
         public ValueList ADVANCE
@@ -76,22 +101,31 @@ namespace Stock.Formula
 
         #region 引用函数
 
+        public ValueList REF(ValueList X, int A) {
+            return null;
+        }
+
+        public ValueList SUM(ValueList X, int N)
+        {
+            return null;
+        }
+
         public ValueList MA(ValueList X, int M)
+        {
+            return null;
+        }
+
+        public ValueList EXPMA(ValueList X, int M)
         {
             return null;
         }
 
         public ValueList EMA(ValueList X, int M)
         {
-            return null;
+            return EXPMA(X, M);
         }
 
         public ValueList MEMA(ValueList X, int M)
-        {
-            return null;
-        }
-
-        public ValueList EXPMA(ValueList X, int M)
         {
             return null;
         }
@@ -149,8 +183,76 @@ namespace Stock.Formula
         /// </summary>
         /// <param name="X"></param>
         /// <param name="N"></param>
-        public void AVEDEV(ValueList X, int N)
+        /// <returns></returns>
+        public ValueList AVEDEV(ValueList X, int N)
         {
+            return null;
+        }
+
+        /// <summary>
+        /// 数据偏差平方和
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="N"></param>
+        /// <returns></returns>
+        public ValueList DEVSQ(ValueList X, int N)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// 估算标准差
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="N"></param>
+        /// <returns></returns>
+        public ValueList STD(ValueList X, int N)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// 总体标准差
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="N"></param>
+        /// <returns></returns>
+        public ValueList STDP(ValueList X, int N)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// 线性回归预测值
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="N"></param>
+        /// <returns></returns>
+        public ValueList FORCAST(ValueList X, int N)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// 估算样本方差
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="N"></param>
+        /// <returns></returns>
+        public ValueList VAR(ValueList X, int N)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// 总体样本方差
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="N"></param>
+        /// <returns></returns>
+        public ValueList VARP(ValueList X, int N)
+        {
+            return null;
         }
 
         #endregion

@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>4194eebc-7c70-4bb8-8bd2-610c7d625eda</ProjectGuid>
+    <ProjectGuid>{C156C1B3-8774-4428-A9FE-28ACBF76FF6D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Stock.Formula</RootNamespace>
@@ -40,8 +40,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="AbstractFormula.cs" />
+    <Compile Include="BOLL.cs" />
+    <Compile Include="IFormula.cs" />
+    <Compile Include="LCD.cs" />
+    <Compile Include="MACD.cs" />
+    <Compile Include="ValueList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.MD" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

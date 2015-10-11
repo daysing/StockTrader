@@ -31,11 +31,52 @@ namespace Stock.Formula
     public class ValueList : List<float>
     {
 
-        public static ValueList operator - (ValueList v1, ValueList v2) {
+        public static ValueList operator +(ValueList v1, ValueList v2)
+        {
             ValueList list = new ValueList();
             for (int i = 0; i < v1.Count; i++)
             {
-                list.Add(v1[i] - v1[i]);
+                list.Add(v1[i] + v1[i]);
+            }
+            return list;
+        }
+
+        public static ValueList operator -(ValueList v1, ValueList v2)
+        {
+            ValueList list = new ValueList();
+            for (int i = 0; i < v1.Count; i++)
+            {
+                list.Add(v1[i] - v2[i]);
+            }
+            return list;
+        }
+
+        public static ValueList operator *(ValueList v1, ValueList v2)
+        {
+            ValueList list = new ValueList();
+            for (int i = 0; i < v1.Count; i++)
+            {
+                list.Add(v1[i] * v2[i]);
+            }
+            return list;
+        }
+
+        public static ValueList operator *(int v1, ValueList v2)
+        {
+            ValueList list = new ValueList();
+            for (int i = 0; i < v2.Count; i++)
+            {
+                list.Add(v1 * v2[i]);
+            }
+            return list;
+        }
+
+        public static ValueList operator /(ValueList v1, ValueList v2)
+        {
+            ValueList list = new ValueList();
+            for (int i = 0; i < v1.Count; i++)
+            {
+                list.Add(v1[i] / v2[i]);
             }
             return list;
         }

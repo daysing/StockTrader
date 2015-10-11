@@ -28,24 +28,27 @@ using System.Text;
 
 namespace Stock.Formula
 {
-    public class MACD : AbstractFormula, IFormula
+    class BOLL : AbstractFormula, IFormula
     {
-        private int s, l, m;
-        ValueList DIFF, DEA, macd;
+        private ValueList UPPER;
+        private ValueList LOWER;
+        private ValueList boll;
 
-        public MACD(ValueList values, int SHORT, int LONG, int M)
+        private int N, M;
+
+        public BOLL(int N, int M)
         {
+            this.N = N;
+            this.M = M;
         }
 
         public ValueList Calculate()
         {
-            DIFF = EMA(CLOSE, s) - EMA(CLOSE, l);
-            DEA = EMA(DIFF, m);
+            boll = MA(CLOSE, N);
+            UPPER = boll + M * STD(CLOSE, N);
+            LOWER = boll - M * STD(CLOSE, N);
 
-            macd = DIFF - DEA;
-            // TODO: 根据上穿和下击 来给出买卖建议
-
-            return macd;
+            return boll;
         }
     }
 }
