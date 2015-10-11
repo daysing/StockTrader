@@ -112,6 +112,10 @@
       <Project>{20C7D12A-F795-454C-8437-C09FDEA02839}</Project>
       <Name>Stock.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Stock.Strategy.Breathing\Stock.Strategy.Breathing.csproj">
+      <Project>{94DE1C67-BAF7-47A4-A1A4-4621D4ACFE6C}</Project>
+      <Name>Stock.Strategy.Breathing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Stock.Strategy.Python.Rotation\Stock.Strategy.Python.Rotation.csproj">
       <Project>{B20A5FA7-F000-4914-B9FC-C768FA1A6D04}</Project>
       <Name>Stock.Strategy.Python.Rotation</Name>
