@@ -85,6 +85,7 @@ namespace Stock.Strategy.Python.Rotation
 
             ScriptSource code = engine.CreateScriptSourceFromFile("e:\\projects\\test.py");
             // code.Execute(scope);
+            Console.WriteLine("调用python策略");
         }
 
         public override void Setup()

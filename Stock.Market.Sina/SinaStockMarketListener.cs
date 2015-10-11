@@ -109,7 +109,7 @@ namespace Stock.Market.Sina
             bid.Low = float.Parse(items[5]);
             //bid.Buy = decimal.Parse(items[6]);
             //bid.Sell = decimal.Parse(items[7]);
-            bid.Volumn = int.Parse(items[8]);
+            bid.Volumn = long.Parse(items[8]);
             bid.Turnover = float.Parse(items[9]);
 
             bid.AddBuyGoodsData(new Bid.GoodsData(float.Parse(items[BUY_1_P]), int.Parse(items[BUY_1_A])));
