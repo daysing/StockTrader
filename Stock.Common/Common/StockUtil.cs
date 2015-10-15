@@ -45,19 +45,30 @@ namespace Stock.Common
         {
             if (stockCode.Length == 6)
             {
+                switch (stockCode.Substring(0, 3))
+                {
+                    case "000":
+                        stockCode = "sh" + stockCode;
+                        return stockCode;
+
+                    case "399":
+                        stockCode = "sz" + stockCode;
+                        return stockCode;
+                }
+
                 switch (stockCode.Substring(0, 2))
                 {
+                    case "51":
+                    case "50":
+                    case "60":
+                        stockCode = "sh" + stockCode;
+                        return stockCode;
+
                     case "00":
                     case "15":
                     case "16":
                     case "30":
-                    case "39":
                         stockCode = "sz" + stockCode;
-                        return stockCode;
-
-                    case "51":
-                    case "60":
-                        stockCode = "sh" + stockCode;
                         return stockCode;
                 }
             }
@@ -66,8 +77,8 @@ namespace Stock.Common
 
         public static int GetExchangeType(String code)
         {
-            if (GetFullCode(code) == "sz") return 2;
-            else if(GetFullCode(code) == "sh") return 1;
+            if (GetFullCode(code).StartsWith("sz")) return 2;
+            else if(GetFullCode(code).StartsWith("sh")) return 1;
 
             return 0;
         }
@@ -91,6 +102,15 @@ namespace Stock.Common
             {
                 return random.Next().ToString();
             }
+        }
+
+        public static string GetFundCode(string code)
+        {
+            if (code.Length == 6)
+                return "f_" + code;
+            else if (code.Length == 8)
+                return "f_" + code.Substring(2, 6);
+            else return code;
         }
     }
 }

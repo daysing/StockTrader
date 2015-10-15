@@ -58,6 +58,8 @@ namespace Stock.Market
         /// </summary>
         /// <param name="bid"></param>
         public static void AddBid(Bid bid) {
+            if (bid == null) return;
+
             bidCache[bid.Code].Enqueue(bid);
         }
 
@@ -97,8 +99,9 @@ namespace Stock.Market
         /// <param name="strategy">策略实例</param>
         public void RegisterStrategy(IStrategy strategy)
         {
-            foreach (string code in strategy.StockPool)
+            foreach (string s in strategy.StockPool)
             {
+                string code = StockUtil.GetFullCode(s);
                 if (!StockMarketManager.bidCache.ContainsKey(code))
                 {
                     StockMarketManager.bidCache.Add(code, new BidCacheQueue());
