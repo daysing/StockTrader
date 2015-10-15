@@ -12,6 +12,7 @@ TestStockTrader
 Stock.Strategy.RotationB
 Stock.Strategy.Breathing
 OCR
+XPTable
 LCD.cs
 TestResults
 *.testsettings
