@@ -43,6 +43,7 @@
     <Compile Include="AbstractFormula.cs" />
     <Compile Include="BOLL.cs" />
     <Compile Include="IFormula.cs" />
+    <Compile Include="IStockData.cs" />
     <Compile Include="LCD.cs" />
     <Compile Include="MACD.cs" />
     <Compile Include="ValueList.cs" />

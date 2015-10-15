@@ -30,6 +30,13 @@ namespace Stock.Formula
 {
     public class ValueList : List<float>
     {
+        public ValueList(IEnumerable<float> iEnumerable) : base(iEnumerable)
+        {
+        }
+
+        public ValueList()
+        {
+        }
 
         public static ValueList operator +(ValueList v1, ValueList v2)
         {

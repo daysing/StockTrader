@@ -30,11 +30,22 @@ namespace Stock.Formula
 {
     public class AbstractFormula
     {
+        private IList<IStockData> stocks;
+
+        public AbstractFormula(string code)
+        {
+
+        }
+
+        public AbstractFormula()
+        {
+        }
+
         #region 行情函数
 
         public ValueList OPEN
         {
-            get { return null; }
+            get {return new ValueList(from it in this.stocks select it.Open);}
         }
 
         public ValueList O
@@ -44,7 +55,7 @@ namespace Stock.Formula
 
         public ValueList CLOSE
         {
-            get { return null; }
+            get { return new ValueList(from it in this.stocks select it.Close); }
         }
 
         public ValueList C
@@ -52,19 +63,19 @@ namespace Stock.Formula
             get { return CLOSE; }
         }
 
-        public static ValueList HIGH
+        public  ValueList HIGH
         {
-            get { return null; }
+            get { return new ValueList(from it in this.stocks select it.High); }
         }
 
-        public static ValueList H
+        public  ValueList H
         {
             get { return HIGH; }
         }
 
         public ValueList LOW
         {
-            get { return null; }
+            get { return new ValueList(from it in this.stocks select it.Low); }
         }
 
         public ValueList L
@@ -74,7 +85,12 @@ namespace Stock.Formula
 
         public ValueList VOL
         {
-            get { return null; }
+            get { return new ValueList(from it in this.stocks select it.Volume); }
+        }
+
+        public ValueList AMOUNT
+        {
+            get { return new ValueList(from it in this.stocks select it.Amount); }
         }
 
         public ValueList V
@@ -92,11 +108,6 @@ namespace Stock.Formula
             get { return null; }
         }
 
-        public ValueList AMOUNT
-        {
-            get { return null; }
-        }
-
         #endregion
 
         #region 引用函数
@@ -110,19 +121,64 @@ namespace Stock.Formula
             return null;
         }
 
+        /// <summary>
+        /// 移动平均线， (X1+X2+X3+...+Xn)/N
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="M"></param>
+        /// <returns></returns>
         public ValueList MA(ValueList X, int M)
         {
-            return null;
+            float[] Y = new float[X.Count];
+            for (int i = 0; i < X.Count; i++)
+            {
+                int skip = i - M + 1;
+                Y[i] = X.Skip<float>(skip).Take<float>(M).Average();
+            }
+            return new ValueList(Y);
+        }
+
+        /// <summary>
+        /// 若Y=SMA(X,N,M)，则 Y=[M*X+(N-M)*Y']/N,其中Y'表示上一周期Y值,N必须大于M。
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="N"></param>
+        /// <param name="M"></param>
+        /// <returns></returns>
+        public ValueList SMA(ValueList X, int N, int M)
+        {
+
+            float[] Y = new float[X.Count];
+            Y[0] = X[0];
+            for (int i = 1; i < X.Count; i++)
+            {
+                float Y1 = Y[i - 1];
+                Y[i] = (M * X[i] + (N - M) * Y1) / N;
+            }
+            return new ValueList(Y);
         }
 
         public ValueList EXPMA(ValueList X, int M)
         {
-            return null;
+            return EMA(X, M);
         }
 
-        public ValueList EMA(ValueList X, int M)
+        /// <summary>
+        /// 若Y=EMA(X,N)，则Y=[2*X+(N-1)*Y']/(N+1),其中Y'表示上一周期Y值。
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="N"></param>
+        /// <returns></returns>
+        public ValueList EMA(ValueList X, int N)
         {
-            return EXPMA(X, M);
+            float[] Y = new float[X.Count];
+            Y[0] = X[0];
+            for (int i = 1; i < X.Count; i++)
+            {
+                float Y1 = Y[i - 1];
+                Y[i] = (2 * X[i] + (N - 1) * Y1) / (N+1);
+            }
+            return new ValueList(Y);
         }
 
         public ValueList MEMA(ValueList X, int M)
@@ -135,9 +191,23 @@ namespace Stock.Formula
             return null;
         }
 
-        public ValueList DMA
+        /// <summary>
+        /// 若Y=DMA(X,A)，则 Y=A*X+(1-A)*Y',其中Y'表示上一周期Y值,A必须小于1。
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="M"></param>
+        /// <returns></returns>
+        public ValueList DMA(ValueList X, float A)
         {
-            get { return null; }
+            float[] Y = new float[X.Count];
+            Y[0] = X[0];
+            for (int i = 1; i < X.Count; i++)
+            {
+                float Y1 = Y[i - 1];
+                Y[i] = A * X[i] + (1 - A) * Y1;
+            }
+
+            return new ValueList(Y);
         }
 
         public ValueList HHV
