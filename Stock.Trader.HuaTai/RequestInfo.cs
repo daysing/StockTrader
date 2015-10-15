@@ -124,68 +124,14 @@ namespace Stock.Trader.HuaTai
         public string vcode { get; set; }
     }
 
-    public class StockQueryRequest : Request
+    public class StockBuyRequest : Request
     {
-
-        public StockQueryRequest()
-        {
-            cssweb_type = "GET_STOCK_POSITION";
-            function_id = "403";
-        }
-
-        public string position_str
-        {
-            get
-            {
-                return "";
-            }
-        }
-
-        public string query_direction
-        {
-            get
-            {
-                return "";
-            }
-        }
-
-        public int query_mode
-        {
-            get
-            {
-                return 0;
-            }
-        }
-
-        public int request_num
-        {
-            get
-            {
-                return 100;
-            }
-        }
-
-        public string stock_account
-        {
-            get
-            {
-                return "";
-            }
-        }
-
-        public string stock_code
-        {
-            get
-            {
-                return "";
-            }
-        }
-
-    }
-
-    public class BuyRequest : Request
-    {
-        public BuyRequest() {
+        // uid=153-0679-7959208&cssweb_type=STOCK_BUY&version=1&custid=666600&op_branch_no=17&
+        // branch_no=17&op_entrust_way=7&op_station=IP$192.168.1.1;MAC$00-0C-29-1A-B4-32;HDD$                    &
+        // function_id=302&fund_account=666600&password=ojCz+ofwfgred0kXNZv4/iTA$$&identity_type=&
+        // exchange_type=1&stock_account=A763412369&stock_code=600717&entrust_amount=100&entrust_price=1&
+        // entrust_prop=0&entrust_bs=1&ram=0.10738790780305862
+        public StockBuyRequest() {
             this.cssweb_type = "STOCK_BUY";
             this.function_id = "302";
         }
@@ -216,46 +162,54 @@ namespace Stock.Trader.HuaTai
 
     }
 
-    public class SellRequest : Request
+    public class StockSaleRequest : Request
     {
-        // uid=153-1f64-7915165&cssweb_type=STOCK_SALE&version=1&custid=666600111111&op_branch_no=17&branch_no=17&op_entrust_way=7&op_station=IP$183.206.203.123;MAC$00-0C-29-1A-B4-32;HDD$                    &function_id=302&fund_account=666600111111&password=ojCz+oMyzH50kXNZv4/iTA$$&identity_type=&exchange_type=1&stock_account=A763438769&stock_code=600717&entrust_amount=100&entrust_price=10&entrust_prop=0&entrust_bs=2&ram=0.21561731165274978
+        // uid=153-1f64-7915165&cssweb_type=STOCK_SALE&version=1&custid=666600111111&op_branch_no=17&
+        // branch_no=17&op_entrust_way=7&op_station=IP$183.206.203.123;MAC$00-0C-29-1A-B4-32;HDD$                    &
+        // function_id=302&fund_account=666600111111&password=ojCz+oMyzH50kXNZv4/iTA$$&identity_type=&
+        // exchange_type=1&stock_account=A763412369&stock_code=600717&entrust_amount=100&entrust_price=10&
+        // entrust_prop=0&entrust_bs=2&ram=0.21561731165274978
 
-        public SellRequest()
+        public StockSaleRequest()
         {
             cssweb_type = "STOCK_SELL";
             function_id = "302";
         }
-            public int entrust_amount { get; set; }
+        public int entrust_amount { get; set; }
 
-            public int entrust_bs
+        public int entrust_bs
+        {
+            get
             {
-                get
-                {
-                    return 2;
-                }
+                return 2;
             }
+        }
 
-            public float entrust_price { get; set; }
+        public float entrust_price { get; set; }
 
-            public int entrust_prop
+        public int entrust_prop
+        {
+            get
             {
-                get
-                {
-                    return 0;
-                }
+                return 0;
             }
+        }
 
-            public string stock_account { get; set; }
+        public string stock_account { get; set; }
 
-            public string stock_code { get; set; }
+        public string stock_code { get; set; }
      
     }
 
-    public class CancelQueryRequest : Request
+    public class GetCancelListRequest : Request
     {
-        //uid=152-5841-6976124&version=1&custid=666600111111&op_branch_no=17&branch_no=17&op_entrust_way=7&op_station=IP$183.206.203.123;MAC$00-0C-29-1A-B4-32;HDD$                    &function_id=401&fund_account=66660111111&password=ojCz+oMyzH05kXNZv4/iTA$$&identity_type=&exchange_type=&stock_account=&stock_code=&locate_entrust_no=&query_direction=&
-        //sort_direction=0&request_num=100&position_str=&ram=0.5226608067750931
-        public CancelQueryRequest()
+        // uid=153-0679-7959208&cssweb_type=GET_CANCEL_LIST&version=1&custid=666600&op_branch_no=17&
+        // branch_no=17&op_entrust_way=7&op_station=IP$192.168.1.1;MAC$00-0C-29-1A-B4-32;HDD$                    &
+        // function_id=401&fund_account=666600&password=ojCz+grgw/iTA$$&identity_type=&exchange_type=&
+        // stock_account=&stock_code=&locate_entrust_no=&query_direction=&sort_direction=0&request_num=100&
+        // position_str=&ram=0.1280686566606164
+
+        public GetCancelListRequest()
         {
             cssweb_type = "GET_CANCEL_LIST";
             function_id = "401";
@@ -270,21 +224,108 @@ namespace Stock.Trader.HuaTai
         public string position_str { get{return "";}}
     }
 
-    public class CancelStockRequest : Request
+    public class StockCancelRequest : Request
     {
-        public CancelStockRequest()
+        public StockCancelRequest()
         {
             cssweb_type = "STOCK_CANCEL";
             function_id = "304";
         }
 
-        public string batch_flag { get; set; }
+        public string batch_flag
+        {
+            get
+            {
+                return "0";
+            }
+        }
         public string entrust_no { get; set; }
 
         // uid=153-759d-7924950&cssweb_type=STOCK_CANCEL&version=1&custid=666600111111&
-        // op_branch_no=17&branch_no=17&op_entrust_way=7&op_station=IP$183.206.203.55;MAC$00-0D-27-1A-B4-32;HDD$                    &
-        // function_id=304&fund_account=666600111111&password=ojCz+oMyzH00kXNZv4/iTA$$&
+        // op_branch_no=17&branch_no=17&op_entrust_way=7&op_station=IP$192.168.1.1;MAC$00-0D-27-1A-B4-32;HDD$                    &
+        // function_id=304&fund_account=666600111111&password=ojCz+otgMyy5hf/iTA$$&
         // identity_type=&
         // batch_flag=0&exchange_type=&entrust_no=12140&ram=0.6111481911502779
     }
+
+    public class GetTodayTradeRequest : Request
+    {
+        // uid=153-0679-7959208&cssweb_type=GET_TODAY_TRADE&version=1&custid=666600&op_branch_no=17&
+        // branch_no=17&op_entrust_way=7&op_station=IP$192.168.1.1;MAC$00-0C-29-1A-B4-32;HDD$                    &
+        // function_id=402&fund_account=66660&password=ojCz+oMyy5hf/iTA$$&identity_type=&serial_no=&
+        // exchange_type=&stock_account=&stock_code=&query_direction=1&request_num=100&query_mode=0&
+        // position_str=&ram=0.8150487979874015
+
+        public GetTodayTradeRequest()
+        {
+            cssweb_type = "GET_TODAY_TRADE";
+            function_id = "402";
+        }
+
+        public string stock_account { get { return ""; } }
+        public string stock_code { get { return ""; } }
+        public string locate_entrust_no { get { return ""; } }
+        public string query_direction { get { return "1"; } }
+        public string serial_no { get { return ""; } }
+        public int sort_direction { get { return 0; } }
+        public int request_num { get { return 100; } }
+        public string position_str { get { return ""; } }
+        public string query_mode { get { return "0"; } }
+
+    }
+
+    public class GetStockPositionRequest : Request
+    {
+        // uid=153-0679-7959208&cssweb_type=GET_STOCK_POSITION&version=1&custid=666600&op_branch_no=17&
+        // branch_no=17&op_entrust_way=7&op_station=IP$192.168.1.1;MAC$00-0C-29-1A-B4-32;HDD$                    &
+        // function_id=403&fund_account=666600&password=ojCz+oMyy5hf/iTA$$&identity_type=&
+        // exchange_type=&stock_account=&stock_code=&query_direction=&query_mode=0&request_num=100&
+        // position_str=&ram=0.8974461741745472
+
+        public GetStockPositionRequest()
+        {
+            cssweb_type = "GET_STOCK_POSITION";
+            function_id = "403";
+        }
+
+        public string position_str{ get { return ""; } }
+        public string query_direction { get { return ""; } }
+        public int query_mode { get { return 0; } }
+        public int request_num { get { return 100; } }
+        public string stock_account { get { return ""; } }
+        public string stock_code { get { return ""; } }
+
+    }
+
+    public class GetFundsRequest : Request
+    {
+        // uid=153-0679-7959208&cssweb_type=GET_FUNDS&version=1&custid=666600&op_branch_no=17&
+        // branch_no=17&op_entrust_way=7&op_station=IP$192.168.1.1;MAC$00-0C-29-1A-B4-32;HDD$                    &
+        // function_id=405&fund_account=666600&password=ojCz+oMyy5hf/iTA$$&identity_type=&
+        // money_type=&ram=0.911359122954309
+        public GetFundsRequest()
+        {
+            cssweb_type = "GET_FUNDS";
+            function_id = "405";
+        }
+
+        public string money_type { get { return ""; } }
+    }
+
+    public class FundGetJjszRequest : Request
+    {
+        public FundGetJjszRequest()
+        {
+            cssweb_type = "FUND_GET_JJSZ";
+            function_id = "741";
+        }
+        // uid=153-0679-7959208&cssweb_type=FUND_GET_JJSZ&version=1&custid=666600&op_branch_no=17&
+        // branch_no=17&op_entrust_way=7&op_station=IP$192.168.1.1;MAC$00-0C-29-1A-B4-32;HDD$                    &
+        // function_id=7411&fund_account=666600&password=ojCz+oMyy5hf/iTA$$&identity_type=&
+        // fund_company=&fund_code=&query_mode=0&ram=0.3891886440105736
+        public string fund_company { get{return "";}}
+        public string fund_code { get { return ""; } }
+        public string query_mode { get { return "0"; } }
+    }
+
 }

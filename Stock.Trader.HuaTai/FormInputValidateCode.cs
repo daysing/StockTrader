@@ -36,6 +36,15 @@ namespace Stock.Trader.HuaTai
         public FormInputValidateCode()
         {
             InitializeComponent();
+
+            loadTraderInfo();
+        }
+
+        private void loadTraderInfo()
+        {
+            this.txtUsername.Text = Stock.Trader.Settings.Configure.GetStockTraderItem("Trade.Account");
+            this.txtServicePwd.Text = Stock.Trader.Settings.Configure.GetStockTraderItem("Service.Password");
+            this.txtTrdpwd.SetPswStr(Stock.Trader.Settings.Configure.GetStockTraderItem("Trade.Password"));
         }
 
         private void btnOK_Click(object sender, EventArgs e)

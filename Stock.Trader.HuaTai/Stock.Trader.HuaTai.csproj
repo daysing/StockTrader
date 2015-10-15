@@ -58,6 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestInfo.cs" />
     <Compile Include="ResponseInfo.cs" />
+    <Compile Include="ThsApiWrapper.cs" />
     <Compile Include="ThsStockTrader.cs" />
     <Compile Include="TdxStockTrader.cs" />
     <Compile Include="WebStockTrader.cs" />

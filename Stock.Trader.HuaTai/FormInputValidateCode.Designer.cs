@@ -125,6 +125,7 @@ namespace Stock.Trader.HuaTai
             this.txtServicePwd.Name = "txtServicePwd";
             this.txtServicePwd.Size = new System.Drawing.Size(100, 21);
             this.txtServicePwd.TabIndex = 6;
+            this.txtServicePwd.Text = "750404";
             // 
             // txtUsername
             // 

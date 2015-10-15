@@ -10,7 +10,9 @@ Stock.Market.Yj
 Stock.Trader.CTP
 TestStockTrader
 Stock.Strategy.RotationB
+Stock.Strategy.Breathing
 OCR
+LCD.cs
 TestResults
 *.testsettings
 *.dll

@@ -55,74 +55,75 @@ namespace Stock.Trader.HuaTai
         public string stock_account { get; set; }
     }
 
-    public class RespStockResult : Response
+    public class GetStockPositionResp : Response
     {
-        public List<StockInfo> Item { get; set; }
+        public class GetStockPositionRespItem
+        {
+            public float av_buy_price { get; set; }
+
+            public float av_income_balance { get; set; }
+
+            public float cost_price { get; set; }
+
+            public int cssweb_test { get; set; }
+
+            public float current_amount { get; set; }
+
+            public float enable_amount { get; set; }
+
+            public string exchange_name { get; set; }
+
+            public int exchange_type { get; set; }
+
+            public int hand_flag { get; set; }
+
+            public float income_balance { get; set; }
+
+            public float keep_cost_price { get; set; }
+
+            public float last_price { get; set; }
+
+            public float market_value { get; set; }
+
+            public string stock_account { get; set; }
+
+            public string stock_code { get; set; }
+
+            public string stock_name { get; set; }
+        }
+
+        public List<GetStockPositionRespItem> Item { get; set; }
     }
 
-    public class StockInfo
+
+    public class StockBuyResp : Response
     {
-        public float av_buy_price { get; set; }
-
-        public float av_income_balance { get; set; }
-
-        public float cost_price { get; set; }
-
-        public int cssweb_test { get; set; }
-
-        public float current_amount { get; set; }
-
-        public float enable_amount { get; set; }
-
-        public string exchange_name { get; set; }
-
-        public int exchange_type { get; set; }
-
-        public int hand_flag { get; set; }
-
-        public float income_balance { get; set; }
-
-        public float keep_cost_price { get; set; }
-
-        public float last_price { get; set; }
-
-        public float market_value { get; set; }
-
-        public string stock_account { get; set; }
-
-        public string stock_code { get; set; }
-
-        public string stock_name { get; set; }
+        public List<StockBuyRespItem> Item { get; set; }
     }
 
-    public class RespBuyStockResult : Response
-    {
-        public List<BuyResultItem> Item { get; set; }
-    }
-
-    public class BuyResultItem
-    {
-        public int cssweb_test { get; set; }
-        public int entrust_no { get; set; }
-    }
-
-    public class RespSellStockResult : Response
-    {
-        public List<SellResultItem> Item { get; set; }
-    }
-
-    public class SellResultItem
+    public class StockBuyRespItem
     {
         public int cssweb_test { get; set; }
         public int entrust_no { get; set; }
     }
 
-   public class RespCancelResult : Response {
-       public List<CancelResultItem> Item { get; set; }
+    public class StockSaleResp : Response
+    {
+        public List<StockSaleRespItem> Item { get; set; }
+    }
+
+    public class StockSaleRespItem
+    {
+        public int cssweb_test { get; set; }
+        public int entrust_no { get; set; }
+    }
+
+   public class GetCancelListResp : Response {
+       public List<GetCancelListRespItem> Item { get; set; }
        // "{\"cssweb_code\":\"success\",\"cssweb_type\":\"GET_CANCEL_LIST\",\"item\":[{\"stock_name\":\"天津港\",\"entrust_time\":\"101145\",\"entrust_bs\":\"2\",\"bs_name\":\"卖出\",\"entrust_amount\":\"1000.00\",\"entrust_price\":\"10.520\",\"business_amount\":\"0\",\"business_price\":\"0\",\"stock_code\":\"600717\",\"entrust_no\":\"8305\",\"stock_account\":\"A763438769\",\"exchange_type\":\"1\",\"exchange_name\":\"上海Ａ\",\"entrust_status\":\"2\",\"status_name\":\"已报\",\"entrust_prop\":\"0\",\"prop_name\":\"买卖\"},{\"cssweb_test\":\"0\"}]}"
    }
 
-   public class CancelResultItem
+   public class GetCancelListRespItem
    {
        public string stock_name;
        public string entrust_time;
@@ -147,5 +148,20 @@ namespace Stock.Trader.HuaTai
        // \"business_amount\":\"0\",\"business_price\":\"0\",\"stock_code\":\"600717\",\"entrust_no\":\"8305\",\"stock_account\":\"A763438769\",
        // \"exchange_type\":\"1\",\"exchange_name\":\"上海Ａ\",\"entrust_status\":\"2\",\"status_name\":\"已报\",
        // \"entrust_prop\":\"0\",\"prop_name\":\"买卖\"},{\"cssweb_test\":\"0\"}]}"
+   }
+
+   public class StockCancelResp : Response
+   {
+       public List<CancelResultItem> Item
+       {
+           get;
+           set;
+       }
+   }
+
+   public class CancelResultItem
+   {
+       public int cssweb_test { get; set; }
+       public int entrust_no { get; set; }
    }
 }

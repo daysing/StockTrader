@@ -396,7 +396,6 @@ namespace Stock.Trader.HuaTai
         public string PurchaseFundSZ(string code, float total)
         {
             return "";
-         
         }
 
         public string RedempteFundSZ(string code, int num)
