@@ -50,20 +50,46 @@ namespace Stock.Market.Sina
                 internalRun();
             }
         } 
-        public  void internalRun()
+        private  void internalRun()
         {
                        
             IList<String> t_codes = new List<String>();
-            foreach (string c in codes)
-            {
-                t_codes.Add(StockUtil.GetFullCode(c));
-            }
-            
-            string address = String.Format(dataurl, String.Join(",", t_codes.ToArray()));
+            // 每20个股票发起一次请求
+            bool isSent = false;
 
+            for (int i = 0; i < codes.Count; i++)
+            {
+                if (i % 20 <= 19)
+                {
+                    isSent = false;
+                    if(codes[i] != "sz000000")
+                    t_codes.Add(StockUtil.GetFullCode(codes[i]));
+                    // 构建字符串请求
+                    if (i % 20 == 19)
+                    {
+                        // 有20个股票就发送一次请求
+                        sendRequest(t_codes);
+                        t_codes.Clear();
+                        isSent = true;
+                    }
+                }
+            }
+
+            // 检查是否请求都已经发送
+            if (!isSent)
+            {
+                sendRequest(t_codes);
+                t_codes.Clear();
+                isSent = true;
+            }            
+        }
+
+        private void sendRequest(IList<string> t_codes)
+        {
+            string address = String.Format(dataurl, String.Join(",", t_codes.ToArray()));
             string[] data = client.DownloadString(address).Split(new char[] { '\n' });
             Dictionary<string, Bid> dictionary2 = new Dictionary<string, Bid>();
-            for (int i = 0; i < data.Count(); i++)
+            for (int i = 0; i < data.Length; i++)
             {
                 if (data[i].Length != 0)
                 {
@@ -97,11 +123,13 @@ namespace Stock.Market.Sina
 
         private Bid Parse(string data)
         {
+            String[] items = data.Split(new char[] { ',' });
+            if (items.Length < 10) return null;
+            
             Bid bid = new Bid();
-            String[] items  = data.Split(new char[]{','});
 
-            bid.Code = data.Substring(13, 6);
-            bid.Name = items[0];
+            bid.Code = data.Substring(11, 8);
+            bid.Name = items[0].Substring(21, items[0].Length-21);    // var hq_str_sz150023="深成指B
             bid.Open = float.Parse(items[1]);
             bid.LastClose = float.Parse(items[2]);
             bid.CurrentPrice = float.Parse(items[3]);
