@@ -336,10 +336,12 @@ namespace Stock.Trader.HuaTai
 
         public TradingAccount GetTradingAccountInfo()
         {
-            List<TradingAccount.StockHolderInfo> shis = GetStocks();
-            TradingAccount account = new TradingAccount();
-            account.AddStockHolder(shis);
-            return account;
+            //List<TradingAccount.StockHolderInfo> shis = GetStocks();
+            //TradingAccount account = new TradingAccount();
+            //account.AddStockHolder(shis);
+            //return account;
+
+            return null;
         }
 
         /// <summary>
@@ -366,7 +368,8 @@ namespace Stock.Trader.HuaTai
             string str2 = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<GetStockPositionRequest>(t), this.encoding);
 
             string positionUrl = "https://tradegw.htsc.com.cn/?" + str2;
-            GetStockPositionResp result = JsonConvert.DeserializeObject<GetStockPositionResp>(StockUtil.Base64Decode(this.httpClient.DownloadString(positionUrl), this.GB2312));
+            string respStr = this.httpClient.DownloadString(positionUrl);
+            GetStockPositionResp result = JsonConvert.DeserializeObject<GetStockPositionResp>(StockUtil.Base64Decode(respStr, this.GB2312));
             List<TradingAccount.StockHolderInfo> list = new List<TradingAccount.StockHolderInfo>();
             foreach (GetStockPositionResp.GetStockPositionRespItem si in result.Item)
             {

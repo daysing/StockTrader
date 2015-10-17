@@ -39,6 +39,8 @@ using System.Reflection;
 using System.Window;
 using Stock.Common;
 using Stock.Trader.Settings;
+using System.Runtime.InteropServices;
+using Stock.Trader.THS;
 
 namespace StockTrader
 {
@@ -53,7 +55,7 @@ namespace StockTrader
             InitListView();
 
             xiadan = Stock.Trader.XiaDan.Instance;
-            //          nextClipboardViewer = (IntPtr)Win32API.SetClipboardViewer(this.Handle);
+            //nextClipboardViewer = (IntPtr)Win32API.SetClipboardViewer(this.Handle);
         }
 
         private void _Start()
@@ -108,13 +110,6 @@ namespace StockTrader
                 iData = Clipboard.GetDataObject();
 
                 MessageBox.Show(iData.GetData(DataFormats.UnicodeText).ToString());
-
-                //if (iData.GetDataPresent(DataFormats.Rtf))
-                //    richTextBox1.Rtf = (string)iData.GetData(DataFormats.Rtf);
-                //else if (iData.GetDataPresent(DataFormats.Text))
-                //    richTextBox1.Text = (string)iData.GetData(DataFormats.Text);
-                //else
-                //    richTextBox1.Text = "[Clipboard data is not RTF or ASCII Text]";
             }
             catch (Exception e)
             {
@@ -176,17 +171,17 @@ namespace StockTrader
 
         private StrategyDesc[] LoadMyStrategyList()
         {
-            StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc(), new StrategyDesc() };
-            sd[0].clazz = "Stock.Strategy.Breathing.BreathingStrategy";
-            sd[0].dllPath = "Stock.Strategy.Breathing.dll";
-            sd[0].desc = "说明：分级A轮动策略";
-            sd[0].name = "T+0 呼吸大法";
-            sd[0].group = 1;
-            sd[1].clazz = "Stock.Strategy.RotationB.RotationBStrategy";
-            sd[1].dllPath = "Stock.Strategy.RotationB.dll";
-            sd[1].desc = "说明：分级B强势轮动策略";
-            sd[1].name = "分级B强势轮动策略";
-            sd[1].group = 0;
+            StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc() };
+            //sd[0].clazz = "Stock.Strategy.Breathing.BreathingStrategy";
+            //sd[0].dllPath = "Stock.Strategy.Breathing.dll";
+            //sd[0].desc = "说明：分级A轮动策略";
+            //sd[0].name = "T+0 呼吸大法";
+            //sd[0].group = 1;
+            sd[0].clazz = "Stock.Strategy.RotationB.RotationBStrategy";
+            sd[0].dllPath = "Stock.Strategy.RotationB.dll";
+            sd[0].desc = "说明：分级B强势轮动策略";
+            sd[0].name = "分级B强势轮动策略";
+            sd[0].group = 0;
 
             return sd;
         }
@@ -258,11 +253,42 @@ namespace StockTrader
             xiadan.GetCashInfo();
         }
 
-        private void button8_Click(object sender, EventArgs e)
+        private bool ADA_EnumWindowsProc(IntPtr hWnd, int lParam)
         {
-            xiadan.PurchaseFundSZ(textBox1.Text, float.Parse(textBox2.Text));
+
+            STRINGBUFFER sb;
+            Win32API.GetClassName(hWnd, out sb, 200);
+            if(sb.szText == "#32770 (对话框)")
+            Console.WriteLine(sb.szText);
+            return true;
         }
 
+        private void button8_Click(object sender, EventArgs e)
+        {
+            // xiadan.PurchaseFundSZ(textBox1.Text, float.Parse(textBox2.Text));
+            // #32770 (对话框)
+            IntPtr hWnd = ThsApiWrapper.FindThsWindow();
+            IntPtr ptr = ThsApiWrapper.GetEntrustTips(IntPtr.Zero);
+            IntPtr textId = Win32API.GetDlgItem(ptr, 0x03EC);
+            String Stext = ThsApiWrapper.GetWindowText(textId);
+
+            IntPtr okId = Win32API.GetDlgItem(ptr, 0x0002);
+
+            String text = ThsApiWrapper.GetWindowText(okId);
+            Console.WriteLine("click button: {0}, handle: {1}, LABEL:{2}", text, Convert.ToString(okId.ToInt32(), 16), Stext);
+
+            //Win32API.SendMessage(okId, Win32Code.WM_LBUTTONDOWN, 0, 0);
+            //Win32API.SendMessage(okId, Win32Code.WM_LBUTTONUP, 0, 0);
+
+            // TODO: 需要按两次，才行
+            //int lParam = 2;
+            //lParam = (lParam * 0x10000) + 2;
+            //Win32API.PostMessage(okId, Win32Code.WM_LBUTTONDOWN, Win32Code.MK_LBUTTON, lParam);
+            //Win32API.PostMessage(okId, Win32Code.WM_LBUTTONUP, 0, lParam);
+
+        }
+
+       
         private void button9_Click(object sender, EventArgs e)
         {
             xiadan.RedempteFundSZ(textBox1.Text, int.Parse(textBox3.Text));
@@ -361,5 +387,9 @@ namespace StockTrader
             StockTraderManager.Instance.GetStockTrader().Keep();
         }
 
+        private void InitDataSource()
+        {
+            
+        }
     }
 }

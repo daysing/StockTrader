@@ -48,8 +48,12 @@ namespace Stock.Strategy.Python.Rotation
             RotationStrategy rs = (RotationStrategy)this.strategy;
             rs.IsValid = this.chkEnable.Checked;
             rs.BasePoint = (int)this.numBasePoint.Value;
-            if(rs.IsValid)
-                
+
+            if (rs.IsValid)
+                StrategyManager.Instance.AddMyStrategy(this.strategy);
+            else
+                StrategyManager.Instance.DeleteMyStrategy(this.strategy);
+
             this.Close();
         }
 
