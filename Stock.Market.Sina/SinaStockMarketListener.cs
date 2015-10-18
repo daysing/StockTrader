@@ -28,6 +28,7 @@ using System.Text;
 using Stock.Common;
 using System.Net;
 using System.Threading;
+using System.Diagnostics;
 
 namespace Stock.Market.Sina
 {
@@ -47,7 +48,11 @@ namespace Stock.Market.Sina
             while (true)
             {
                 Thread.Sleep(3000);
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+
                 internalRun();
+                Console.WriteLine("运行了{0}ms", watch.ElapsedMilliseconds);
             }
         } 
         private  void internalRun()
@@ -57,7 +62,6 @@ namespace Stock.Market.Sina
             // 每n个股票发起一次请求
             bool isSent = false;
             int n = 220;
-
             for (int i = 0; i < codes.Count; i++)
             {
                 if ((i % n) < n)
@@ -90,8 +94,6 @@ namespace Stock.Market.Sina
             string address = String.Format(dataurl, String.Join(",", t_codes.ToArray()));
             string resp = client.DownloadString(address);
             string[] data = resp.Split(new char[] { '\n' });
-            Console.WriteLine("Address is : {0}", address);
-            Console.WriteLine("Response is: {0}", resp);
             Dictionary<string, Bid> dictionary2 = new Dictionary<string, Bid>();
             for (int i = 0; i < data.Length; i++)
             {

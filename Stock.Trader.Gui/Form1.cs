@@ -391,5 +391,12 @@ namespace StockTrader
         {
             
         }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            StockMarketManager smm = StockMarketManager.Instance;
+            smm.Close();
+            base.OnClosing(e);
+        }
     }
 }

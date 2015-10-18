@@ -72,6 +72,7 @@ namespace Stock.Market
         }
 
 
+        private Thread listenThread;
         /// <summary>
         /// 启动行情监听器
         /// </summary>
@@ -86,11 +87,17 @@ namespace Stock.Market
                 rsmt.AddStock(code);
             }
 
-            Thread t = new Thread(new ThreadStart(rsmt.Run));
-            t.Start();
+            listenThread = new Thread(new ThreadStart(rsmt.Run));
+            listenThread.Start();
 
             timer.Start();
             timer.Elapsed += new System.Timers.ElapsedEventHandler(Timer_TimesUp);
+        }
+
+        public void Close()
+        {
+            if (listenThread != null)
+                listenThread.Abort();
         }
 
         /// <summary>

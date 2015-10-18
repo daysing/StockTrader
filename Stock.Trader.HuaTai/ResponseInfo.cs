@@ -95,7 +95,6 @@ namespace Stock.Trader.HuaTai
         public List<GetStockPositionRespItem> Item { get; set; }
     }
 
-
     public class StockBuyResp : Response
     {
         public List<StockBuyRespItem> Item { get; set; }
