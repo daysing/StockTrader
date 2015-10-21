@@ -95,60 +95,72 @@ namespace Stock.Trader.HuaTai
         public List<GetStockPositionRespItem> Item { get; set; }
     }
 
+    /// <summary>
+    /// 买股票response
+    /// </summary>
     public class StockBuyResp : Response
     {
         public List<StockBuyRespItem> Item { get; set; }
+
+        public class StockBuyRespItem
+        {
+            public int cssweb_test { get; set; }
+            public int entrust_no { get; set; }
+        }
     }
 
-    public class StockBuyRespItem
-    {
-        public int cssweb_test { get; set; }
-        public int entrust_no { get; set; }
-    }
-
+    /// <summary>
+    /// 卖股票response
+    /// </summary>
     public class StockSaleResp : Response
     {
         public List<StockSaleRespItem> Item { get; set; }
+
+        public class StockSaleRespItem
+        {
+            public int cssweb_test { get; set; }
+            public int entrust_no { get; set; }
+        }
     }
 
-    public class StockSaleRespItem
-    {
-        public int cssweb_test { get; set; }
-        public int entrust_no { get; set; }
-    }
-
+    /// <summary>
+    /// 获取可撤单列表response
+    /// </summary>
    public class GetCancelListResp : Response {
+       // {"cssweb_code":"success","cssweb_type":"GET_CANCEL_LIST",
+       // "item":[{"stock_name":"Ҹȱ","entrust_time":"145933","entrust_bs":"1","bs_name":"²ȫ",
+       // "entrust_amount":"62900.00","entrust_price":"1.007","business_amount":"38100.00",
+       // "business_price":"1.007","stock_code":"150019","entrust_no":"36566","stock_account":"0103648609",
+       // "exchange_type":"2","exchange_name":"ɮۚb,"entrust_status":"7","status_name":"ɢ,
+       // "entrust_prop":"0","prop_name":"²´"},{"cssweb_test":"0"}]}
        public List<GetCancelListRespItem> Item { get; set; }
-       // "{\"cssweb_code\":\"success\",\"cssweb_type\":\"GET_CANCEL_LIST\",\"item\":[{\"stock_name\":\"天津港\",\"entrust_time\":\"101145\",\"entrust_bs\":\"2\",\"bs_name\":\"卖出\",\"entrust_amount\":\"1000.00\",\"entrust_price\":\"10.520\",\"business_amount\":\"0\",\"business_price\":\"0\",\"stock_code\":\"600717\",\"entrust_no\":\"8305\",\"stock_account\":\"A763438769\",\"exchange_type\":\"1\",\"exchange_name\":\"上海Ａ\",\"entrust_status\":\"2\",\"status_name\":\"已报\",\"entrust_prop\":\"0\",\"prop_name\":\"买卖\"},{\"cssweb_test\":\"0\"}]}"
+ 
+       public class GetCancelListRespItem
+       {
+           public string stock_name;
+           public string entrust_time;
+           public string entrust_bs;
+           public string bs_name;
+           public string entrust_amount;
+           public string entrust_price;
+           public string business_amount;
+           public string business_price;
+           public string stock_code;
+           public string entrust_no;
+           public string stock_account;
+           public string exchange_type;
+           public string exchange_name;
+           public string entrust_status;
+           public string status_name;
+           public string entrust_prop;
+           public string prop_name;
+           public string cssweb_test;
+       }
    }
 
-   public class GetCancelListRespItem
-   {
-       public string stock_name;
-       public string entrust_time;
-       public string entrust_bs;
-       public string bs_name;
-       public string entrust_amount;
-       public string entrust_price;
-       public string business_amount;
-       public string business_price;
-       public string stock_code;
-       public string entrust_no;
-       public string stock_account;
-       public string exchange_type;
-       public string exchange_name;
-       public string entrust_status;
-       public string status_name;
-       public string entrust_prop;
-       public string prop_name;
-       public string cssweb_test;
-
-       // "item\":[{\"stock_name\":\"天津港\",\"entrust_time\":\"101145\",\"entrust_bs\":\"2\",\"bs_name\":\"卖出\",\"entrust_amount\":\"1000.00\",\"entrust_price\":\"10.520\",
-       // \"business_amount\":\"0\",\"business_price\":\"0\",\"stock_code\":\"600717\",\"entrust_no\":\"8305\",\"stock_account\":\"A763438769\",
-       // \"exchange_type\":\"1\",\"exchange_name\":\"上海Ａ\",\"entrust_status\":\"2\",\"status_name\":\"已报\",
-       // \"entrust_prop\":\"0\",\"prop_name\":\"买卖\"},{\"cssweb_test\":\"0\"}]}"
-   }
-
+    /// <summary>
+    /// 股票撤单response
+    /// </summary>
    public class StockCancelResp : Response
    {
        public List<CancelResultItem> Item
@@ -156,11 +168,85 @@ namespace Stock.Trader.HuaTai
            get;
            set;
        }
+
+       public class CancelResultItem
+       {
+           public int cssweb_test { get; set; }
+           public int entrust_no { get; set; }
+       }
    }
 
-   public class CancelResultItem
+    /// <summary>
+    /// 今日成交response
+    /// </summary>
+   public class GetTodayTradeResponse : Response
    {
-       public int cssweb_test { get; set; }
-       public int entrust_no { get; set; }
+       // {"cssweb_code":"success","cssweb_type":"GET_TODAY_TRADE",
+       // "item":[{"stock_name":"银华锐进","date":"20151019","bs_name":"²ȫ","business_amount":"10000.00",
+       // "business_price":"1.007","business_balance":"10070.00","stock_code":"150019","entrust_no":"36566",
+       // "serial_no":"37830","stock_account":"0103648609","exchange_type":"ɮۚb,"remark":"成交"}]}
+
+       public class GetTodayTradeRespItem
+       {
+           public string stock_name;
+           public string date;
+           public string bs_name;
+           public string business_amount;
+           public string business_price;
+           public string business_balance;
+           public string stock_code;
+           public string entrust_no;
+           public string serial_no;
+           public string stock_account;
+           public string exchange_type;
+           public string remark;
+       }
+
+       public List<GetTodayTradeRespItem> Item
+       {
+           get;
+           set;
+       }
+
    }
+   public class GetTodayEntrustResp : Response
+   {
+        //{"cssweb_code":"success","cssweb_type":"GET_TODAY_ENTRUST",
+        //"item":[{"stock_name":"֤ͨȯ","entrust_time":"102647","entrust_bs":"2",
+        //"bs_name":"´","entrust_amount":"800.00","entrust_price":"15.430",
+        //"business_amount":"800.00","business_price":"15.430","stock_code":"600837",
+        //"entrust_no":"13859","stock_account":"A763438769","exchange_type":"1",
+        //"exchange_name":"ɏb,"entrust_status":"8","status_name":"ґɢ,"entrust_prop":"0",
+        //"prop_name":"²´"}]}
+
+       public class GetTodayEntrustRespItem
+       {
+           public string stock_name;
+           public string entrust_time;
+           public string entrust_bs;
+           public string bs_name;
+           public string entrust_amount;
+           public string entrust_price;
+           public string business_amount;
+           public string business_price;
+           public string stock_code;
+           public string entrust_no;
+           public string stock_account;
+           public string exchange_type;
+           public string exchange_name;
+           public string entrust_status;
+           public string status_name;
+           public string entrust_prop;
+           public string prop_name;
+       }
+
+
+       public List<GetTodayEntrustRespItem> Item
+       {
+           get;
+           set;
+       }
+
+   }
+
 }

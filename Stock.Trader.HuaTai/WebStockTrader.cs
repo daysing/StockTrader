@@ -38,7 +38,7 @@ using Newtonsoft.Json;
 
 namespace Stock.Trader.HuaTai
 {
-    class WebStockTrader : IStockTrader
+    public class WebStockTrader : IStockTrader
     {
 
         #region nested class
@@ -336,23 +336,67 @@ namespace Stock.Trader.HuaTai
 
         public TradingAccount GetTradingAccountInfo()
         {
-            //List<TradingAccount.StockHolderInfo> shis = GetStocks();
-            //TradingAccount account = new TradingAccount();
-            //account.AddStockHolder(shis);
-            //return account;
+            List<TradingAccount.StockHolderInfo> shis = GetStocks();
+            TradingAccount account = new TradingAccount();
+            account.AddStockHolder(shis);
+            return account;
+        }
 
-            return null;
+        public void GetTodayEntrusterList()
+        {
+            GetTodayEntrusterRequest t1 = new GetTodayEntrusterRequest
+            {
+                branch_no = this.resAccountInfo.branch_no,
+                custid = this.resAccountInfo.fund_account,
+                fund_account = this.resAccountInfo.fund_account,
+                op_branch_no = this.resAccountInfo.branch_no,
+                op_station = this.resAccountInfo.op_station,
+                password = this.resAccountInfo.trdpwd,
+                uid = this.resAccountInfo.uid,
+                exchange_type = ""
+            };
+            string entrusterParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<GetTodayEntrusterRequest>(t1), this.GB2312);
+            string entrusterUrl = "https://tradegw.htsc.com.cn/?" + entrusterParams;
+            string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(entrusterUrl), this.GB2312);
+
+            GetTodayEntrustResp ret = JsonConvert.DeserializeObject<GetTodayEntrustResp>(resp);
+            if (JsonConvert.DeserializeObject<GetTodayEntrustResp>(resp).cssweb_code == SuccessCode)
+            {
+                //return ret.Item[0].entrust_no.ToString();
+            }
+
+        }
+
+        public void GetTodayTradeList()
+        {
+            GetTodayTradeRequest t1 = new GetTodayTradeRequest
+            {
+                branch_no = this.resAccountInfo.branch_no,
+                custid = this.resAccountInfo.fund_account,
+                fund_account = this.resAccountInfo.fund_account,
+                op_branch_no = this.resAccountInfo.branch_no,
+                op_station = this.resAccountInfo.op_station,
+                password = this.resAccountInfo.trdpwd,
+                uid = this.resAccountInfo.uid,
+                exchange_type = ""
+            };
+            string tradeParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<GetTodayTradeRequest>(t1), this.GB2312);
+            string tradeUrl = "https://tradegw.htsc.com.cn/?" + tradeParams;
+            string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(tradeUrl), this.GB2312);
+
+            GetTodayTradeResponse ret = JsonConvert.DeserializeObject<GetTodayTradeResponse>(resp);
+            if (JsonConvert.DeserializeObject<GetTodayTradeResponse>(resp).cssweb_code == SuccessCode)
+            {
+                //return ret.Item[0].entrust_no.ToString();
+            }
+
+            // return "";
         }
 
         /// <summary>
-        /// 获取信用账户的股票信息
+        /// 获取股票持仓
         /// </summary>
         /// <returns></returns>
-        private List<TradingAccount.StockHolderInfo> GetXYStocks()
-        {
-            return null;
-        }
-
         private List<TradingAccount.StockHolderInfo> GetStocks()
         {
             GetStockPositionRequest t = new GetStockPositionRequest
@@ -395,6 +439,8 @@ namespace Stock.Trader.HuaTai
             return list;
         }
 
+        #region 不支持的操作
+
         public string PurchaseFundSZ(string code, float total)
         {
             throw new NotImplementedException();
@@ -434,5 +480,7 @@ namespace Stock.Trader.HuaTai
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 }

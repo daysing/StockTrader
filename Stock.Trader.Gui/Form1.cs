@@ -41,12 +41,14 @@ using Stock.Common;
 using Stock.Trader.Settings;
 using System.Runtime.InteropServices;
 using Stock.Trader.THS;
+using Stock.Trader.HuaTai;
 
 namespace StockTrader
 {
     public partial class Form1 : Form
     {
         Stock.Trader.XiaDan xiadan = null;
+        
         IntPtr nextClipboardViewer;
         public Form1()
         {
@@ -154,17 +156,17 @@ namespace StockTrader
 
         private StrategyDesc[] LoadStrategyList()
         {
-            StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc(), new StrategyDesc() };
-            sd[0].clazz = "Stock.Strategy.Breathing.BreathingStrategy";
-            sd[0].dllPath = "Stock.Strategy.Breathing.dll";
-            sd[0].desc = "说明：分级A轮动策略";
-            sd[0].name = "T+0 呼吸大法";
-            sd[0].group = 1;
-            sd[1].clazz = "Stock.Strategy.RotationB.RotationBStrategy";
-            sd[1].dllPath = "Stock.Strategy.RotationB.dll";
-            sd[1].desc = "说明：分级B强势轮动策略";
-            sd[1].name = "分级B强势轮动策略";
-            sd[1].group = 0;
+            StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc() };
+            //sd[0].clazz = "Stock.Strategy.Breathing.BreathingStrategy";
+            //sd[0].dllPath = "Stock.Strategy.Breathing.dll";
+            //sd[0].desc = "说明：分级A轮动策略";
+            //sd[0].name = "T+0 呼吸大法";
+            //sd[0].group = 1;
+            //sd[1].clazz = "Stock.Strategy.RotationB.RotationBStrategy";
+            //sd[1].dllPath = "Stock.Strategy.RotationB.dll";
+            //sd[1].desc = "说明：分级B强势轮动策略";
+            //sd[1].name = "分级B强势轮动策略";
+            //sd[1].group = 0;
 
             return sd;
         }
@@ -172,16 +174,16 @@ namespace StockTrader
         private StrategyDesc[] LoadMyStrategyList()
         {
             StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc() };
-            //sd[0].clazz = "Stock.Strategy.Breathing.BreathingStrategy";
-            //sd[0].dllPath = "Stock.Strategy.Breathing.dll";
-            //sd[0].desc = "说明：分级A轮动策略";
-            //sd[0].name = "T+0 呼吸大法";
-            //sd[0].group = 1;
-            sd[0].clazz = "Stock.Strategy.RotationB.RotationBStrategy";
-            sd[0].dllPath = "Stock.Strategy.RotationB.dll";
-            sd[0].desc = "说明：分级B强势轮动策略";
-            sd[0].name = "分级B强势轮动策略";
+            sd[0].clazz = "Stock.Strategy.Python.Rotation";
+            sd[0].dllPath = "Stock.Strategy.Python.Rotation.dll";
+            sd[0].desc = "说明：分级A轮动策略";
+            sd[0].name = "分级A轮动策略";
             sd[0].group = 0;
+            //sd[0].clazz = "Stock.Strategy.RotationB.RotationBStrategy";
+            //sd[0].dllPath = "Stock.Strategy.RotationB.dll";
+            //sd[0].desc = "说明：分级B强势轮动策略";
+            //sd[0].name = "分级B强势轮动策略";
+            //sd[0].group = 0;
 
             return sd;
         }
@@ -296,7 +298,7 @@ namespace StockTrader
 
         private void button11_Click(object sender, EventArgs e)
         {
-            xiadan.MergeFundSZ(textBox1.Text, int.Parse(textBox3.Text));
+            ((WebStockTrader)xiadan.trader).GetTodayTradeList();
         }
 
         private void button10_Click(object sender, EventArgs e)

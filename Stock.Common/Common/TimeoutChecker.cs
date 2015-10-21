@@ -21,59 +21,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Collections;
 
-namespace Stock.Market
+namespace Stock.Common.Common
 {
     /// <summary>
-    /// 股票价格队列, 当价格发生变动时,发送给观察者
+    /// 超时监测，确保每个下单操作不会挂起
     /// </summary>
-    public class BidCacheQueue
+    public class TimeoutChecker
     {
-         /// <summary>
-        /// 定义一个委托类型
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="bid"></param>
-        public delegate void BidChangeHandler(object sender, Bid bid);
- 
-         /// <summary>定义一个事件</summary>
-        public event BidChangeHandler OnBidChange;
+        long _timeout;              //超时时间  
+        Action<Delegate> _proc;               // 业务函数代码  
+        Action<Delegate> _procHandle;         // 业务函数包装，超时处理
+        Action<Delegate> _timeoutHandle;      // 超时后处理事件  
 
-        private Bid lastData;
-        private Queue<Bid> queue = new Queue<Bid>();
-
-        public Bid LastData
+        public TimeoutChecker()
         {
-            get { return lastData; }
-          //  set { lastData = value; }
         }
 
-        List<Bid> bids = new List<Bid>();
-        public List<Bid> BidList
-        {
-            get { return this.bids; }
-        }
-
-        public void Enqueue(Bid obj)
-        {
-            bids.Insert(0, obj);
-            queue.Enqueue(obj);
-            lastData = obj;
-            if (OnBidChange != null)
-            {
-                OnBidChange(this, obj);
-            }
-        }
-
-        public Bid Dequeue()
-        {
-            return queue.Dequeue();
+        public void wait(long timeout) {
+            this._timeout = timeout;
+            this._procHandle.BeginInvoke(null, null, null);
         }
     }
 }

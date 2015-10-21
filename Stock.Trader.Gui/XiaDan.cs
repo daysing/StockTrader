@@ -41,7 +41,7 @@ namespace Stock.Trader
         #endregion
 
         private static XiaDan instance = new XiaDan();
-        IStockTrader trader = StockTraderManager.Instance.GetStockTrader();
+        public IStockTrader trader = StockTraderManager.Instance.GetStockTrader();
 
         public void Init()
         {

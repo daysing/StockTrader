@@ -29,7 +29,9 @@ using Stock.Common;
 
 namespace Stock.Trader.HuaTai
 {
-
+    /// <summary>
+    /// 请求基类
+    /// </summary>
     public class Request
     {
         public string uid { get; set; }
@@ -124,6 +126,9 @@ namespace Stock.Trader.HuaTai
         public string vcode { get; set; }
     }
 
+    /// <summary>
+    /// 买股票
+    /// </summary>
     public class StockBuyRequest : Request
     {
         // uid=153-0679-7959208&cssweb_type=STOCK_BUY&version=1&custid=666600&op_branch_no=17&
@@ -162,6 +167,9 @@ namespace Stock.Trader.HuaTai
 
     }
 
+    /// <summary>
+    /// 卖股票
+    /// </summary>
     public class StockSaleRequest : Request
     {
         // uid=153-1f64-7915165&cssweb_type=STOCK_SALE&version=1&custid=666600111111&op_branch_no=17&
@@ -201,6 +209,9 @@ namespace Stock.Trader.HuaTai
      
     }
 
+    /// <summary>
+    /// 查询可撤单列表
+    /// </summary>
     public class GetCancelListRequest : Request
     {
         // uid=153-0679-7959208&cssweb_type=GET_CANCEL_LIST&version=1&custid=666600&op_branch_no=17&
@@ -224,6 +235,44 @@ namespace Stock.Trader.HuaTai
         public string position_str { get{return "";}}
     }
 
+    /// <summary>
+    /// 获取当日委托
+    /// </summary>
+    public class GetTodayEntrusterRequest : Request
+    {
+        // uid=152-107c-7090078&cssweb_type=GET_TODAY_ENTRUST&version=1&custid=666621390461&op_branch_no=17&
+        // branch_no=17&op_entrust_way=7&op_station=IP$183.206.207.161;MAC$00-0C-29-1A-B4-32;HDD$                    &
+        // function_id=401&fund_account=666621390461&password=ojCz+oMyzH00kXNZv4/iTA$$&identity_type=&
+        // exchange_type=&stock_account=&stock_code=&locate_entrust_no=&query_direction=&sort_direction=0&
+        // request_num=100&position_str=&ram=0.5542000429704785
+        public GetTodayEntrusterRequest() {
+            cssweb_type = "GET_TODAY_ENTRUST";
+            function_id = "401";
+        }
+        public string stock_account { get; set; }
+        public string stock_code { get; set; }
+        public string locate_entrust_no { get; set; }
+        public string query_direction { get; set; }
+        public int sort_direction { get { return 0; } }
+        public int request_num { get { return 100; } }
+        public string position_str { get; set; }
+    }
+
+    /// <summary>
+    /// 获取历史委托
+    /// </summary>
+    public class GetHistoryEntrusterRequest : Request
+    {
+        //uid=152-107c-7090078&cssweb_type=HISTORY_TRADE&version=1&custid=666621390461&op_branch_no=17&
+        // branch_no=17&op_entrust_way=7&op_station=IP$183.206.207.161;MAC$00-0C-29-1A-B4-32;HDD$                    &
+        // function_id=411&fund_account=666621390461&password=ojCz+oMyzH00kXNZv4/iTA$$&identity_type=&
+        // start_date=20150918&end_date=20151019&exchange_type=&stock_account=&stock_code=&query_direction=1&
+        // request_num=100&position_str=&ram=0.356126575730741
+    }
+
+    /// <summary>
+    /// 撤销委托
+    /// </summary>
     public class StockCancelRequest : Request
     {
         public StockCancelRequest()
@@ -248,6 +297,9 @@ namespace Stock.Trader.HuaTai
         // batch_flag=0&exchange_type=&entrust_no=12140&ram=0.6111481911502779
     }
 
+    /// <summary>
+    /// 获取当日成交
+    /// </summary>
     public class GetTodayTradeRequest : Request
     {
         // uid=153-0679-7959208&cssweb_type=GET_TODAY_TRADE&version=1&custid=666600&op_branch_no=17&
@@ -274,6 +326,9 @@ namespace Stock.Trader.HuaTai
 
     }
 
+    /// <summary>
+    /// 获取股票仓位
+    /// </summary>
     public class GetStockPositionRequest : Request
     {
         // uid=153-0679-7959208&cssweb_type=GET_STOCK_POSITION&version=1&custid=666600&op_branch_no=17&

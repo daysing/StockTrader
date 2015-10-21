@@ -29,7 +29,7 @@ using System.Text;
 
 namespace Stock.Trader
 {
-    public abstract class BaseStockTrader 
+    public abstract class BaseStockTrader
     {
     }
 }

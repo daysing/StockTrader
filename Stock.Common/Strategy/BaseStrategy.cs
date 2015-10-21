@@ -35,6 +35,7 @@ using Stock.Trader;
 using System.Windows.Forms;
 using Stock.Strategy.Python;
 using Stock.Trader.Settings;
+using System.Threading;
 
 namespace Stock.Strategy
 {
@@ -45,24 +46,6 @@ namespace Stock.Strategy
         private IDictionary<String, BidCacheQueue> bids;
 
         protected StrategyControl control;
-
-        private IDictionary<string, EntrustInfo> entrustNos = new Dictionary<string, EntrustInfo>();
-        private class EntrustInfo
-        {
-            public string No;
-            public DateTime Time;
-        }
-
-        private void AddEntrustNo(string entrustNo)
-        {
-
-            entrustNos.Add(entrustNo, new EntrustInfo { No = entrustNo, Time = DateTime.Now});
-        }
-
-        private void RemoveEntrustNo(string entrustNo)
-        {
-            entrustNos.Remove(entrustNo);
-        }
 
         public StrategyControl Control
         {
@@ -272,7 +255,6 @@ namespace Stock.Strategy
 
         #endregion
 
-
         #region 控件操作接口
 
         public virtual void Setup()
@@ -297,5 +279,57 @@ namespace Stock.Strategy
         }
 
         #endregion
+
+        #region 撤单相关部分
+        private IDictionary<string, EntrustInfo> entrustNos = new Dictionary<string, EntrustInfo>();
+        private class EntrustInfo
+        {
+            public string No;
+            public DateTime Time;
+        }
+
+        private void AddEntrustNo(string entrustNo)
+        {
+
+            entrustNos.Add(entrustNo, new EntrustInfo { No = entrustNo, Time = DateTime.Now });
+        }
+
+        private void RemoveEntrustNo(string entrustNo)
+        {
+            entrustNos.Remove(entrustNo);
+        }
+
+        private void CancelEntrustJob()
+        {
+            // 1、获取委托列表
+            // 2、从委托列表中移除已成交的部分
+        }
+
+        #endregion
+
+        public delegate void SellStockHandler(string code, float price, int num);
+        public event SellStockHandler sellStockEventHandler;
+
+        //private delegate string SellStock(string code, float price, int num);
+        //private void executeThreadWithTimeout(Action action, int timeoutMilliseconds)
+        //{
+        //    Thread threadToKill = null;
+        //    Action wrappedAction = () =>
+        //    {
+        //        threadToKill = Thread.CurrentThread;
+        //        action();
+        //    };
+
+        //    IAsyncResult result = wrappedAction.BeginInvoke(null, null);
+        //    if (result.AsyncWaitHandle.WaitOne(timeoutMilliseconds))
+        //    {
+        //        wrappedAction.EndInvoke(result);
+        //    }
+        //    else
+        //    {
+        //        threadToKill.Abort();
+        //        throw new TimeoutException();
+        //    }
+        //}
     }
 }

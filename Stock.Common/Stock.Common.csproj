@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\DataGridViewCellStyleFactory.cs" />
     <Compile Include="Common\DataHelper.cs" />
     <Compile Include="Common\DllUtils.cs" />
     <Compile Include="Common\HttpClient.cs">
@@ -52,6 +53,7 @@
     </Compile>
     <Compile Include="Common\LogHelper.cs" />
     <Compile Include="Common\StockUtil.cs" />
+    <Compile Include="Common\TimeoutChecker.cs" />
     <Compile Include="Market\Bid.cs" />
     <Compile Include="Market\BidCacheQueue.cs" />
     <Compile Include="Market\FundData.cs" />
