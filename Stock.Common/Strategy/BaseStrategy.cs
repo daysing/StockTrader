@@ -275,7 +275,7 @@ namespace Stock.Strategy
         public virtual IList<StockData> LoadData()
         {
             // nothing to do
-            return null;
+            return new List<StockData>();
         }
 
         #endregion
