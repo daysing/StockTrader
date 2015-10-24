@@ -47,53 +47,74 @@ namespace Stock.Market.Sina
         {
             while (true)
             {
-                Thread.Sleep(3000);
-                Stopwatch watch = new Stopwatch();
-                watch.Start();
-
                 internalRun();
-                Console.WriteLine("运行了{0}ms", watch.ElapsedMilliseconds);
+                Thread.Sleep(3000);
             }
-        } 
+        }
+
+        private List<string> s_codes = new List<string>();
         private  void internalRun()
         {
-                       
-            IList<String> t_codes = new List<String>();
-            // 每n个股票发起一次请求
             bool isSent = false;
-            int n = 220;
-            for (int i = 0; i < codes.Count; i++)
+            int n = 150;
+            if (s_codes.Count == 0)
             {
-                if ((i % n) < n)
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < codes.Count; i++)
                 {
-                    isSent = false;
-                    if(codes[i] != "sz000000")
-                    t_codes.Add(StockUtil.GetFullCode(codes[i]));
-                    // 构建字符串请求
-                    if (i % n == (n-1))
+                    if ((i % n) < n)
                     {
-                        // 有n个股票就发送一次请求
-                        sendRequest(t_codes);
-                        t_codes.Clear();
+                        isSent = false;
+                        sb.Append(StockUtil.GetFullCode(codes[i]));
+                        sb.Append(",");
+                    }
+                    if (i % n == (n - 1))
+                    {
+                        sb.Remove(sb.Length - 1, 1);
+                        s_codes.Add(sb.ToString());
+                        sb.Clear();
                         isSent = true;
                     }
                 }
+                if (!isSent)
+                {
+                    sb.Remove(sb.Length - 1, 1);
+                    s_codes.Add(sb.ToString());
+                }
             }
 
-            // 检查是否请求都已经发送
-            if (!isSent)
+            foreach (string item in s_codes)
             {
-                sendRequest(t_codes);
-                t_codes.Clear();
-                isSent = true;
-            }            
+                Console.WriteLine("请求一次");
+                watch.Restart();
+                sendRequest(item);
+            }
+        }
+        private Stopwatch watch = new Stopwatch();
+        private void sendRequest(string t_codes)
+        {
+            //string address = String.Format(dataurl, String.Join(",", t_codes.ToArray()));
+            string address = String.Format(dataurl, t_codes);
+            Uri addr = new Uri(address);
+            // if (client.IsBusy) return;
+            client = new HttpClient();
+            client.Timeout = 700;
+            client.DownloadStringAsyncWithTimeout(addr);
+            client.DownloadStringCompleted += new DownloadStringCompletedEventHandler(client_DownloadStringCompleted);
+            client.DownloadStringTimeout += new HttpClient.DownloadStringTimeoutEventHandler(client_DownloadStringTimeout);
+            // string resp = client.DownloadString(address);
+       }
+
+        void client_DownloadStringTimeout(object sender)
+        {
+            
         }
 
-        private void sendRequest(IList<string> t_codes)
+        void client_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
-            string address = String.Format(dataurl, String.Join(",", t_codes.ToArray()));
-            string resp = client.DownloadString(address);
-            string[] data = resp.Split(new char[] { '\n' });
+            if (e.Cancelled) return;
+            string[] data = e.Result.Split(new char[] { '\n' });
+            Console.WriteLine("读取完毕一次,发现数据：{0}条,耗时{1}毫秒", data.Length, watch.ElapsedMilliseconds);
             Dictionary<string, Bid> dictionary2 = new Dictionary<string, Bid>();
             for (int i = 0; i < data.Length; i++)
             {

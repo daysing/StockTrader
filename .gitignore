@@ -11,9 +11,10 @@ Stock.Trader.CTP
 TestStockTrader
 Stock.Strategy.RotationB
 Stock.Strategy.Breathing
-OCR
+Stock.OCR
 XPTable
 LCD.cs
+Templates
 TestResults
 *.testsettings
 *.dll
