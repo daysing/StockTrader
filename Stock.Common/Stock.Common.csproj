@@ -90,7 +90,9 @@
     <Compile Include="Trader\BaseStockTrader.cs" />
     <Compile Include="Trader\IStockTrader.cs" />
     <Compile Include="Trader\StockTraderManager.cs" />
-    <Compile Include="TradingAccount.cs" />
+    <Compile Include="Trader\TraderResult.cs" />
+    <Compile Include="Trader\TradingAccount.cs" />
+    <Compile Include="Trader\TradingList.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Strategy\AddStockForm.resx">

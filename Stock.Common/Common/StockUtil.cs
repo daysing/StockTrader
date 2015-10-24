@@ -112,5 +112,19 @@ namespace Stock.Common
                 return "f_" + code.Substring(2, 6);
             else return code;
         }
+
+        public static string GetShortCode(string code)
+        {
+            switch(code.Length) {
+                case 6:
+                    return code;
+                case 7:
+                    return code.Substring(1);
+                case 8:
+                    return code.Substring(2);
+                default:
+                    return code;
+            }
+        }
     }
 }

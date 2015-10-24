@@ -114,6 +114,10 @@
       <Project>{20C7D12A-F795-454C-8437-C09FDEA02839}</Project>
       <Name>Stock.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Stock.Strategy.RotationB\Stock.Strategy.RotationB.csproj">
+      <Project>{C10192F9-9EB4-44E5-90D6-DA8852F929F8}</Project>
+      <Name>Stock.Strategy.RotationB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Stock.Trader.HuaTai\Stock.Trader.HuaTai.csproj">
       <Project>{F1101EE9-D795-4B8E-A14D-B8AE79986FCD}</Project>
       <Name>Stock.Trader.HuaTai</Name>

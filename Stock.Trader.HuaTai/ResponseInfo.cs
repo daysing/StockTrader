@@ -33,6 +33,7 @@ namespace Stock.Trader.HuaTai
     public class Response
     {
         public string cssweb_code { get; set; }
+        public string cssweb_msg { get; set; }
         public string cssweb_type { get; set; }
     }
 
@@ -40,13 +41,13 @@ namespace Stock.Trader.HuaTai
     {
         public string branch_no { get; set; }
         public string fund_account { get; set; }
-        public List<StockHolder> Item { get; set; }
+        public List<StockHolderInfo> Item { get; set; }
         public string op_station { get; set; }
         public string trdpwd { get; set; }
         public string uid { get; set; }
     }
 
-    public class StockHolder
+    public class StockHolderInfo
     {
         public string exchange_name { get; set; }
         public string exchange_type { get; set; }

@@ -130,11 +130,18 @@ namespace Stock.Strategy
 
         #endregion
 
-
         public BaseStrategy()
         {
-            control = CreateControl();
-            this.Init();
+            try
+            {
+                control = CreateControl();
+                this.Init();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                throw e;
+            }
         }
 
         protected virtual StrategyControl CreateControl()
@@ -173,33 +180,58 @@ namespace Stock.Strategy
             // trader.Init();
         }
 
-        public string SellStock(string code, float price, int num)
+        public TraderResult SellStock(string code, float price, int num)
         {
             LogHelper.WriteLog(this.GetType(),"BaseStrategy.SellStock");
-            string entrustNo = trader.SellStock(code, price, num);
-            AddEntrustNo(entrustNo);
-            return entrustNo;
+            TraderResult result = trader.SellStock(code, price, num);
+            switch (result.Code)
+            {
+                case TraderResultEnum.ERROR:
+                    MessageBox.Show(result.Message);
+                    break;
+                case TraderResultEnum.SUCCESS:
+                    AddEntrustNo(result.EntrustNo);
+                    break;
+            }
+            return result;
         }
 
-        public string BuyStock(string code, float price, int num)
+        public TraderResult BuyStock(string code, float price, int num)
         {
             LogHelper.WriteLog(this.GetType(), "BaseStrategy.BuyStock");
-            string entrustNo = trader.BuyStock(code, price, num);
-            AddEntrustNo(entrustNo);
-            return entrustNo;
+            TraderResult result =trader.BuyStock(code, price, num);
+            switch (result.Code)
+            {
+                case TraderResultEnum.ERROR:
+                    MessageBox.Show(result.Message);
+                    break;
+                case TraderResultEnum.SUCCESS:
+                    AddEntrustNo(result.EntrustNo);
+                    break;
+            }
+            return result;
         }
 
-        public string CancelStock(string entrustNo)
+        public TraderResult CancelStock(string entrustNo)
         {
             LogHelper.WriteLog(this.GetType(), "BaseStrategy.CancelStock");
-            string eNo = trader.CancelStock(entrustNo);
-            RemoveEntrustNo(entrustNo);
-            return eNo;
+            TraderResult result = trader.CancelStock(entrustNo);
+            switch (result.Code)
+            {
+                case TraderResultEnum.ERROR:
+                    MessageBox.Show(result.Message);
+                    break;
+                case TraderResultEnum.SUCCESS:
+                    AddEntrustNo(result.EntrustNo);
+                    break;
+            }
+            return result;
         }
 
-        public void GetTransactionInfo()
+        public TraderResult GetTodayTradeList()
         {
             LogHelper.WriteLog(this.GetType(), "BaseStrategy.GetTransactionInfo");
+            return trader.GetTodayTradeList();
         }
 
         public void Keep()
@@ -208,9 +240,9 @@ namespace Stock.Strategy
             trader.Keep();
         }
 
-        public TradingAccount GetTradingAccountInfo()
+        public TraderResult GetTradingAccountInfo()
         {
-            return null;
+            return trader.GetTradingAccountInfo();
         }
 
         public string PurchaseFundSZ(string code, float total)

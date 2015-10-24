@@ -73,6 +73,10 @@
       <Project>{20C7D12A-F795-454C-8437-C09FDEA02839}</Project>
       <Name>Stock.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Stock.OCR\Stock.OCR.csproj">
+      <Project>{49E00206-8BE8-4356-8D24-03122832F2B0}</Project>
+      <Name>Stock.OCR</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

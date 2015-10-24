@@ -35,12 +35,12 @@ using System.Reflection;
 using System.Web;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using Stock.OCR;
 
 namespace Stock.Trader.HuaTai
 {
-    public class WebStockTrader : IStockTrader
+    public class WebStockTrader : BaseStockTrader
     {
-
         #region nested class
 
         public class URLHelper
@@ -83,7 +83,6 @@ namespace Stock.Trader.HuaTai
         
         #endregion
 
-        private CookieContainer Cookie;
         private Encoding encoding = Encoding.UTF8;
         private Encoding GB2312 = Encoding.GetEncoding("GB2312");
         private HttpClient httpClient = new HttpClient();
@@ -91,16 +90,18 @@ namespace Stock.Trader.HuaTai
         private static string SuccessCode = "success";
         FormInputValidateCode fivc = null;
 
-        public void Init()
+        #region 重写方法
+
+        public override void Init()
         {
             Login();
         }
 
-        private void Login()
+        protected override void Login()
         {
             string loginUrl = "https://service.htsc.com.cn/service/loginAction.do?method=login";
             this.httpClient.DownloadString(loginUrl);
-            
+
             string verifyCode = this.GetVerifyCode();
             if (verifyCode == "")
             {
@@ -112,7 +113,7 @@ namespace Stock.Trader.HuaTai
                 // TODO: 自动获取MAC, HDD INFO
                 macaddr = "00:0C:29:1A:B4:32",
                 hddInfo = "CVCV434102MF120BGN++",
-                
+
                 servicePwd = fivc.txtServicePwd.Text,
                 trdpwd = fivc.txtTrdpwd.GetEncPswAes(),
                 trdpwdEns = fivc.txtTrdpwd.GetEncPswAes(),
@@ -125,6 +126,7 @@ namespace Stock.Trader.HuaTai
             this.httpClient.Encoding = this.encoding;
 
             // string str4 = this.httpClient.UploadString(address, data);
+            httpClient.Timeout = 0xea90;
             byte[] responseData = this.httpClient.UploadData(loginUrl, "POST", postData);
             string resp = Encoding.UTF8.GetString(responseData);//解码  
 
@@ -133,7 +135,7 @@ namespace Stock.Trader.HuaTai
                 string input = this.httpClient.DownloadString("https://service.htsc.com.cn/service/flashbusiness_new3.jsp?etfCode=");
                 String infoStr = StockUtil.Base64Decode(this.GetData(input), this.GB2312);
                 Console.WriteLine(infoStr);
-                resAccountInfo = JsonConvert.DeserializeObject<RespAccountInfo>(infoStr);                
+                resAccountInfo = JsonConvert.DeserializeObject<RespAccountInfo>(infoStr);
             }
             else if (resp.IndexOf("系统升级中") != -1)
             {
@@ -145,6 +147,156 @@ namespace Stock.Trader.HuaTai
                 Login();
             }
         }
+
+        protected override TraderResult internalSellStock(string code, float price, int num)
+        {
+            int exchange_type = StockUtil.GetExchangeType(code);
+            StockHolderInfo holder = GetStockHolder(exchange_type);
+            StockSaleRequest t = new StockSaleRequest
+            {
+                branch_no = this.resAccountInfo.branch_no,
+                custid = this.resAccountInfo.fund_account,
+                fund_account = this.resAccountInfo.fund_account,
+                op_branch_no = this.resAccountInfo.branch_no,
+                op_station = this.resAccountInfo.op_station,
+                password = this.resAccountInfo.trdpwd,
+                uid = this.resAccountInfo.uid,
+                exchange_type = exchange_type.ToString(),
+                stock_account = holder.stock_account,
+                stock_code = StockUtil.GetShortCode(code),
+                entrust_amount = num,
+                entrust_price = (float)price
+            };
+            StockSaleResp resp = getResp<StockSaleResp, StockSaleRequest>(t);
+
+            TraderResult ret = new TraderResult();
+            if (resp.cssweb_code == SuccessCode)
+            {
+                ret.Code = TraderResultEnum.SUCCESS;
+                ret.EntrustNo = resp.Item[0].entrust_no.ToString();
+            }
+            else
+            {
+                ret.Code = TraderResultEnum.ERROR;
+            }
+
+            return ret;
+        }
+
+        protected override TraderResult internalBuyStock(string code, float price, int num)
+        {
+            int exchange_type = StockUtil.GetExchangeType(code);
+            StockHolderInfo holder = GetStockHolder(exchange_type);
+
+            StockBuyRequest t = new StockBuyRequest
+            {
+                branch_no = this.resAccountInfo.branch_no,
+                custid = this.resAccountInfo.fund_account,
+                fund_account = this.resAccountInfo.fund_account,
+                op_branch_no = this.resAccountInfo.branch_no,
+                op_station = this.resAccountInfo.op_station,
+                password = this.resAccountInfo.trdpwd,
+                uid = this.resAccountInfo.uid,
+                exchange_type = exchange_type.ToString(),
+                stock_account = holder.stock_account,
+                stock_code = code,
+                entrust_amount = num,
+                entrust_price = price
+            };
+
+            StockBuyResp resp = getResp<StockBuyResp, StockBuyRequest>(t);
+            TraderResult ret = new TraderResult();
+            if (resp.cssweb_code == SuccessCode)
+            {
+                ret.Code = TraderResultEnum.SUCCESS;
+                ret.EntrustNo = resp.Item[0].entrust_no.ToString();
+            }
+            else
+            {
+                ret.Code = TraderResultEnum.ERROR;
+            }
+            return ret;
+        }
+
+        protected override TraderResult internalGetTodayTradeList()
+        {
+            GetTodayTradeRequest t = new GetTodayTradeRequest
+            {
+                branch_no = this.resAccountInfo.branch_no,
+                custid = this.resAccountInfo.fund_account,
+                fund_account = this.resAccountInfo.fund_account,
+                op_branch_no = this.resAccountInfo.branch_no,
+                op_station = this.resAccountInfo.op_station,
+                password = this.resAccountInfo.trdpwd,
+                uid = this.resAccountInfo.uid,
+                exchange_type = ""
+            };
+
+            GetTodayTradeResponse ret = getResp<GetTodayTradeResponse, GetTodayTradeRequest>(t);
+            TraderResult result = new TraderResult();
+            result.Result = ret;
+            if (ret.cssweb_code == SuccessCode)
+            {
+                result.Code = TraderResultEnum.SUCCESS;
+            }
+            else
+            {
+                result.Code = TraderResultEnum.ERROR;
+            }
+
+            return result;
+        }
+
+        protected override void internalKeep()
+        {
+            GetTradingAccountInfo();
+        }
+
+        protected override TraderResult internalGetTradingAccountInfo()
+        {
+            List<TradingAccount.StockHolderInfo> shis = GetStocks();
+            TradingAccount account = new TradingAccount();
+            account.AddStockHolder(shis);
+
+            TraderResult result = new TraderResult();
+            result.Code = TraderResultEnum.SUCCESS;
+            result.Result = account;
+
+            return result;
+        }
+
+        protected override TraderResult internalCancelStock(string entrust_no)
+        {
+
+            StockCancelRequest t = new StockCancelRequest
+            {
+                branch_no = this.resAccountInfo.branch_no,
+                custid = this.resAccountInfo.fund_account,
+                fund_account = this.resAccountInfo.fund_account,
+                op_branch_no = this.resAccountInfo.branch_no,
+                op_station = this.resAccountInfo.op_station,
+                password = this.resAccountInfo.trdpwd,
+                uid = this.resAccountInfo.uid,
+                exchange_type = "",
+                entrust_no = entrust_no
+            };
+
+            StockCancelResp resp = getResp<StockCancelResp, StockCancelRequest>(t);
+            TraderResult ret = new TraderResult();
+            if (resp.cssweb_code == SuccessCode)
+            {
+                ret.Code = TraderResultEnum.SUCCESS;
+                ret.EntrustNo = resp.Item[0].entrust_no.ToString();
+            }
+            else
+            {
+                ret.Code = TraderResultEnum.ERROR;
+            }
+
+            return ret;
+        }
+
+        #endregion 重写方法
 
         private string GetData(string input)
         {
@@ -165,232 +317,30 @@ namespace Stock.Trader.HuaTai
             Bitmap image = bitmap.Clone(rect, PixelFormat.Format8bppIndexed);
             fivc = new FormInputValidateCode();
             fivc.picValidateCode.Image = image;
+            //OcrUtil ocrUtil = new OcrUtil();
+            //string code = ocrUtil.Recognise(image);
+            //fivc.txtValidateCode.Text = code;
             fivc.ShowDialog();
             return fivc.txtValidateCode.Text;
         }
 
-        private StockHolder GetStockHolder(int exchangeType)
+        /// <summary>
+        /// 获取股东信息
+        /// </summary>
+        /// <param name="exchangeType"></param>
+        /// <returns></returns>
+        private StockHolderInfo GetStockHolder(int exchangeType)
         {
-            StockHolder holder = null;
+            StockHolderInfo holder = null;
             for (int i = 0; i < this.resAccountInfo.Item.Count; i++)
-			{
-			    if(this.resAccountInfo.Item[i].exchange_type == exchangeType.ToString())
+            {
+                if (this.resAccountInfo.Item[i].exchange_type == exchangeType.ToString())
                 {
                     holder = this.resAccountInfo.Item[i];
                 }
-			}
+            }
 
             return holder;
-        }
-
-        public string SellStock(string code, float price, int num)
-        {
-            string ret = _SellStock(code, price, num);
-            if (ret == "")
-            {
-                // LOG
-                Login();
-                return _SellStock(code, price, num);  
-            }
-
-            return ret;
-        }
-
-        private string _SellStock(string code, float price, int num)
-        {
-            int exchange_type = StockUtil.GetExchangeType(code);
-            StockHolder holder = GetStockHolder(exchange_type);
-            StockSaleRequest t = new StockSaleRequest
-            {
-                branch_no = this.resAccountInfo.branch_no,
-                custid = this.resAccountInfo.fund_account,
-                fund_account = this.resAccountInfo.fund_account,
-                op_branch_no = this.resAccountInfo.branch_no,
-                op_station = this.resAccountInfo.op_station,
-                password = this.resAccountInfo.trdpwd,
-                uid = this.resAccountInfo.uid,
-                exchange_type = exchange_type.ToString(),
-                stock_account = holder.stock_account,
-                stock_code = code,
-                entrust_amount = num,
-                entrust_price = (float)price
-            };
-            string queryParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<StockSaleRequest>(t), this.GB2312);
-            string sellUrl = "https://tradegw.htsc.com.cn/?" + queryParams;
-            string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(sellUrl), this.GB2312);
-
-            StockSaleResp ret = JsonConvert.DeserializeObject<StockSaleResp>(resp);
-            if (ret.cssweb_code == SuccessCode)
-            {
-                return ret.Item[0].entrust_no.ToString();
-            }
-
-            return "";
-        }
-
-        public string BuyStock(string code, float price, int num)
-        {
-            string ret = _BuyStock(code, price, num);
-            if (ret == "")
-            {
-                // LOG
-                Login();
-                _BuyStock(code, price, num);
-            }
-            return null;
-       }
-
-        private string _BuyStock(string code, float price, int num)
-        {
-            int exchange_type = StockUtil.GetExchangeType(code);
-            StockHolder holder = GetStockHolder(exchange_type);
-
-            StockBuyRequest t = new StockBuyRequest
-            {
-                branch_no = this.resAccountInfo.branch_no,
-                custid = this.resAccountInfo.fund_account,
-                fund_account = this.resAccountInfo.fund_account,
-                op_branch_no = this.resAccountInfo.branch_no,
-                op_station = this.resAccountInfo.op_station,
-                password = this.resAccountInfo.trdpwd,
-                uid = this.resAccountInfo.uid,
-                exchange_type = exchange_type.ToString(),
-                stock_account = holder.stock_account,
-                stock_code = code,
-                entrust_amount = num,
-                entrust_price = price
-            };
-
-            string queryParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<StockBuyRequest>(t), this.GB2312);
-            string buyUrl = "https://tradegw.htsc.com.cn/?" + queryParams;
-            string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(buyUrl), this.GB2312);
-
-            StockBuyResp ret = JsonConvert.DeserializeObject<StockBuyResp>(resp);
-            if (JsonConvert.DeserializeObject<StockBuyResp>(resp).cssweb_code == SuccessCode)
-            {
-                return ret.Item[0].entrust_no.ToString();
-            }
-            return "";
-        }
-
-        public string CancelStock(string entrust_no)
-        {
-            //GetCancelListRequest t = new GetCancelListRequest
-            //{
-            //    branch_no = this.resAccountInfo.branch_no,
-            //    custid = this.resAccountInfo.fund_account,
-            //    fund_account = this.resAccountInfo.fund_account,
-            //    op_branch_no = this.resAccountInfo.branch_no,
-            //    op_station = this.resAccountInfo.op_station,
-            //    password = this.resAccountInfo.trdpwd,
-            //    uid = this.resAccountInfo.uid,
-            //    exchange_type = "",
-            //    stock_account = "",
-            //    stock_code = "",
-            //};
-            //string queryParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<GetCancelListRequest>(t), this.GB2312);
-            //string buyUrl = "https://tradegw.htsc.com.cn/?" + queryParams;
-            //string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(buyUrl), this.GB2312);
-
-            //if (JsonConvert.DeserializeObject<GetCancelListResp>(resp).cssweb_code == SuccessCode)
-            //{
-            //    // TODO:
-            //}
-
-
-            StockCancelRequest t1 = new StockCancelRequest
-            {
-                branch_no = this.resAccountInfo.branch_no,
-                custid = this.resAccountInfo.fund_account,
-                fund_account = this.resAccountInfo.fund_account,
-                op_branch_no = this.resAccountInfo.branch_no,
-                op_station = this.resAccountInfo.op_station,
-                password = this.resAccountInfo.trdpwd,
-                uid = this.resAccountInfo.uid,
-                exchange_type = "",
-                entrust_no = entrust_no
-            };
-            string cancelParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<StockCancelRequest>(t1), this.GB2312);
-            string cancelUrl = "https://tradegw.htsc.com.cn/?" + cancelParams;
-            string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(cancelUrl), this.GB2312);
-
-            StockCancelResp ret = JsonConvert.DeserializeObject<StockCancelResp>(resp);
-            if (JsonConvert.DeserializeObject<StockCancelResp>(resp).cssweb_code == SuccessCode)
-            {
-                return ret.Item[0].entrust_no.ToString();
-            }
-
-            return "";
-
-        }
-
-        public void GetTransactionInfo()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Keep()
-        {
-            GetTradingAccountInfo();
-        }
-
-        public TradingAccount GetTradingAccountInfo()
-        {
-            List<TradingAccount.StockHolderInfo> shis = GetStocks();
-            TradingAccount account = new TradingAccount();
-            account.AddStockHolder(shis);
-            return account;
-        }
-
-        public void GetTodayEntrusterList()
-        {
-            GetTodayEntrusterRequest t1 = new GetTodayEntrusterRequest
-            {
-                branch_no = this.resAccountInfo.branch_no,
-                custid = this.resAccountInfo.fund_account,
-                fund_account = this.resAccountInfo.fund_account,
-                op_branch_no = this.resAccountInfo.branch_no,
-                op_station = this.resAccountInfo.op_station,
-                password = this.resAccountInfo.trdpwd,
-                uid = this.resAccountInfo.uid,
-                exchange_type = ""
-            };
-            string entrusterParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<GetTodayEntrusterRequest>(t1), this.GB2312);
-            string entrusterUrl = "https://tradegw.htsc.com.cn/?" + entrusterParams;
-            string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(entrusterUrl), this.GB2312);
-
-            GetTodayEntrustResp ret = JsonConvert.DeserializeObject<GetTodayEntrustResp>(resp);
-            if (JsonConvert.DeserializeObject<GetTodayEntrustResp>(resp).cssweb_code == SuccessCode)
-            {
-                //return ret.Item[0].entrust_no.ToString();
-            }
-
-        }
-
-        public void GetTodayTradeList()
-        {
-            GetTodayTradeRequest t1 = new GetTodayTradeRequest
-            {
-                branch_no = this.resAccountInfo.branch_no,
-                custid = this.resAccountInfo.fund_account,
-                fund_account = this.resAccountInfo.fund_account,
-                op_branch_no = this.resAccountInfo.branch_no,
-                op_station = this.resAccountInfo.op_station,
-                password = this.resAccountInfo.trdpwd,
-                uid = this.resAccountInfo.uid,
-                exchange_type = ""
-            };
-            string tradeParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<GetTodayTradeRequest>(t1), this.GB2312);
-            string tradeUrl = "https://tradegw.htsc.com.cn/?" + tradeParams;
-            string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(tradeUrl), this.GB2312);
-
-            GetTodayTradeResponse ret = JsonConvert.DeserializeObject<GetTodayTradeResponse>(resp);
-            if (JsonConvert.DeserializeObject<GetTodayTradeResponse>(resp).cssweb_code == SuccessCode)
-            {
-                //return ret.Item[0].entrust_no.ToString();
-            }
-
-            // return "";
         }
 
         /// <summary>
@@ -409,11 +359,12 @@ namespace Stock.Trader.HuaTai
                 password = this.resAccountInfo.trdpwd,
                 uid = this.resAccountInfo.uid
             };
-            string str2 = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<GetStockPositionRequest>(t), this.encoding);
 
-            string positionUrl = "https://tradegw.htsc.com.cn/?" + str2;
-            string respStr = this.httpClient.DownloadString(positionUrl);
-            GetStockPositionResp result = JsonConvert.DeserializeObject<GetStockPositionResp>(StockUtil.Base64Decode(respStr, this.GB2312));
+            GetStockPositionResp result = getResp<GetStockPositionResp, GetStockPositionRequest>(t);
+            //string str2 = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<GetStockPositionRequest>(t), this.encoding);
+            //string positionUrl = "https://tradegw.htsc.com.cn/?" + str2;            
+            //string respStr = this.httpClient.DownloadString(positionUrl);
+            //GetStockPositionResp result = JsonConvert.DeserializeObject<GetStockPositionResp>(StockUtil.Base64Decode(respStr, this.GB2312));
             List<TradingAccount.StockHolderInfo> list = new List<TradingAccount.StockHolderInfo>();
             foreach (GetStockPositionResp.GetStockPositionRespItem si in result.Item)
             {
@@ -439,7 +390,73 @@ namespace Stock.Trader.HuaTai
             return list;
         }
 
+        private T getResp<T, R>(R request)
+        {
+            string queryParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<R>(request), this.GB2312);
+            string sellUrl = "https://tradegw.htsc.com.cn/?" + queryParams;
+            string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(sellUrl), this.GB2312);
+
+            Console.WriteLine("Web操作返回结果", resp);
+            T ret = JsonConvert.DeserializeObject<T>(resp);
+            return ret;
+        }
+
         #region 不支持的操作
+
+        public void GetCancelList()
+        {
+            //GetCancelListRequest t = new GetCancelListRequest
+            //{
+            //    branch_no = this.resAccountInfo.branch_no,
+            //    custid = this.resAccountInfo.fund_account,
+            //    fund_account = this.resAccountInfo.fund_account,
+            //    op_branch_no = this.resAccountInfo.branch_no,
+            //    op_station = this.resAccountInfo.op_station,
+            //    password = this.resAccountInfo.trdpwd,
+            //    uid = this.resAccountInfo.uid,
+            //    exchange_type = "",
+            //    stock_account = "",
+            //    stock_code = "",
+            //};
+            //string queryParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<GetCancelListRequest>(t), this.GB2312);
+            //string buyUrl = "https://tradegw.htsc.com.cn/?" + queryParams;
+            //string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(buyUrl), this.GB2312);
+
+            //if (JsonConvert.DeserializeObject<GetCancelListResp>(resp).cssweb_code == SuccessCode)
+            //{
+            //    // TODO:
+            //}
+
+        }
+
+        public void GetTodayEntrusterList()
+        {
+            GetTodayEntrusterRequest t = new GetTodayEntrusterRequest
+            {
+                branch_no = this.resAccountInfo.branch_no,
+                custid = this.resAccountInfo.fund_account,
+                fund_account = this.resAccountInfo.fund_account,
+                op_branch_no = this.resAccountInfo.branch_no,
+                op_station = this.resAccountInfo.op_station,
+                password = this.resAccountInfo.trdpwd,
+                uid = this.resAccountInfo.uid,
+                exchange_type = ""
+            };
+            //string entrusterParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<GetTodayEntrusterRequest>(t1), this.GB2312);
+            //string entrusterUrl = "https://tradegw.htsc.com.cn/?" + entrusterParams;
+            //string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(entrusterUrl), this.GB2312);
+
+            //GetTodayEntrustResp ret = JsonConvert.DeserializeObject<GetTodayEntrustResp>(resp);
+            GetTodayEntrustResp ret = getResp<GetTodayEntrustResp, GetTodayEntrusterRequest>(t);
+            TraderResult result = new TraderResult();
+            result.Result = ret;
+            if (ret.cssweb_code == SuccessCode)
+            {
+                result.Code = TraderResultEnum.SUCCESS;
+            }
+
+            // return result;
+        }
 
         public string PurchaseFundSZ(string code, float total)
         {

@@ -235,7 +235,7 @@ namespace Stock.Trader.HuaTai
             Win32API.SendMessage(htvi, Win32Code.TVM_SELECTITEM, Win32Code.TVGN_CARET, hQueryLscjcx);
         }
 
-        public string SellStock(string code, float price, int num)
+        public TraderResult SellStock(string code, float price, int num)
         {
             ClickSellTreeViewItem();
 
@@ -257,10 +257,10 @@ namespace Stock.Trader.HuaTai
             hCtrl = Win32API.GetDlgItem(hPanel, BUY_BTN_OK);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
-            return "";
+            return null ;
         }
 
-        public string BuyStock(string code, float price, int num)
+        public TraderResult BuyStock(string code, float price, int num)
         {
             const int BUY_TXT_CODE = 0x0408;
             const int BUY_TXT_PRICE = 0x0409;
@@ -283,13 +283,13 @@ namespace Stock.Trader.HuaTai
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
 
-            return "";
+            return null;
         }
 
-        public string CancelStock(String entrust_no)
+        public TraderResult CancelStock(String entrust_no)
         {
             ClickCancelTreeViewItem();
-            return "";
+            return null ;
         }
 
         public void Keep()
@@ -316,7 +316,7 @@ namespace Stock.Trader.HuaTai
             return hc;
       }
 
-        public TradingAccount GetTradingAccountInfo()
+        public TraderResult GetTradingAccountInfo()
         {
             #region test
             //Win32API.SendMessage(htvi, Win32Code.TVM_SELECTITEM, Win32Code.TVGN_CARET, hQueryZjgp);
@@ -384,11 +384,11 @@ namespace Stock.Trader.HuaTai
             #endregion
 
             //return null;
-            return wst.GetTradingAccountInfo();
+            return null;
 
         }
 
-        public void GetTransactionInfo()
+        public TraderResult GetTodayTradeList()
         {
             throw new NotImplementedException();
         }

@@ -40,7 +40,6 @@ namespace StockTrader
         /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
         protected override void Dispose(bool disposing)
         {
-            Win32API.ChangeClipboardChain(this.Handle, nextClipboardViewer);
             if (disposing && (components != null))
             {
                 components.Dispose();
@@ -57,9 +56,9 @@ namespace StockTrader
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("基金组", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("股票组", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("基金组", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("股票组", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -114,7 +113,6 @@ namespace StockTrader
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.textBox4 = new System.Windows.Forms.TextBox();
-            this.keepLoginTimer = new System.Windows.Forms.Timer(this.components);
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -136,13 +134,13 @@ namespace StockTrader
             this.listView1.ContextMenuStrip = this.ctxStrategyMenu;
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
-            listViewGroup1.Header = "基金组";
-            listViewGroup1.Name = "jjz";
-            listViewGroup2.Header = "股票组";
-            listViewGroup2.Name = "gpz";
+            listViewGroup3.Header = "基金组";
+            listViewGroup3.Name = "jjz";
+            listViewGroup4.Header = "股票组";
+            listViewGroup4.Name = "gpz";
             this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2});
+            listViewGroup3,
+            listViewGroup4});
             this.listView1.HideSelection = false;
             this.listView1.LabelEdit = true;
             this.listView1.Location = new System.Drawing.Point(22, 17);
@@ -595,10 +593,6 @@ namespace StockTrader
             this.textBox4.Size = new System.Drawing.Size(684, 179);
             this.textBox4.TabIndex = 0;
             // 
-            // keepLoginTimer
-            // 
-            this.keepLoginTimer.Tick += new System.EventHandler(this.keepLoginTimer_Tick);
-            // 
             // tabPage6
             // 
             this.tabPage6.Controls.Add(this.dataGridView1);
@@ -629,9 +623,9 @@ namespace StockTrader
             // 
             // Column1
             // 
-            dataGridViewCellStyle1.Format = "N3";
-            dataGridViewCellStyle1.NullValue = null;
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N3";
+            dataGridViewCellStyle2.NullValue = null;
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle2;
             this.Column1.HeaderText = "Column1";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
@@ -719,7 +713,6 @@ namespace StockTrader
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.Timer keepLoginTimer;
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.TabPage tabPage6;

@@ -44,7 +44,7 @@ namespace Stock.Trader
         /// <param name="price"></param>
         /// <param name="num"></param>
         /// <returns>合同号</returns>
-        string SellStock(String code, float price, int num);
+        TraderResult SellStock(String code, float price, int num);
 
         /// <summary>
         /// 买股票
@@ -53,19 +53,19 @@ namespace Stock.Trader
         /// <param name="price"></param>
         /// <param name="num"></param>
         /// <returns>合同号</returns>
-        string BuyStock(String code, float price, int num);
+        TraderResult BuyStock(String code, float price, int num);
 
         /// <summary>
         /// 撤单
         /// </summary>
         /// <param name="entrustNo">合约号</param>
         /// <returns>合同号</returns>
-        string CancelStock(String entrustNo);
+        TraderResult CancelStock(String entrustNo);
 
         /// <summary>
         /// 获取成交信息
         /// </summary>
-        void GetTransactionInfo();
+        TraderResult GetTodayTradeList();
 
         /// <summary>
         /// 保持连接
@@ -75,7 +75,7 @@ namespace Stock.Trader
         /// <summary>
         /// 获取资金信息
         /// </summary>
-        TradingAccount GetTradingAccountInfo();
+        TraderResult GetTradingAccountInfo();
 
         /// <summary>
         /// 申购基金 深圳

@@ -21,33 +21,35 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Reflection;
 
-namespace Stock.Common
+namespace Stock.Trader
 {
-    public class DllUtils
+    public enum TraderResultEnum
     {
-        public static T CreateInstance<T>(string dllPath, String className)
+        SUCCESS,    // 成功
+        ERROR,      // 错误
+        UNLOGIN,    // 未登录
+        TIMEOUT     // 超时
+    }
+
+    public class TraderResult
+    {
+        /// <summary>
+        /// -1: 表示调用不成功
+        /// </summary>
+        public TraderResultEnum Code { get; set; }
+        public string Message { get; set; }
+        public string EntrustNo { get; set; }
+        public object Result { get; set; }
+
+        public TraderResult()
         {
-            Assembly ass = Assembly.LoadFrom(dllPath); 
-
-            Type type = ass.GetType(className);
-            try
-            {
-                object obj = Activator.CreateInstance(type);
-                return (T)obj;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.StackTrace);
-                return default(T);
-            }
-
+            Code = TraderResultEnum.TIMEOUT;
         }
-
     }
 }

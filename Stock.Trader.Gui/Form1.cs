@@ -42,14 +42,15 @@ using Stock.Trader.Settings;
 using System.Runtime.InteropServices;
 using Stock.Trader.THS;
 using Stock.Trader.HuaTai;
+using System.Diagnostics;
 
 namespace StockTrader
 {
     public partial class Form1 : Form
     {
         Stock.Trader.XiaDan xiadan = null;
-        
-        IntPtr nextClipboardViewer;
+        private System.Timers.Timer keepLoginTimer = new System.Timers.Timer();
+      
         public Form1()
         {
             InitializeComponent();
@@ -57,17 +58,10 @@ namespace StockTrader
             InitListView();
 
             xiadan = Stock.Trader.XiaDan.Instance;
-            //nextClipboardViewer = (IntPtr)Win32API.SetClipboardViewer(this.Handle);
         }
 
         private void _Start()
         {
-            xiadan = Stock.Trader.XiaDan.Instance;
-
-            int span = int.Parse(Configure.GetStockTraderItem(Configure.KEEP_TIME_SPAN));
-            this.keepLoginTimer.Interval = span;
-            this.keepLoginTimer.Enabled = true;
-
             StockMarketManager smm = StockMarketManager.Instance;
             IStrategy[] strategies = StrategyManager.Instance.ReadMyStrategies();
 
@@ -78,32 +72,13 @@ namespace StockTrader
 
             smm.Start();
 
+            int span = int.Parse(Configure.GetStockTraderItem(Configure.KEEP_TIME_SPAN));
+            keepLoginTimer.Interval = span * 60000;
+            keepLoginTimer.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
+            keepLoginTimer.Enabled = true;
+
         }
-        //protected override void WndProc(ref Message m)
-        //{
-        //    const int WM_DRAWCLIPBOARD = 0x308;
-        //    const int WM_CHANGECBCHAIN = 0x030D;
-
-        //    switch (m.Msg)
-        //    {
-        //        case WM_DRAWCLIPBOARD:
-        //            DisplayClipboardData();
-        //            Win32API.SendMessage(nextClipboardViewer, m.Msg, m.WParam, m.LParam);
-        //            break;
-
-        //        case WM_CHANGECBCHAIN:
-        //            if (m.WParam == nextClipboardViewer)
-        //                nextClipboardViewer = m.LParam;
-        //            else
-        //                Win32API.SendMessage(nextClipboardViewer, m.Msg, m.WParam, m.LParam);
-        //            break;
-
-        //        default:
-        //            base.WndProc(ref m);
-        //            break;
-        //    }
-        //}
-
+ 
         private void DisplayClipboardData()
         {
             try
@@ -156,17 +131,17 @@ namespace StockTrader
 
         private StrategyDesc[] LoadStrategyList()
         {
-            StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc() };
-            //sd[0].clazz = "Stock.Strategy.Breathing.BreathingStrategy";
-            //sd[0].dllPath = "Stock.Strategy.Breathing.dll";
-            //sd[0].desc = "说明：分级A轮动策略";
-            //sd[0].name = "T+0 呼吸大法";
-            //sd[0].group = 1;
-            //sd[1].clazz = "Stock.Strategy.RotationB.RotationBStrategy";
-            //sd[1].dllPath = "Stock.Strategy.RotationB.dll";
-            //sd[1].desc = "说明：分级B强势轮动策略";
-            //sd[1].name = "分级B强势轮动策略";
-            //sd[1].group = 0;
+            StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc(), new StrategyDesc() };
+            sd[0].clazz = "Stock.Strategy.Breathing.BreathingStrategy";
+            sd[0].dllPath = "Stock.Strategy.Breathing.dll";
+            sd[0].desc = "说明：分级A轮动策略";
+            sd[0].name = "T+0 呼吸大法";
+            sd[0].group = 1;
+            sd[1].clazz = "Stock.Strategy.RotationB.RotationBStrategy";
+            sd[1].dllPath = "Stock.Strategy.RotationB.dll";
+            sd[1].desc = "说明：分级B强势轮动策略";
+            sd[1].name = "分级B强势轮动策略";
+            sd[1].group = 0;
 
             return sd;
         }
@@ -174,16 +149,16 @@ namespace StockTrader
         private StrategyDesc[] LoadMyStrategyList()
         {
             StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc() };
-            sd[0].clazz = "Stock.Strategy.Python.Rotation";
-            sd[0].dllPath = "Stock.Strategy.Python.Rotation.dll";
-            sd[0].desc = "说明：分级A轮动策略";
-            sd[0].name = "分级A轮动策略";
+            //sd[0].clazz = "Stock.Strategy.Python.Rotation.RotationStrategy";
+            //sd[0].dllPath = "Stock.Strategy.Python.Rotation.dll";
+            //sd[0].desc = "说明：分级A轮动策略";
+            //sd[0].name = "T+0 呼吸大法";
+            //sd[0].group = 1;
+            sd[0].clazz = "Stock.Strategy.RotationB.RotationBStrategy";
+            sd[0].dllPath = "Stock.Strategy.RotationB.dll";
+            sd[0].desc = "说明：分级B强势轮动策略";
+            sd[0].name = "分级B强势轮动策略";
             sd[0].group = 0;
-            //sd[0].clazz = "Stock.Strategy.RotationB.RotationBStrategy";
-            //sd[0].dllPath = "Stock.Strategy.RotationB.dll";
-            //sd[0].desc = "说明：分级B强势轮动策略";
-            //sd[0].name = "分级B强势轮动策略";
-            //sd[0].group = 0;
 
             return sd;
         }
@@ -199,9 +174,7 @@ namespace StockTrader
             // this.listView1.Items[0].Selected = true;
             this.panel1.Controls.Add((Control)this.listView1.Items[0].Tag);
 
-        }
-
-       
+        }      
 
         /// <summary>
         /// 加入策略到列表视图，同时生成一个策略实例
@@ -217,11 +190,12 @@ namespace StockTrader
 
         private void AddStrategyToListView(StrategyDesc sd)
         {
-            BaseStrategy strategy = (BaseStrategy)StrategyManager.Instance.AddMyStrategy(sd.dllPath, sd.clazz);
-
+            // BaseStrategy strategy = (BaseStrategy)StrategyManager.Instance.AddMyStrategy(sd.dllPath, sd.clazz);
+            BaseStrategy strategy = new Stock.Strategy.RotationB.RotationBStrategy();
+            StrategyManager.Instance.AddMyStrategy(strategy);
             System.Windows.Forms.ListViewItem lvi = new System.Windows.Forms.ListViewItem(new string[] {
-            sd.name,
-            sd.desc}, -1);
+                sd.name,
+                sd.desc}, -1);
             lvi.Group = this.listView1.Groups[sd.group];
             lvi.Tag = strategy.Control;
             this.listView1.Items.Add(lvi);
@@ -363,7 +337,7 @@ namespace StockTrader
                 return;
 
             lvStockPosition.Items.Clear();
-            TradingAccount account = this.xiadan.GetCashInfo();
+            TradingAccount account = (TradingAccount)this.xiadan.GetCashInfo().Result;
             foreach (TradingAccount.StockHolderInfo shi in account.StockHolders)
             {
                 ListViewItem lvi = new ListViewItem(new string[] {shi.StockCode,
@@ -384,9 +358,23 @@ namespace StockTrader
             }
         }
 
-        private void keepLoginTimer_Tick(object sender, EventArgs e)
+        private void GetTodayTrading()
         {
+            TradingAccount account = (TradingAccount)this.xiadan.GetCashInfo().Result;
+        }
+
+
+        void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
             StockTraderManager.Instance.GetStockTrader().Keep();
+            Console.WriteLine("刷新界面持仓数据，运行了{0}ms", watch.ElapsedMilliseconds);
+        }
+
+        private void RefreshPosition()
+        {
         }
 
         private void InitDataSource()

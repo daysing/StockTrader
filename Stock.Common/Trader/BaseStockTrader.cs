@@ -29,7 +29,180 @@ using System.Text;
 
 namespace Stock.Trader
 {
-    public abstract class BaseStockTrader
+    public abstract class BaseStockTrader : IStockTrader
     {
+        public virtual void Init()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected virtual void Login()
+        {
+        }
+
+        public TraderResult SellStock(string code, float price, int num)
+        {
+            TraderResult ret = internalSellStock(code, price, num);
+            switch (ret.Code)
+            {
+                case TraderResultEnum.TIMEOUT:
+                    return SellStock(code, price, num);
+                case TraderResultEnum.UNLOGIN:
+                    Login();
+                    return SellStock(code, price, num);
+                case TraderResultEnum.ERROR:
+                case TraderResultEnum.SUCCESS:
+                    return ret;
+                default:
+                    return null;
+            }
+        }
+
+        protected virtual TraderResult internalSellStock(string code, float price, int num)
+        {
+            return null;
+        }
+
+        public TraderResult BuyStock(string code, float price, int num)
+        {
+            TraderResult ret = internalBuyStock(code, price, num);
+            switch (ret.Code)
+            {
+                case TraderResultEnum.TIMEOUT:
+                    return BuyStock(code, price, num);
+                case TraderResultEnum.UNLOGIN:
+                    Login();
+                    return BuyStock(code, price, num);
+                case TraderResultEnum.ERROR:
+                case TraderResultEnum.SUCCESS:
+                    return ret;
+                default:
+                    return null;
+            }
+        }
+
+        protected virtual TraderResult internalBuyStock(string code, float price, int num)
+        {
+            return null;
+        }
+
+        public TraderResult CancelStock(string entrustNo)
+        {
+            TraderResult ret = internalCancelStock(entrustNo);
+            switch (ret.Code)
+            {
+                case TraderResultEnum.TIMEOUT:
+                    return CancelStock(entrustNo);
+                case TraderResultEnum.UNLOGIN:
+                    Login();
+                    return CancelStock(entrustNo);
+                case TraderResultEnum.ERROR:
+                case TraderResultEnum.SUCCESS:
+                    return ret;
+                default:
+                    return null;
+            }
+        }
+
+        protected virtual TraderResult internalCancelStock(string entrustNo)
+        {
+            return null;
+        }
+
+        public TraderResult GetTodayTradeList()
+        {
+            TraderResult ret = internalGetTodayTradeList();
+            switch (ret.Code)
+            {
+                case TraderResultEnum.TIMEOUT:
+                    return GetTodayTradeList();
+                case TraderResultEnum.UNLOGIN:
+                    Login();
+                    return GetTodayTradeList();
+                case TraderResultEnum.ERROR:
+                case TraderResultEnum.SUCCESS:
+                    return ret;
+                default:
+                    return null;
+            }
+        }
+
+        protected virtual TraderResult internalGetTodayTradeList() {
+            return null;
+        }
+
+        public void Keep()
+        {
+            internalKeep();
+        }
+
+        protected virtual void internalKeep()
+        {
+            return;
+        }
+
+        public TraderResult GetTradingAccountInfo()
+        {
+            TraderResult ret = internalGetTradingAccountInfo();
+            switch (ret.Code)
+            {
+                case TraderResultEnum.TIMEOUT:
+                    return GetTradingAccountInfo();
+                case TraderResultEnum.UNLOGIN:
+                    Login();
+                    return GetTradingAccountInfo();
+                case TraderResultEnum.ERROR:
+                case TraderResultEnum.SUCCESS:
+                    return ret;
+                default:
+                    return null;
+            }
+        }
+
+        protected virtual TraderResult internalGetTradingAccountInfo()
+        {
+            return null;
+        }
+
+
+        public string PurchaseFundSZ(string code, float total)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string RedempteFundSZ(string code, int num)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string MergeFundSZ(string code, int num)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string PartFundSZ(string code, int num)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string PurchaseFundSH(string code, float total)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string RedempteFundSH(string code, int num)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string MergeFundSH(string code, int num)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string PartFundSH(string code, int num)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

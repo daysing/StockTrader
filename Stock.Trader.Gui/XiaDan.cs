@@ -162,12 +162,12 @@ namespace Stock.Trader
             // 读取当日的操作日志文件，分析后上传到服务器
         }
 
-        internal string CancelStock(string code)
+        internal TraderResult CancelStock(string code)
         {
             return trader.CancelStock(code);
         }
 
-        internal TradingAccount GetCashInfo()
+        internal TraderResult GetCashInfo()
         {
             return trader.GetTradingAccountInfo();
         }
