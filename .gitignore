@@ -17,5 +17,4 @@ LCD.cs
 Templates
 TestResults
 *.testsettings
-*.dll
 monitor.vsmdi
