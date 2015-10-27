@@ -35,7 +35,7 @@ using System.Reflection;
 using System.Web;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-using Stock.OCR;
+using System.Diagnostics;
 
 namespace Stock.Trader.HuaTai
 {
@@ -178,6 +178,7 @@ namespace Stock.Trader.HuaTai
             else
             {
                 ret.Code = TraderResultEnum.ERROR;
+                ret.Message = String.Format("错误代码{0}, 错误内容{1}", resp.cssweb_code, resp.cssweb_msg);
             }
 
             return ret;
@@ -214,6 +215,7 @@ namespace Stock.Trader.HuaTai
             else
             {
                 ret.Code = TraderResultEnum.ERROR;
+                ret.Message = String.Format("错误代码{0}, 错误内容{1}", resp.cssweb_code, resp.cssweb_msg);
             }
             return ret;
         }
@@ -232,19 +234,20 @@ namespace Stock.Trader.HuaTai
                 exchange_type = ""
             };
 
-            GetTodayTradeResponse ret = getResp<GetTodayTradeResponse, GetTodayTradeRequest>(t);
-            TraderResult result = new TraderResult();
-            result.Result = ret;
-            if (ret.cssweb_code == SuccessCode)
+            GetTodayTradeResponse resp = getResp<GetTodayTradeResponse, GetTodayTradeRequest>(t);
+            TraderResult ret = new TraderResult();
+            ret.Result = resp;
+            if (resp.cssweb_code == SuccessCode)
             {
-                result.Code = TraderResultEnum.SUCCESS;
+                ret.Code = TraderResultEnum.SUCCESS;
             }
             else
             {
-                result.Code = TraderResultEnum.ERROR;
+                ret.Code = TraderResultEnum.ERROR;
+                ret.Message = String.Format("错误代码{0}, 错误内容{1}", resp.cssweb_code, resp.cssweb_msg);
             }
 
-            return result;
+            return ret;
         }
 
         protected override void internalKeep()
@@ -291,6 +294,7 @@ namespace Stock.Trader.HuaTai
             else
             {
                 ret.Code = TraderResultEnum.ERROR;
+                ret.Message = String.Format("错误代码{0}, 错误内容{1}", resp.cssweb_code, resp.cssweb_msg);
             }
 
             return ret;
@@ -394,7 +398,11 @@ namespace Stock.Trader.HuaTai
         {
             string queryParams = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<R>(request), this.GB2312);
             string sellUrl = "https://tradegw.htsc.com.cn/?" + queryParams;
-            string resp = StockUtil.Base64Decode(this.httpClient.DownloadString(sellUrl), this.GB2312);
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            string strResp = this.httpClient.DownloadString(sellUrl);
+            Console.WriteLine("请求耗时：{0}ms", watch.ElapsedMilliseconds);
+            string resp = StockUtil.Base64Decode(strResp, this.GB2312);
 
             Console.WriteLine("Web操作返回结果", resp);
             T ret = JsonConvert.DeserializeObject<T>(resp);

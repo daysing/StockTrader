@@ -26,9 +26,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Stock.Trader
+namespace Stock.Common.Trader
 {
-    public class TradingList 
+    public interface IFundTrader
     {
     }
 }

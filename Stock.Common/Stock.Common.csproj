@@ -88,6 +88,7 @@
     <Compile Include="System.Window\Win32API.cs" />
     <Compile Include="System.Window\Win32Code.cs" />
     <Compile Include="Trader\BaseStockTrader.cs" />
+    <Compile Include="Trader\IFundTrader.cs" />
     <Compile Include="Trader\IStockTrader.cs" />
     <Compile Include="Trader\StockTraderManager.cs" />
     <Compile Include="Trader\TraderResult.cs" />

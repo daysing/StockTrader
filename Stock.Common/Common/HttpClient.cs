@@ -29,6 +29,8 @@ using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.Threading;
+using System.IO;
+using System.Diagnostics;
 
 namespace Stock.Common
 {
@@ -151,19 +153,70 @@ namespace Stock.Common
             }
         }
     }
+
     public class HttpClient : WebClient
     {
+        public string Post(string url, string body)
+        {
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+
+            httpWebRequest.ContentType = "application/x-www-form-urlencoded";
+            httpWebRequest.Method = "POST";
+            httpWebRequest.Timeout = 20000;
+
+            byte[] btBodys = Encoding.UTF8.GetBytes(body);
+            httpWebRequest.ContentLength = btBodys.Length;
+            httpWebRequest.GetRequestStream().Write(btBodys, 0, btBodys.Length);
+
+            HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream());
+            string responseContent = streamReader.ReadToEnd();
+
+            httpWebResponse.Close();
+            streamReader.Close();
+            httpWebRequest.Abort();
+            httpWebResponse.Close();
+
+            return responseContent;
+        }
+
+        public string Get(string address)
+        {
+            HttpWebRequest httpWebRequest = null;
+            httpWebRequest = (HttpWebRequest)WebRequest.Create(address);
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "GET";
+            httpWebRequest.Timeout = 2000;
+            httpWebRequest.KeepAlive = true;
+
+            HttpWebResponse httpWebResponse = null;
+            StreamReader streamReader = null;
+            string responseContent = null;
+            try
+            {
+                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                streamReader = new StreamReader(httpWebResponse.GetResponseStream(), Encoding.Default);
+                responseContent = streamReader.ReadToEnd();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+            finally
+            {
+                if(httpWebResponse != null) httpWebResponse.Close();
+                if(streamReader != null) streamReader.Close();
+            }
+
+
+            return responseContent;
+        }
         //private int _timeOut;
         //private CookieContainer cookieContainer;
         private string Referer;
 
-        public HttpClient()
+        public HttpClient() : this(new CookieContainer())
         {
-            this.Timeout = 0xea60;
-            this.Proxy = null;
-            this.Referer = "";
-            this.Cookies = new CookieContainer();
-            ServicePointManager.DefaultConnectionLimit = 10;
         }
 
         public HttpClient(CookieContainer cookies)
@@ -171,6 +224,9 @@ namespace Stock.Common
             this.Timeout = 0x500;
             this.Referer = "";
             this.Cookies = cookies;
+            this.Proxy = null;
+            ServicePointManager.DefaultConnectionLimit = 100;
+            ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(this.CheckValidationResult);
         }
 
         public bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
@@ -180,7 +236,6 @@ namespace Stock.Common
 
         protected override WebRequest GetWebRequest(Uri address)
         {
-            ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(this.CheckValidationResult);
             WebRequest webRequest = base.GetWebRequest(address);
             if (webRequest is HttpWebRequest)
             {
@@ -188,24 +243,14 @@ namespace Stock.Common
                 req.Headers.Clear();
                 req.CookieContainer = this.Cookies;
                 req.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-                req.Headers.Add("Accept-Language", "zh-cn");
-                req.Headers.Add("UA-CPU", "x86");
-                req.Headers.Add("Accept-Charset", "gb2312,utf-8;q=0.7,*;q=0.7");
+                req.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36";
                 req.Timeout = this.Timeout;
                 req.ReadWriteTimeout = this.Timeout;
-                if (this.IsGzip)
-                {
-                    req.Headers.Add("Accept-Encoding", "gzip, deflate");
-                }
-                if (this.Referer != "")
-                {
-                    req.Referer = this.Referer;
-                }
-                req.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 6.0; zh-CN; rv:1.9.0.5) Gecko/2008120122 Firefox/3.0.5)";
-                if (this.Referer != "")
-                {
-                    req.Referer = this.Referer;
-                }
+                req.KeepAlive = true;
+                req.Referer = this.Referer;
+                req.Headers.Add("Accept-Language", "zh-cn");
+                req.Headers.Add("Accept-Charset", "gb2312,utf-8;q=0.7,*;q=0.7");
+                req.Headers.Add("Accept-Encoding", "gzip, deflate, sdch");
                 if (webRequest.Method.ToLower() == "post")
                 {
                     req.ContentType = "application/x-www-form-urlencoded";
@@ -228,12 +273,10 @@ namespace Stock.Common
             _timer.Start();
         }
         
-
         void HttpClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             if (e.ProgressPercentage == 100)
             {
-                Console.WriteLine("复位计数器");
                 _timer.Reset();//重置计时器
             }
         }
@@ -244,7 +287,6 @@ namespace Stock.Common
         /// <param name="userdata"></param>
         private void _timer_TimeOver(object userdata)
         {
-            Console.WriteLine("计数器发现超时");
             CancelAsync();
             if (DownloadStringTimeout != null)
                 DownloadStringTimeout(this);

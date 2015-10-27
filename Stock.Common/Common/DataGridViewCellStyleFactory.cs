@@ -27,14 +27,29 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
+using Stock.Trader.Settings;
 
 namespace Stock.Common.Common
 {
     public class DataGridViewCellStyleFactory
     {
         private static IDictionary<string, DataGridViewCellStyle> styles = new Dictionary<string, DataGridViewCellStyle>();
-        private static Font font1 = new Font("微软雅黑", 9, FontStyle.Regular);
-        private static Font font2 = new Font("微软雅黑", 9, FontStyle.Bold);
+        private static Font font1;
+        private static Font font2;
+
+        static DataGridViewCellStyleFactory(){
+            int font_size = 0;
+            string size = Configure.GetStockTraderItem(Configure.FONT_SIZE);
+            if (size == null) font_size = 9;
+            else font_size = int.Parse(size);
+
+            String font_family = Configure.GetStockTraderItem(Configure.FONT_FAMILY);
+            if (font_family == null) font_family = "微软雅黑";
+
+            font1 = new Font(font_family, font_size, FontStyle.Regular);
+            font2 = new Font(font_family, font_size, FontStyle.Bold);
+        }
+    
         public static DataGridViewCellStyle CreateCellStyle(bool bold, string format, Color fcolor, Color bcolor, DataGridViewContentAlignment alignment)
         {
             string key = string.Format("key_{0}_{1}_{2}_{3}_{4}", bold, format, fcolor, bcolor, alignment);

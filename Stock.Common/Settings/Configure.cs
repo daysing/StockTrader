@@ -13,6 +13,9 @@ namespace Stock.Trader.Settings
         public const String KEEP_TIME_SPAN = "Keep.Time.Span";
         public const String CANCEL_TIME_SPAN = "Cancel.Time.Span";
 
+        public const String FONT_SIZE = "font.size";
+        public const String FONT_FAMILY = "font.family";
+
         public class Clazz
         {
             public String Dll {get; set;}
@@ -42,7 +45,9 @@ namespace Stock.Trader.Settings
         public static String GetStockTraderItem(String key)
         {
             IDictionary cs = (IDictionary)ConfigurationManager.GetSection("StockTrader");
-            return cs[key].ToString();
+            if(cs.Contains(key))
+                return cs[key].ToString();
+            return null;
         }
 
     }

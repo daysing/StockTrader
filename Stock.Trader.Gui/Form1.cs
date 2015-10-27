@@ -40,8 +40,6 @@ using System.Window;
 using Stock.Common;
 using Stock.Trader.Settings;
 using System.Runtime.InteropServices;
-using Stock.Trader.THS;
-using Stock.Trader.HuaTai;
 using System.Diagnostics;
 
 namespace StockTrader
@@ -132,7 +130,7 @@ namespace StockTrader
         private StrategyDesc[] LoadStrategyList()
         {
             StrategyDesc[] sd = new StrategyDesc[] { new StrategyDesc(), new StrategyDesc() };
-            sd[0].clazz = "Stock.Strategy.Breathing.BreathingStrategy";
+            sd[0].clazz = "Stock.Strategy.Python.BreathingStrategy";
             sd[0].dllPath = "Stock.Strategy.Breathing.dll";
             sd[0].desc = "说明：分级A轮动策略";
             sd[0].name = "T+0 呼吸大法";
@@ -190,8 +188,8 @@ namespace StockTrader
 
         private void AddStrategyToListView(StrategyDesc sd)
         {
-            // BaseStrategy strategy = (BaseStrategy)StrategyManager.Instance.AddMyStrategy(sd.dllPath, sd.clazz);
-            BaseStrategy strategy = new Stock.Strategy.RotationB.RotationBStrategy();
+            BaseStrategy strategy = (BaseStrategy)StrategyManager.Instance.AddMyStrategy(sd.dllPath, sd.clazz);
+            // BaseStrategy strategy = new Stock.Strategy.RotationB.RotationBStrategy();
             StrategyManager.Instance.AddMyStrategy(strategy);
             System.Windows.Forms.ListViewItem lvi = new System.Windows.Forms.ListViewItem(new string[] {
                 sd.name,
@@ -243,15 +241,15 @@ namespace StockTrader
         {
             // xiadan.PurchaseFundSZ(textBox1.Text, float.Parse(textBox2.Text));
             // #32770 (对话框)
-            IntPtr hWnd = ThsApiWrapper.FindThsWindow();
-            IntPtr ptr = ThsApiWrapper.GetEntrustTips(IntPtr.Zero);
-            IntPtr textId = Win32API.GetDlgItem(ptr, 0x03EC);
-            String Stext = ThsApiWrapper.GetWindowText(textId);
+            //IntPtr hWnd = ThsApiWrapper.FindThsWindow();
+            //IntPtr ptr = ThsApiWrapper.GetEntrustTips(IntPtr.Zero);
+            //IntPtr textId = Win32API.GetDlgItem(ptr, 0x03EC);
+            //String Stext = ThsApiWrapper.GetWindowText(textId);
 
-            IntPtr okId = Win32API.GetDlgItem(ptr, 0x0002);
+            //IntPtr okId = Win32API.GetDlgItem(ptr, 0x0002);
 
-            String text = ThsApiWrapper.GetWindowText(okId);
-            Console.WriteLine("click button: {0}, handle: {1}, LABEL:{2}", text, Convert.ToString(okId.ToInt32(), 16), Stext);
+            //String text = ThsApiWrapper.GetWindowText(okId);
+            //Console.WriteLine("click button: {0}, handle: {1}, LABEL:{2}", text, Convert.ToString(okId.ToInt32(), 16), Stext);
 
             //Win32API.SendMessage(okId, Win32Code.WM_LBUTTONDOWN, 0, 0);
             //Win32API.SendMessage(okId, Win32Code.WM_LBUTTONUP, 0, 0);
@@ -272,7 +270,7 @@ namespace StockTrader
 
         private void button11_Click(object sender, EventArgs e)
         {
-            ((WebStockTrader)xiadan.trader).GetTodayTradeList();
+            // ((WebStockTrader)xiadan.trader).GetTodayTradeList();
         }
 
         private void button10_Click(object sender, EventArgs e)
@@ -328,7 +326,18 @@ namespace StockTrader
             if (this.tabControl1.SelectedTab.Text == "持仓")
             {
                 GetStockPosition();
+            } else if(this.tabControl1.SelectedTab.Text == "成交") {
+                GetTradeList();
             }
+        }
+
+        private void GetTradeList()
+        {
+            if (this.xiadan == null)
+                return;
+
+            lvTradeList.Items.Clear();
+
         }
 
         private void GetStockPosition()

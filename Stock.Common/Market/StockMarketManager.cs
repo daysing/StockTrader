@@ -59,6 +59,8 @@ namespace Stock.Market
         /// <param name="bid"></param>
         public static void AddBid(Bid bid) {
             if (bid == null) return;
+            if (!bidCache.ContainsKey(bid.Code))
+                bidCache.Add(bid.Code, new BidCacheQueue());
 
             bidCache[bid.Code].Enqueue(bid);
         }
@@ -73,6 +75,7 @@ namespace Stock.Market
 
 
         private Thread listenThread;
+        private StockMarketListener rsmt;
         /// <summary>
         /// 启动行情监听器
         /// </summary>
@@ -81,12 +84,12 @@ namespace Stock.Market
             if (started)
                 throw new Exception();
 
-            StockMarketListener rsmt = DllUtils.CreateInstance<StockMarketListener>(Configure.GetCurrentMarketListener().Dll, Configure.GetCurrentMarketListener().ClazzName);
+            rsmt = DllUtils.CreateInstance<StockMarketListener>(Configure.GetCurrentMarketListener().Dll, Configure.GetCurrentMarketListener().ClazzName);
             foreach (string code in StockMarketManager.bidCache.Keys)
             {
                 rsmt.AddStock(code);
             }
-
+            rsmt.Init();
             listenThread = new Thread(new ThreadStart(rsmt.Run));
             listenThread.Start();
 
@@ -97,7 +100,10 @@ namespace Stock.Market
         public void Close()
         {
             if (listenThread != null)
+            {
                 listenThread.Abort();
+                rsmt.Close();
+            }
         }
 
         /// <summary>

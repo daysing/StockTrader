@@ -40,6 +40,14 @@ namespace Stock.Market
                 this.codes.Add(code);
         }
 
+        public virtual void Init()
+        {
+        }
+
+        public virtual void Close()
+        {
+        }
+
         public virtual void WndProc(ref System.Windows.Forms.Message m)
         {
             // noting to do

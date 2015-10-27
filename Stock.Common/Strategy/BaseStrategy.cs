@@ -333,8 +333,15 @@ namespace Stock.Strategy
 
         private void CancelEntrustJob()
         {
-            // 1、获取委托列表
+            // 1、获取成交列表
+            TraderResult ret = this.GetTodayTradeList();
+            TradingList list = (TradingList)ret.Result;
+
             // 2、从委托列表中移除已成交的部分
+            // foreach (var item in list)
+            //{
+                
+            //}
         }
 
         #endregion
