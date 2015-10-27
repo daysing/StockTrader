@@ -85,23 +85,42 @@ namespace Stock.Market.Sina
 
             foreach (string item in s_codes)
             {
-                Console.WriteLine("请求一次");
-                watch.Restart();
                 sendRequest(item);
             }
         }
-        private Stopwatch watch = new Stopwatch();
         private void sendRequest(string t_codes)
         {
             //string address = String.Format(dataurl, String.Join(",", t_codes.ToArray()));
             string address = String.Format(dataurl, t_codes);
-            Uri addr = new Uri(address);
+            //Uri addr = new Uri(address);
             // if (client.IsBusy) return;
-            client = new HttpClient();
-            client.Timeout = 700;
-            client.DownloadStringAsyncWithTimeout(addr);
-            client.DownloadStringCompleted += new DownloadStringCompletedEventHandler(client_DownloadStringCompleted);
-            client.DownloadStringTimeout += new HttpClient.DownloadStringTimeoutEventHandler(client_DownloadStringTimeout);
+            //client = new HttpClient();
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            //string resp = client.Get(address);
+            string resp = client.Get(address);
+            if (resp == null)
+            {
+                Console.WriteLine("没有获取到数据");
+                return;
+            }
+//            Console.WriteLine(resp);
+            string[] data = resp.Split(new char[] { '\n' });
+            Dictionary<string, Bid> dictionary2 = new Dictionary<string, Bid>();
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i].Length != 0)
+                {
+                    Bid bid = Parse(data[i]);
+                    StockMarketManager.AddBid(bid);
+                }
+            }
+            Console.WriteLine("耗时{0}", watch.ElapsedMilliseconds);
+            //client.DownloadString(address);
+            //client.Timeout = 700;
+            //client.DownloadStringAsyncWithTimeout(addr);
+            //client.DownloadStringCompleted += new DownloadStringCompletedEventHandler(client_DownloadStringCompleted);
+            //client.DownloadStringTimeout += new HttpClient.DownloadStringTimeoutEventHandler(client_DownloadStringTimeout);
             // string resp = client.DownloadString(address);
        }
 
@@ -114,7 +133,6 @@ namespace Stock.Market.Sina
         {
             if (e.Cancelled) return;
             string[] data = e.Result.Split(new char[] { '\n' });
-            Console.WriteLine("读取完毕一次,发现数据：{0}条,耗时{1}毫秒", data.Length, watch.ElapsedMilliseconds);
             Dictionary<string, Bid> dictionary2 = new Dictionary<string, Bid>();
             for (int i = 0; i < data.Length; i++)
             {
