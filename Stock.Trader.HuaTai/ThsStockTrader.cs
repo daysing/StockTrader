@@ -31,6 +31,7 @@ using System.Windows.Forms;
 using System.Window;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Stock.Common;
 
 namespace Stock.Trader.HuaTai
 {
@@ -257,7 +258,7 @@ namespace Stock.Trader.HuaTai
         /// <summary>
         /// 检测
         /// </summary>
-        public void Init()
+        public override void Init()
         {
             hWnd = Win32API.FindWindow(null, @"网上股票交易系统5.0");
 
@@ -279,12 +280,12 @@ namespace Stock.Trader.HuaTai
             InitQtjySzLOFjjFuncHandler();
 
             // 登录Web 接口
-            wst = new WebStockTrader();
-            wst.Init();
+            // wst = new WebStockTrader();
+            // wst.Init();
 
         }
-        
-        public TraderResult SellStock(string code, float price, int num)
+
+        protected override TraderResult internalSellStock(string code, float price, int num)
         {
             ClickSellTreeViewItem();
 
@@ -296,7 +297,7 @@ namespace Stock.Trader.HuaTai
             // 设定代码,价格,数量
             IntPtr hPanel = GetDetailPanel();
             IntPtr hCtrl = Win32API.GetDlgItem(hPanel, BUY_TXT_CODE);
-            Win32API.SendMessage(hCtrl, Win32Code.WM_SETTEXT, 0, code);
+            Win32API.SendMessage(hCtrl, Win32Code.WM_SETTEXT, 0, StockUtil.GetShortCode(code));
             hCtrl = Win32API.GetDlgItem(hPanel, BUY_TXT_PRICE);
             Win32API.SendMessage(hCtrl, Win32Code.WM_SETTEXT, 0, price.ToString());
             hCtrl = Win32API.GetDlgItem(hPanel, BUY_TXT_NUM);
@@ -306,10 +307,15 @@ namespace Stock.Trader.HuaTai
             hCtrl = Win32API.GetDlgItem(hPanel, BUY_BTN_OK);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
             Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
-            return null;
+
+            TraderResult result = new TraderResult();
+            result.Code = TraderResultEnum.SUCCESS;
+
+            result.EntrustNo = new Random().Next(100000).ToString();
+            return result;
         }
 
-        public TraderResult BuyStock(string code, float price, int num)
+        protected override TraderResult internalBuyStock(string code, float price, int num)
         {
             const int BUY_TXT_CODE = 0x0408;
             const int BUY_TXT_PRICE = 0x0409;
@@ -319,32 +325,39 @@ namespace Stock.Trader.HuaTai
             ClickBuyTreeViewItem();
 
             // 设定代码,价格,数量
-            IntPtr hPanel = GetDetailPanel();
-            IntPtr hCtrl = Win32API.GetDlgItem(hPanel, BUY_TXT_CODE);
-            Win32API.SendMessage(hCtrl, Win32Code.WM_SETTEXT, 0, code);
-            hCtrl = Win32API.GetDlgItem(hPanel, BUY_TXT_PRICE);
-            Win32API.SendMessage(hCtrl, Win32Code.WM_SETTEXT, 0, price.ToString());
-            hCtrl = Win32API.GetDlgItem(hPanel, BUY_TXT_NUM);
-            Win32API.SendMessage(hCtrl, Win32Code.WM_SETTEXT, 0, num.ToString());
+            //IntPtr hPanel = GetDetailPanel();
+            //IntPtr hCtrl = Win32API.GetDlgItem(hPanel, BUY_TXT_CODE);
+            //Win32API.SendMessage(hCtrl, Win32Code.WM_SETTEXT, 0, StockUtil.GetShortCode(code));
+            //hCtrl = Win32API.GetDlgItem(hPanel, BUY_TXT_PRICE);
+            //Win32API.SendMessage(hCtrl, Win32Code.WM_SETTEXT, 0, price.ToString());
+            //hCtrl = Win32API.GetDlgItem(hPanel, BUY_TXT_NUM);
+            //Win32API.SendMessage(hCtrl, Win32Code.WM_SETTEXT, 0, num.ToString());
 
-            // 点击买入按钮
-            hCtrl = Win32API.GetDlgItem(hPanel, BUY_BTN_OK);
-            Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
-            Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
-            return null;
+            //// 点击买入按钮
+            //hCtrl = Win32API.GetDlgItem(hPanel, BUY_BTN_OK);
+            //Win32API.PostMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
+            //Win32API.PostMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
+
+            Thread.Sleep(100);
+            IntPtr pTip = THS.ThsApiWrapper.GetPriceTipInfoAndClickYes(hWnd);
+
+            TraderResult result = new TraderResult();
+            result.Code = TraderResultEnum.SUCCESS;
+            result.EntrustNo = "123";
+            return result;
         }
 
-        public TraderResult CancelStock(String entrust_no)
+        protected override TraderResult internalCancelStock(string entrustNo)
         {
-            return wst.CancelStock(entrust_no);
+            return wst.CancelStock(entrustNo);
             // ClickCancelTreeViewItem();
         }
 
-        public void Keep()
+        protected override void internalKeep()
         {
             // 刷新
             Win32API.PostMessage(hWnd, Win32Code.WM_KEYDOWN, Win32Code.VK_F5, 0);
-            wst.Keep();
+            // wst.Keep();
         }
 
         private IntPtr findWndClass(IntPtr hWnd, IntPtr child)
@@ -365,7 +378,7 @@ namespace Stock.Trader.HuaTai
             return hc;
       }
 
-        public TraderResult GetTradingAccountInfo()
+        protected override TraderResult internalGetTradingAccountInfo()
         {
             #region test
             //Win32API.SendMessage(htvi, Win32Code.TVM_SELECTITEM, Win32Code.TVGN_CARET, hQueryZjgp);
@@ -432,14 +445,17 @@ namespace Stock.Trader.HuaTai
             //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBDC);
             #endregion
 
-            return wst.GetTradingAccountInfo();
+            // return wst.GetTradingAccountInfo();
+            return null;
 
         }
 
-        public TraderResult GetTodayTradeList()
+        protected override TraderResult internalGetTodayTradeList()
         {
             throw new NotImplementedException();
         }
+
+        #region 基金操作
 
         public string PurchaseFundSZ(string code, float total)
         {
@@ -590,6 +606,8 @@ namespace Stock.Trader.HuaTai
             return "";
 
         }
+
+        #endregion 基金操作
 
         #endregion
 

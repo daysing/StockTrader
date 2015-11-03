@@ -53,6 +53,57 @@ namespace Stock.Trader.THS
             return sb.szText;
         }
 
+        public static IntPtr GetPriceTipInfoAndClickYes(IntPtr hWnd)
+        {
+            IntPtr tipInfoWindow = IntPtr.Zero;
+            Win32API.EnumWindowsProc EnumWindowsProc = delegate(IntPtr p, int lParam)
+            {
+                if (p != IntPtr.Zero)
+                {
+                    String text = GetWindowText(p);
+                    String clazz = GetClassName(p);
+
+                    if (clazz == "#32770" && text == "")
+                    {
+                        Console.WriteLine("找到窗口：{0}", Convert.ToString(p.ToInt64(), 16));
+                        IntPtr hParent = Win32API.GetParent(p);
+                        String pText = GetWindowText(hParent);
+                        if (pText == @"网上股票交易系统5.0")
+                        {
+                            int staticId = 0x0410;
+                            IntPtr pStatic = Win32API.GetDlgItem(p, staticId);
+                            if (pStatic != IntPtr.Zero)
+                            {
+                                tipInfoWindow = p;
+
+                                String sText = GetWindowText(pStatic);
+                                if (sText == "委托价格的小数部分应为 2 位，是否继续？")
+                                {
+                                    int btnYesId = 0x0006;
+                                    IntPtr btnYes = Win32API.GetDlgItem(p, btnYesId);
+                                    Win32API.SendMessage(btnYes, Win32Code.WM_SETFOCUS, 0, 0);
+                                    Win32API.SendMessage(btnYes, Win32Code.WM_LBUTTONDOWN, 0, 0);
+                                    Win32API.SendMessage(btnYes, Win32Code.WM_LBUTTONUP, 0, 0);
+                                    Win32API.SendMessage(btnYes, Win32Code.WM_LBUTTONDOWN, 0, 0);
+                                    Win32API.SendMessage(btnYes, Win32Code.WM_LBUTTONUP, 0, 0);
+                                }
+                            }
+
+
+                        }
+
+                    }
+                    return true;
+                }
+
+                return false;
+            };
+
+            Win32API.EnumChildWindows(IntPtr.Zero, EnumWindowsProc, new IntPtr(100));
+
+            return tipInfoWindow;
+        }
+
         /// <summary>
         /// 获取成交提示
         /// </summary>
