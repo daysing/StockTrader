@@ -180,14 +180,24 @@ namespace Stock.Common
             return responseContent;
         }
 
-        public string Get(string address)
+        public string Get(String address)
+        {
+            return Get(address, Encoding.Default);
+        }
+
+        public string Get(string address, Encoding encoding)
         {
             HttpWebRequest httpWebRequest = null;
             httpWebRequest = (HttpWebRequest)WebRequest.Create(address);
+            httpWebRequest.Accept = "text/html,application/xhtml+xml,application/xml;*/*;q=0.8";
+            httpWebRequest.Headers.Add("Accept-Language", "zh-CN,zh;q=0.8");
+            httpWebRequest.Headers.Add("UA-CPU", "x86");
+            httpWebRequest.Headers.Add("Accept-Charset", "utf8;q=0.8;");
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "GET";
             httpWebRequest.Timeout = 2000;
             httpWebRequest.KeepAlive = true;
+            httpWebRequest.CookieContainer = this.Cookies;
 
             HttpWebResponse httpWebResponse = null;
             StreamReader streamReader = null;
@@ -195,7 +205,7 @@ namespace Stock.Common
             try
             {
                 httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                streamReader = new StreamReader(httpWebResponse.GetResponseStream(), Encoding.Default);
+                streamReader = new StreamReader(httpWebResponse.GetResponseStream(), encoding);
                 responseContent = streamReader.ReadToEnd();
             }
             catch (Exception e)
@@ -221,7 +231,7 @@ namespace Stock.Common
 
         public HttpClient(CookieContainer cookies)
         {
-            this.Timeout = 0x500;
+            this.Timeout = 0xea00;
             this.Referer = "";
             this.Cookies = cookies;
             this.Proxy = null;
@@ -236,27 +246,58 @@ namespace Stock.Common
 
         protected override WebRequest GetWebRequest(Uri address)
         {
+            ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(this.CheckValidationResult);
             WebRequest webRequest = base.GetWebRequest(address);
+            webRequest.Timeout = this.Timeout;
             if (webRequest is HttpWebRequest)
             {
-                HttpWebRequest req = webRequest as HttpWebRequest;
-                req.Headers.Clear();
-                req.CookieContainer = this.Cookies;
-                req.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-                req.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36";
-                req.Timeout = this.Timeout;
-                req.ReadWriteTimeout = this.Timeout;
-                req.KeepAlive = true;
-                req.Referer = this.Referer;
-                req.Headers.Add("Accept-Language", "zh-cn");
-                req.Headers.Add("Accept-Charset", "gb2312,utf-8;q=0.7,*;q=0.7");
-                req.Headers.Add("Accept-Encoding", "gzip, deflate, sdch");
+                HttpWebRequest request2 = webRequest as HttpWebRequest;
+                request2.Headers.Clear();
+                request2.CookieContainer = this.Cookies; ;
+                request2.Accept = "text/html,application/xhtml+xml,application/xml;*/*;q=0.8";
+                request2.Headers.Add("Accept-Language", "zh-CN,zh;q=0.8");
+                request2.Headers.Add("UA-CPU", "x86");
+                request2.Headers.Add("Accept-Charset", "utf8;q=0.8;");
+                if (this.IsGzip)
+                {
+                    request2.Headers.Add("Accept-Encoding", "gzip, deflate, sdch");
+                }
+                if (this.Referer != "")
+                {
+                    request2.Referer = this.Referer;
+                }
+                request2.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 6.0; zh-CN; rv:1.9.0.5) Gecko/2008120122 Firefox/3.0.5)";
+                if (this.Referer != "")
+                {
+                    request2.Referer = this.Referer;
+                }
                 if (webRequest.Method.ToLower() == "post")
                 {
-                    req.ContentType = "application/x-www-form-urlencoded";
+                    request2.ContentType = "application/x-www-form-urlencoded";
                 }
                 this.Referer = address.ToString();
             }
+            //WebRequest webRequest = base.GetWebRequest(address);
+            //if (webRequest is HttpWebRequest)
+            //{
+            //    HttpWebRequest req = webRequest as HttpWebRequest;
+            //    req.Headers.Clear();
+            //    req.CookieContainer = this.Cookies;
+            //    req.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+            //    req.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36";
+            //    req.Timeout = this.Timeout;
+            //    req.ReadWriteTimeout = this.Timeout;
+            //    req.KeepAlive = true;
+            //    req.Referer = this.Referer;
+            //    req.Headers.Add("Accept-Language", "zh-cn");
+            //    req.Headers.Add("Accept-Charset", "gb2312,utf-8;q=0.7,*;q=0.7");
+            //    req.Headers.Add("Accept-Encoding", "gzip, deflate, sdch");
+            //    if (webRequest.Method.ToLower() == "post")
+            //    {
+            //        req.ContentType = "application/x-www-form-urlencoded";
+            //    }
+            //    this.Referer = address.ToString();
+            //}
             return webRequest;
         }
 
