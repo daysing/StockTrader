@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net;
-using Stock.Common;
+using Stock.Sqlite;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing;
@@ -36,6 +36,8 @@ using System.Web;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using Stock.Account;
+using Stock.Common;
 
 namespace Stock.Trader.HuaTai
 {
@@ -151,7 +153,7 @@ namespace Stock.Trader.HuaTai
         protected override TraderResult internalSellStock(string code, float price, int num)
         {
             int exchange_type = StockUtil.GetExchangeType(code);
-            StockHolderInfo holder = GetStockHolder(exchange_type);
+            AccountInfoItem holder = GetStockHolder(exchange_type);
             StockSaleRequest t = new StockSaleRequest
             {
                 branch_no = this.resAccountInfo.branch_no,
@@ -173,7 +175,7 @@ namespace Stock.Trader.HuaTai
             if (resp.cssweb_code == SuccessCode)
             {
                 ret.Code = TraderResultEnum.SUCCESS;
-                ret.EntrustNo = resp.Item[0].entrust_no.ToString();
+                ret.EntrustNo = resp.Item[0].entrust_no;
             }
             else
             {
@@ -187,7 +189,7 @@ namespace Stock.Trader.HuaTai
         protected override TraderResult internalBuyStock(string code, float price, int num)
         {
             int exchange_type = StockUtil.GetExchangeType(code);
-            StockHolderInfo holder = GetStockHolder(exchange_type);
+            AccountInfoItem holder = GetStockHolder(exchange_type);
 
             StockBuyRequest t = new StockBuyRequest
             {
@@ -200,7 +202,7 @@ namespace Stock.Trader.HuaTai
                 uid = this.resAccountInfo.uid,
                 exchange_type = exchange_type.ToString(),
                 stock_account = holder.stock_account,
-                stock_code = code,
+                stock_code = StockUtil.GetShortCode(code),
                 entrust_amount = num,
                 entrust_price = price
             };
@@ -210,7 +212,7 @@ namespace Stock.Trader.HuaTai
             if (resp.cssweb_code == SuccessCode)
             {
                 ret.Code = TraderResultEnum.SUCCESS;
-                ret.EntrustNo = resp.Item[0].entrust_no.ToString();
+                ret.EntrustNo = resp.Item[0].entrust_no;
             }
             else
             {
@@ -236,10 +238,29 @@ namespace Stock.Trader.HuaTai
 
             GetTodayTradeResponse resp = getResp<GetTodayTradeResponse, GetTodayTradeRequest>(t);
             TraderResult ret = new TraderResult();
-            ret.Result = resp;
             if (resp.cssweb_code == SuccessCode)
             {
                 ret.Code = TraderResultEnum.SUCCESS;
+                TradingList tradingList = new TradingList();
+                foreach (GetTodayTradeResponse.GetTodayTradeRespItem item in resp.Item)
+                {
+                    tradingList.Add(new TradingList.TradingItem
+                    {
+                        StockName = item.stock_name,
+                        StockCode = item.stock_code,
+                        SerialNo = item.serial_no,
+                        BusinessAmount = item.business_amount,
+                        BusinessPrice = item.business_price,
+                        BusinessBalance = item.business_balance,
+                        EntrustNo = item.entrust_no,
+                        Remark = item.remark,
+                        StockAccount = item.stock_code,
+                        ExchangeType = item.exchange_type,
+                        bs_name = item.bs_name,
+                        Date = item.date
+                     });
+                }
+                ret.Result = tradingList;
             }
             else
             {
@@ -257,9 +278,12 @@ namespace Stock.Trader.HuaTai
 
         protected override TraderResult internalGetTradingAccountInfo()
         {
-            List<TradingAccount.StockHolderInfo> shis = GetStocks();
+            List<StockHolderInfo> shis = GetStocks();
             TradingAccount account = new TradingAccount();
             account.AddStockHolder(shis);
+            account.fundInfo = GetFunds();
+
+            // FundGetJJsz();
 
             TraderResult result = new TraderResult();
             result.Code = TraderResultEnum.SUCCESS;
@@ -268,7 +292,7 @@ namespace Stock.Trader.HuaTai
             return result;
         }
 
-        protected override TraderResult internalCancelStock(string entrust_no)
+        protected override TraderResult internalCancelStock(int entrust_no)
         {
 
             StockCancelRequest t = new StockCancelRequest
@@ -281,7 +305,7 @@ namespace Stock.Trader.HuaTai
                 password = this.resAccountInfo.trdpwd,
                 uid = this.resAccountInfo.uid,
                 exchange_type = "",
-                entrust_no = entrust_no
+                entrust_no = entrust_no.ToString()
             };
 
             StockCancelResp resp = getResp<StockCancelResp, StockCancelRequest>(t);
@@ -289,7 +313,7 @@ namespace Stock.Trader.HuaTai
             if (resp.cssweb_code == SuccessCode)
             {
                 ret.Code = TraderResultEnum.SUCCESS;
-                ret.EntrustNo = resp.Item[0].entrust_no.ToString();
+                ret.EntrustNo = resp.Item[0].entrust_no;
             }
             else
             {
@@ -333,9 +357,9 @@ namespace Stock.Trader.HuaTai
         /// </summary>
         /// <param name="exchangeType"></param>
         /// <returns></returns>
-        private StockHolderInfo GetStockHolder(int exchangeType)
+        private AccountInfoItem GetStockHolder(int exchangeType)
         {
-            StockHolderInfo holder = null;
+            AccountInfoItem holder = null;
             for (int i = 0; i < this.resAccountInfo.Item.Count; i++)
             {
                 if (this.resAccountInfo.Item[i].exchange_type == exchangeType.ToString())
@@ -347,11 +371,66 @@ namespace Stock.Trader.HuaTai
             return holder;
         }
 
+        private void FundGetJJsz()
+        {
+            FundGetJjszRequest t = new FundGetJjszRequest
+            {
+                branch_no = this.resAccountInfo.branch_no,
+                custid = this.resAccountInfo.fund_account,
+                fund_account = this.resAccountInfo.fund_account,
+                op_branch_no = this.resAccountInfo.branch_no,
+                op_station = this.resAccountInfo.op_station,
+                password = this.resAccountInfo.trdpwd,
+                uid = this.resAccountInfo.uid
+            };
+
+            FundGetJjszResp result = getResp<FundGetJjszResp, FundGetJjszRequest>(t);
+
+        }
+
+        /// <summary>
+        /// 获取资金信息
+        /// </summary>
+        private TradingAccount.FundInfo GetFunds()
+        {
+            GetFundsRequest t = new GetFundsRequest
+            {
+                branch_no = this.resAccountInfo.branch_no,
+                custid = this.resAccountInfo.fund_account,
+                fund_account = this.resAccountInfo.fund_account,
+                op_branch_no = this.resAccountInfo.branch_no,
+                op_station = this.resAccountInfo.op_station,
+                password = this.resAccountInfo.trdpwd,
+                uid = this.resAccountInfo.uid
+            };
+
+            GetFundsResp result = getResp<GetFundsResp, GetFundsRequest>(t);
+            TradingAccount.FundInfo fundInfo = null;
+            foreach (GetFundsResp.GetFundsRespItem item in result.Item)
+            {
+                if (item.money_type == 0)
+                {
+                    fundInfo = new TradingAccount.FundInfo
+                    {
+                        MoneyType = item.money_type,
+                        MoneyName = item.money_name,
+                        CurrentBalance = item.current_balance,
+                        EnableBalance = item.enable_balance,
+                        FetchBalance = item.fetch_balance,
+                        MarketValue = item.market_value,
+                        AssetBalance = item.asset_balance
+                   };
+                    break;
+                }
+            }
+
+            return fundInfo;
+        }
         /// <summary>
         /// 获取股票持仓
         /// </summary>
         /// <returns></returns>
-        private List<TradingAccount.StockHolderInfo> GetStocks()
+        private List<StockHolderInfo> GetStocks()
         {
             GetStockPositionRequest t = new GetStockPositionRequest
             {
@@ -365,28 +444,24 @@ namespace Stock.Trader.HuaTai
             };
 
             GetStockPositionResp result = getResp<GetStockPositionResp, GetStockPositionRequest>(t);
-            //string str2 = StockUtil.Base64Encode(URLHelper.GetDataWithOutEncode<GetStockPositionRequest>(t), this.encoding);
-            //string positionUrl = "https://tradegw.htsc.com.cn/?" + str2;            
-            //string respStr = this.httpClient.DownloadString(positionUrl);
-            //GetStockPositionResp result = JsonConvert.DeserializeObject<GetStockPositionResp>(StockUtil.Base64Decode(respStr, this.GB2312));
-            List<TradingAccount.StockHolderInfo> list = new List<TradingAccount.StockHolderInfo>();
+            List<StockHolderInfo> list = new List<StockHolderInfo>();
             foreach (GetStockPositionResp.GetStockPositionRespItem si in result.Item)
             {
                 if (si.stock_code != null)
                 {
-                    TradingAccount.StockHolderInfo shi = new TradingAccount.StockHolderInfo
+                    StockHolderInfo shi = new StockHolderInfo
                     {
                         StockAccount = si.stock_account,
                         StockCode = si.stock_code,
                         StockName = si.stock_name,
                         ExchangeName = si.exchange_name,
-                        MarketValue = (decimal) si.market_value,
-                        CostPrice = (decimal)si.cost_price,
-                        CurrentAmount = (int)si.current_amount,
-                        EnableAmount = (int)si.enable_amount,
-                        IncomeBalance = (decimal)si.income_balance,
-                        KeepCostPrice = (decimal)si.keep_cost_price,
-                        LastPrice = (decimal)si.last_price
+                        MarketValue = si.market_value,
+                        CostPrice = si.cost_price,
+                        CurrentAmount = si.current_amount,
+                        EnableAmount = si.enable_amount,
+                        IncomeAmount = si.income_balance,
+                        KeepCostPrice = si.keep_cost_price,
+                        LastPrice = si.last_price
                     };
                     list.Add(shi);
                 }

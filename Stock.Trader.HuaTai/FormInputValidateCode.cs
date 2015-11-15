@@ -42,9 +42,9 @@ namespace Stock.Trader.HuaTai
 
         private void loadTraderInfo()
         {
-            this.txtUsername.Text = Stock.Trader.Settings.Configure.GetStockTraderItem("Trade.Account");
-            this.txtServicePwd.Text = Stock.Trader.Settings.Configure.GetStockTraderItem("Service.Password");
-            this.txtTrdpwd.SetPswStr(Stock.Trader.Settings.Configure.GetStockTraderItem("Trade.Password"));
+            this.txtUsername.Text = Stock.Account.Settings.Configure.GetStockTraderItem("Trade.Account");
+            this.txtServicePwd.Text = Stock.Account.Settings.Configure.GetStockTraderItem("Service.Password");
+            this.txtTrdpwd.SetPswStr(Stock.Account.Settings.Configure.GetStockTraderItem("Trade.Password"));
         }
 
         private void btnOK_Click(object sender, EventArgs e)

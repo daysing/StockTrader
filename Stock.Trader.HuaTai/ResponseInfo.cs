@@ -41,13 +41,13 @@ namespace Stock.Trader.HuaTai
     {
         public string branch_no { get; set; }
         public string fund_account { get; set; }
-        public List<StockHolderInfo> Item { get; set; }
+        public List<AccountInfoItem> Item { get; set; }
         public string op_station { get; set; }
         public string trdpwd { get; set; }
         public string uid { get; set; }
     }
 
-    public class StockHolderInfo
+    public class AccountInfoItem
     {
         public string exchange_name { get; set; }
         public string exchange_type { get; set; }
@@ -68,9 +68,9 @@ namespace Stock.Trader.HuaTai
 
             public int cssweb_test { get; set; }
 
-            public float current_amount { get; set; }
+            public int current_amount { get; set; }
 
-            public float enable_amount { get; set; }
+            public int enable_amount { get; set; }
 
             public string exchange_name { get; set; }
 
@@ -95,6 +95,37 @@ namespace Stock.Trader.HuaTai
 
         public List<GetStockPositionRespItem> Item { get; set; }
     }
+
+    public class GetFundsResp : Response
+    {
+        // "{\"cssweb_code\":\"success\",\"cssweb_type\":\"GET_FUNDS\",
+        // \"item\":[{\"money_type\":\"0\",\"money_name\":\"人民币\",\"current_balance\":\"0\",
+        // \"enable_balance\":\"1.00\",\"fetch_balance\":\"0\",\"market_value\":\"66038.20\",
+        // \"asset_balance\":\"66321.27\"},{\"cssweb_test\":\"0\"}]}"
+
+        public class GetFundsRespItem
+        {
+            public int money_type { get; set; }
+            public string money_name { get; set; }
+            public float current_balance { get; set; }  // 资金余额
+            public float enable_balance { get; set; }   // 可用金额
+            public float fetch_balance { get; set; }    //可取金额
+            public float market_value { get; set; }     // 股票市值
+            public float asset_balance { get; set; }    // 总资产
+        }
+
+        public List<GetFundsRespItem> Item { get; set; }
+    }
+
+    public class FundGetJjszResp : Response
+    {
+        public class FundGetJjszRespItem {
+        }
+
+        public List<FundGetJjszRespItem> Item { get; set; }
+
+    }
+
 
     /// <summary>
     /// 买股票response
@@ -192,12 +223,12 @@ namespace Stock.Trader.HuaTai
            public string stock_name;
            public string date;
            public string bs_name;
-           public string business_amount;
-           public string business_price;
-           public string business_balance;
+           public int business_amount;
+           public float business_price;
+           public float business_balance;
            public string stock_code;
-           public string entrust_no;
-           public string serial_no;
+           public int entrust_no;
+           public int serial_no;
            public string stock_account;
            public string exchange_type;
            public string remark;

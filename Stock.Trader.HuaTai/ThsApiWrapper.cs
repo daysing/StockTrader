@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Window;
+using System.Threading;
 
 namespace Stock.Trader.THS
 {
@@ -43,6 +44,11 @@ namespace Stock.Trader.THS
             Win32API.GetWindowText(hWnd, out sb, 500);
 
             return sb.szText;
+        }
+
+        public static void SetWindowText(IntPtr hWnd)
+        {
+            Win32API.SetWindowText(hWnd, "hello");
         }
 
         public static String GetClassName(IntPtr hWnd)
@@ -65,7 +71,7 @@ namespace Stock.Trader.THS
 
                     if (clazz == "#32770" && text == "")
                     {
-                        Console.WriteLine("找到窗口：{0}", Convert.ToString(p.ToInt64(), 16));
+                        Console.WriteLine("寻找价格提示窗口：{0}", Convert.ToString(p.ToInt64(), 16));
                         IntPtr hParent = Win32API.GetParent(p);
                         String pText = GetWindowText(hParent);
                         if (pText == @"网上股票交易系统5.0")
@@ -88,10 +94,7 @@ namespace Stock.Trader.THS
                                     Win32API.SendMessage(btnYes, Win32Code.WM_LBUTTONUP, 0, 0);
                                 }
                             }
-
-
                         }
-
                     }
                     return true;
                 }
@@ -109,8 +112,9 @@ namespace Stock.Trader.THS
         /// </summary>
         /// <param name="hWnd"></param>
         /// <returns></returns>
-        public static IntPtr GetEntrustTips(IntPtr hWnd)
+        public static String GetEntrustTipsAndClickYes(IntPtr hWnd)
         {
+            string no = "0";
             IntPtr confirmWindow = IntPtr.Zero;
             Win32API.EnumWindowsProc EnumWindowsProc = delegate(IntPtr p, int lParam)
             {
@@ -128,12 +132,37 @@ namespace Stock.Trader.THS
                             IntPtr pStatic = Win32API.GetDlgItem(p, staticId);
                             if(pStatic != IntPtr.Zero) {
                                 confirmWindow = p;
+                                byte[] lParamStr = new byte[100];
+                                Win32API.SendMessage(pStatic, Win32Code.WM_GETTEXT, 100, lParamStr);
+                                String sText = Encoding.Unicode.GetString(lParamStr);
+                                Console.WriteLine("找到委托提示窗口：{0}, 合同：{1}", Convert.ToString(p.ToInt64(), 16), sText);
+                                if (sText.Contains("委托已成功提交"))
+                                {
+                                    int i = sText.IndexOf("。");
+                                    no = sText.Substring(17, i - 17);
+                                    int btnYesId = 0x0002;
+                                    IntPtr btnYes = Win32API.GetDlgItem(p, btnYesId);
 
-                                String sText = GetWindowText(pStatic);
-     
-                                // 检查static label, 获取合同编号
-                                Console.WriteLine("IntPtr: {2}, text: {0}, clazz: {1}====Parent Ptr: {3}, Text;{4}", text, clazz, Convert.ToString(p.ToInt32(), 16), hParent, pText);
-                                Console.WriteLine("text: {0}, Ptr{1}", sText, Convert.ToString(pStatic.ToInt32(), 16));
+                                    //int pbId;
+                                    //Win32API.GetWindowThreadProcessId(btnYes, out pbId);
+                                    POINT pt = new POINT();
+                                    pt.x = 1;
+                                    pt.y = 1;
+                                    Win32API.SendMessage(btnYes, Win32Code.WM_SETFOCUS, 0, 0);
+                                    Win32API.PostMessage(btnYes, Win32Code.WM_MOUSEMOVE, 0, ref pt);
+                                    Win32API.PostMessage(btnYes, Win32Code.WM_LBUTTONDOWN, 0, ref pt);
+                                    Win32API.PostMessage(btnYes, Win32Code.WM_LBUTTONUP, 0, ref pt);
+                                    Win32API.PostMessage(btnYes, Win32Code.WM_LBUTTONDOWN, 0, ref pt);
+                                    Win32API.PostMessage(btnYes, Win32Code.WM_LBUTTONUP, 0, ref pt);
+                                    //Win32API.keybd_event(13, 0, 0, pbId);
+                                    //Win32API.keybd_event(13, 0, 2, pbId);
+
+                                    Win32API.SendMessage(btnYes, Win32Code.WM_SETFOCUS, 0, 0);
+                                    Win32API.SendMessage(btnYes, Win32Code.WM_LBUTTONDOWN, 0, 0);
+                                    Win32API.SendMessage(btnYes, Win32Code.WM_LBUTTONUP, 0, 0);
+                                    Win32API.SendMessage(btnYes, Win32Code.WM_LBUTTONDOWN, 0, 0);
+                                    Win32API.SendMessage(btnYes, Win32Code.WM_LBUTTONUP, 0, 0);
+                                }
                             }
                         }
 
@@ -144,9 +173,9 @@ namespace Stock.Trader.THS
                 return false;
             };
 
-           Win32API.EnumChildWindows(hWnd, EnumWindowsProc, new IntPtr(100));
+            Win32API.EnumChildWindows(IntPtr.Zero, EnumWindowsProc, new IntPtr(100));
 
-           return confirmWindow;
+           return no;
         }
     }
 }

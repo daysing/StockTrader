@@ -200,7 +200,6 @@ namespace Stock.Trader.HuaTai
 
         #region 接口实现
 
-        WebStockTrader wst = null;
         /// <summary>
         /// 检测
         /// </summary>
