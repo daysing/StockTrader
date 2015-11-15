@@ -26,8 +26,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Stock.Trader;
 
-namespace Stock.Trader
+namespace Stock.Account
 {
     /// <summary>
     /// 这个类的实例是临界资源，只允许单实例运行
@@ -66,6 +67,10 @@ namespace Stock.Trader
             // 保存下单记录到文件
         }
 
+        public void GetTransList()
+        {
+            trader.GetTodayTradeList();
+        }
         /// <summary>
         /// 申购基金
         /// </summary>
@@ -73,7 +78,7 @@ namespace Stock.Trader
         /// <param name="total"></param>
         public void PurchaseFundSZ(String code, float total)
         {
-            trader.PurchaseFundSZ(code, total);
+            //trader.PurchaseFundSZ(code, total);
         }
 
         /// <summary>
@@ -83,7 +88,7 @@ namespace Stock.Trader
         /// <param name="num">份额</param>
         public void RedempteFundSZ(String code, int num)
         {
-            trader.RedempteFundSZ(code, num);
+            //trader.RedempteFundSZ(code, num);
         }
 
         /// <summary>
@@ -93,7 +98,7 @@ namespace Stock.Trader
         /// <param name="num">合并数量</param>
         public void MergeFundSZ(String code, int num)
         {
-            trader.MergeFundSZ(code, num);
+           // trader.MergeFundSZ(code, num);
         }
 
         /// <summary>
@@ -103,7 +108,7 @@ namespace Stock.Trader
         /// <param name="num">分拆数量</param>
         public void PartFundSZ(String code, int num)
         {
-            trader.PartFundSZ(code, num);
+           // trader.PartFundSZ(code, num);
         }
 
         /// <summary>
@@ -113,7 +118,7 @@ namespace Stock.Trader
         /// <param name="total"></param>
         public void PurchaseFundSH(String code, float total)
         {
-            trader.PurchaseFundSH(code, total);
+           // trader.PurchaseFundSH(code, total);
         }
 
         /// <summary>
@@ -123,7 +128,7 @@ namespace Stock.Trader
         /// <param name="num">份额</param>
         public void RedempteFundSH(String code, int num)
         {
-            trader.RedempteFundSH(code, num);
+            //trader.RedempteFundSH(code, num);
         }
 
         /// <summary>
@@ -133,7 +138,7 @@ namespace Stock.Trader
         /// <param name="num">合并数量</param>
         public void MergeFundSH(String code, int num)
         {
-            trader.MergeFundSH(code, num);
+           // trader.MergeFundSH(code, num);
         }
 
         /// <summary>
@@ -143,7 +148,7 @@ namespace Stock.Trader
         /// <param name="num">分拆数量</param>
         public void PartFundSH(String code, int num)
         {
-            trader.PartFundSH(code, num);
+            //trader.PartFundSH(code, num);
         }
         /// <summary>
         /// 撤销超时未成交股票
@@ -162,7 +167,7 @@ namespace Stock.Trader
             // 读取当日的操作日志文件，分析后上传到服务器
         }
 
-        internal TraderResult CancelStock(string code)
+        internal TraderResult CancelStock(int code)
         {
             return trader.CancelStock(code);
         }

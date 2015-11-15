@@ -48,10 +48,24 @@ namespace Stock.Market
         private Bid lastData;
         private Queue<Bid> queue = new Queue<Bid>();
 
+        private String code = null;
+        // private String name = null;
+
+        public BidCacheQueue(String code)
+        {
+            this.code = code;
+        }
+
+        public String Code  { get {return code;} }
+        // public String Name {get {return name;}}
+
         public Bid LastData
         {
-            get { return lastData; }
-          //  set { lastData = value; }
+            get {
+                if (lastData == null)
+                    lastData = new Bid();
+                return lastData; 
+            }
         }
 
         List<Bid> bids = new List<Bid>();

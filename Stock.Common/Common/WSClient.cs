@@ -26,9 +26,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using WebSocketSharp;
-using Stock.Trader.Settings;
+using Stock.Account.Settings;
 using System.Threading;
-using Stock.Common;
+using Stock.Sqlite;
 using System.Windows.Forms;
 
 namespace Stock.Common
@@ -43,11 +43,13 @@ namespace Stock.Common
         public event Received Received30;
         public event Received Received60; 
         public event Received ReceivedDay;
-        public event Received ReceivedFund;
+        public event Received ReceivedFundNetValue;
+        public event Received ReceivedFundIdxCons;
         public event Received ReceivedAllStrategy;
         public event Received ReceivedMyStrategy;
 
 
+        public const string CMD_GET_A_STOCK_BID = "31";
 
         private static WSClient instance = new WSClient();
         public static WSClient Instance
@@ -60,32 +62,45 @@ namespace Stock.Common
         private System.Threading.Timer timer;
         private WSClient()
         {
-            //timer = new System.Threading.Timer(timer_Elapsed);
-        }
-        void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            
+            timer = new System.Threading.Timer(new TimerCallback(timerCall), this, 30000, 0);
         }
 
+        private void timerCall(object obj)
+        {
+            if(wsChat.ReadyState == WebSocketState.Open)
+                wsChat.Ping();
+//            this.SendMessage("91: ping");
+        }
+ 
         const string SERVER = "server";
         const string USERNAME = "username";
         const string PASSWORD = "password";
 
         showNotifyForm showForm = null;
+        private EventHandler openHandler = null;
+        private EventHandler<CloseEventArgs> closeHandler;
+        private EventHandler<ErrorEventArgs> errorHandler;
+        private EventHandler<MessageEventArgs> messageHandler;
         public void InitWebSocket()
         {
-            form.Show();
+            // form.Show();
             showForm = ShowNotifyForm;
+
             wsChat = new WebSocket(String.Format("ws://{0}/websock/stockmarket", Configure.GetStockTraderItem(SERVER)));
-            wsChat.OnOpen += new EventHandler(wsChat_OnOpen);
-            wsChat.OnClose += new EventHandler<CloseEventArgs>(wsChat_OnClose);
-            wsChat.OnError += new EventHandler<ErrorEventArgs>(wsChat_OnError);
-            wsChat.OnMessage += new EventHandler<MessageEventArgs>(wsChat_OnMessage);
+            openHandler = new EventHandler(wsChat_OnOpen);
+            wsChat.OnOpen += openHandler;
+            closeHandler = new EventHandler<CloseEventArgs>(wsChat_OnClose);
+            wsChat.OnClose += closeHandler;
+            errorHandler = new EventHandler<ErrorEventArgs>(wsChat_OnError);
+            wsChat.OnError += errorHandler;
+            messageHandler = new EventHandler<MessageEventArgs>(wsChat_OnMessage);
+            wsChat.OnMessage += messageHandler;
             connectServer();
         }
 
         public void SendMessage(String s)
         {
+            if (wsChat == null) InitWebSocket();
             wsChat.SendAsync(s, null);
         }
 
@@ -135,8 +150,10 @@ namespace Stock.Common
                     Received60(e.Data);
                     break;
                 case "40":      // 基金净值
+                    ReceivedFundNetValue(e.Data.Substring(3));
                     break;
                 case "45":      // 基金指数的成分股
+                    ReceivedFundIdxCons(e.Data.Substring(3));
                     break;
                 case "71":
                     showForm.Invoke(e.Data.Substring(3));
@@ -160,11 +177,11 @@ namespace Stock.Common
 
         void wsChat_OnError(object sender, ErrorEventArgs e)
         {
+            wsChat.OnOpen -= openHandler;
+            wsChat.OnClose -= closeHandler;
+            wsChat.OnError -= errorHandler;
+            wsChat.OnMessage -= messageHandler;
             wsChat.Close();
-            wsChat.OnOpen -= new EventHandler(wsChat_OnOpen);
-            wsChat.OnClose -= new EventHandler<CloseEventArgs>(wsChat_OnClose);
-            wsChat.OnError -= new EventHandler<ErrorEventArgs>(wsChat_OnError);
-            wsChat.OnMessage -= new EventHandler<MessageEventArgs>(wsChat_OnMessage);
             MessageBox.Show("链接服务器出错，1秒后重连");
             Thread.Sleep(1000);
             InitWebSocket();

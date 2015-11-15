@@ -5,7 +5,7 @@ using System.Text;
 using System.Configuration;
 using System.Collections;
 
-namespace Stock.Trader.Settings
+namespace Stock.Account.Settings
 {
     public class Configure
     {
@@ -15,6 +15,8 @@ namespace Stock.Trader.Settings
 
         public const String FONT_SIZE = "font.size";
         public const String FONT_FAMILY = "font.family";
+        public const string TRADE_FEE = "money.rate.fee";
+        public const string TRADE_TAX = "money.rate.tax";
 
         public class Clazz
         {

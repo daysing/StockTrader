@@ -23,5 +23,13 @@ namespace Stock.Common
                     this.textBox1.AppendText(s + "\r\n");
             //}));
         }
+
+        private void textBox2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Return)
+            {
+                WSClient.Instance.SendMessage(this.textBox2.Text);
+            }
+        }
     }
 }

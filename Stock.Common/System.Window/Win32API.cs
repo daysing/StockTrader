@@ -125,10 +125,22 @@ namespace System.Window
 			static public extern bool GetMenuItemRect(IntPtr hWnd, IntPtr hMenu, uint Item, ref RECT rc);
 		[DllImport("user32.dll", ExactSpelling=true, CharSet=CharSet.Auto)]
 			public static extern IntPtr GetParent(IntPtr hWnd);
+
+        [DllImport("user32.dll", EntryPoint = "keybd_event")]
+        public static extern void keybd_event(
+            byte bVk,    //虚拟键值
+            byte bScan,// 一般为0
+            int dwFlags,  //这里是整数类型  0 为按下，2为释放
+            int dwExtraInfo  //这里是整数类型 一般情况下设成为 0
+        );
+        [DllImport("User32.dll", CharSet = CharSet.Auto)]
+        public static extern int GetWindowThreadProcessId(IntPtr hwnd, out int ID);
+
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-
+        public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, byte[] lParam);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, StringBuilder lParam); 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, string lParam);

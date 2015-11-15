@@ -44,7 +44,7 @@ namespace Stock.Trader
         /// </summary>
         public TraderResultEnum Code { get; set; }
         public string Message { get; set; }
-        public string EntrustNo { get; set; }
+        public int EntrustNo { get; set; }
         public object Result { get; set; }
 
         public TraderResult()

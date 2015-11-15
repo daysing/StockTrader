@@ -41,9 +41,10 @@ namespace Stock.Strategy
         event StockRemoveHandler OnStockRemove;
         event StockAddHandler OnStockAdd;
 
-        string Name { get; set; }
-        string Description { get; set; }
-        bool IsValid { get; set; }
+        int Id { get; set; }
+        string Name { get; }
+        string Description { get; }
+        bool Enabled { get; set; }
         String[] StockPool { get; }
 
         /// <summary>

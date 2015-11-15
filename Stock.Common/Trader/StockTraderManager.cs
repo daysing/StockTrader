@@ -25,8 +25,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Stock.Common;
-using Stock.Trader.Settings;
+using Stock.Sqlite;
+using Stock.Account.Settings;
 
 namespace Stock.Trader
 {
@@ -48,6 +48,7 @@ namespace Stock.Trader
             if (stockTrader == null)
             {
                 stockTrader = DllUtils.CreateInstance<IStockTrader>(Configure.GetCurrentStock().Dll, Configure.GetCurrentStock().ClazzName);
+
                 stockTrader.Init();
             }
             return stockTrader;

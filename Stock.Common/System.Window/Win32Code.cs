@@ -94,6 +94,7 @@ namespace System.Window
         public const int VK_SHIFT = 0x10;
         public const int VK_CONTROL = 0x11;
         public const int VK_MENU = 0x12;
+        public const int VK_ALT = 0X12;
         public const int VK_PAUSE = 0x13;
         public const int VK_CAPITAL = 0x14;
         public const int VK_ESCAPE = 0x1B;

@@ -30,8 +30,9 @@ using System.Collections;
 
 using Stock.Strategy;
 using System.Threading;
+using Stock.Sqlite;
+using Stock.Account.Settings;
 using Stock.Common;
-using Stock.Trader.Settings;
 
 namespace Stock.Market
 {
@@ -60,7 +61,7 @@ namespace Stock.Market
         public static void AddBid(Bid bid) {
             if (bid == null) return;
             if (!bidCache.ContainsKey(bid.Code))
-                bidCache.Add(bid.Code, new BidCacheQueue());
+                bidCache.Add(bid.Code, new BidCacheQueue(bid.Code));
 
             bidCache[bid.Code].Enqueue(bid);
         }
@@ -90,8 +91,9 @@ namespace Stock.Market
                 rsmt.AddStock(code);
             }
             rsmt.Init();
-            listenThread = new Thread(new ThreadStart(rsmt.Run));
-            listenThread.Start();
+            rsmt.Run();
+            //listenThread = new Thread(new ThreadStart(rsmt.Run));
+            //listenThread.Start();
 
             timer.Start();
             timer.Elapsed += new System.Timers.ElapsedEventHandler(Timer_TimesUp);
@@ -99,11 +101,8 @@ namespace Stock.Market
 
         public void Close()
         {
-            if (listenThread != null)
-            {
-                listenThread.Abort();
+            if(rsmt != null)
                 rsmt.Close();
-            }
         }
 
         /// <summary>
@@ -117,15 +116,16 @@ namespace Stock.Market
                 string code = StockUtil.GetFullCode(s);
                 if (!StockMarketManager.bidCache.ContainsKey(code))
                 {
-                    StockMarketManager.bidCache.Add(code, new BidCacheQueue());
+                    StockMarketManager.bidCache.Add(code, new BidCacheQueue(code));
                 }
                 StockMarketManager.bidCache[code].OnBidChange += strategy.OnStockDataChanged;
             }
 
             // 调用策略
             this.OnTicket += strategy.OnTicket;
+            strategy.Run();
         }
-        
+       
 
     }
 }

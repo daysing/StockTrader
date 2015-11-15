@@ -60,7 +60,7 @@ namespace Stock.Market
         public float CurrentPrice { get; set; }    // 成交价
         public long Volumn { get; set; }     // 成交量
         public float Turnover { get; set; }      // 成交金额
-        public DateTime PushTime;  // 推送时间
+        public String PushTime{get; set;}  // 推送时间
 
         private ICollection<GoodsData> buyList = new List<GoodsData>();
         private ICollection<GoodsData> sellList = new List<GoodsData>();
@@ -69,6 +69,7 @@ namespace Stock.Market
         {
             get
             {
+                if (buyList.Count == 0) return new GoodsData[5] { new GoodsData(0, 0), new GoodsData(0, 0), new GoodsData(0, 0), new GoodsData(0, 0), new GoodsData(0, 0) };
                 return this.buyList.ToArray<GoodsData>();   
             }
         }
@@ -77,6 +78,8 @@ namespace Stock.Market
         {
             get
             {
+                if (sellList.Count == 0) return new GoodsData[5] { new GoodsData(0, 0), new GoodsData(0, 0), new GoodsData(0, 0), new GoodsData(0, 0), new GoodsData(0, 0)};
+
                 return this.sellList.ToArray<GoodsData>();   
             }
         }
