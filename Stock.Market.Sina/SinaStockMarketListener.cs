@@ -25,10 +25,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Stock.Common;
+using Stock.Sqlite;
 using System.Net;
 using System.Threading;
 using System.Diagnostics;
+using Stock.Common;
 
 namespace Stock.Market.Sina
 {
@@ -43,62 +44,70 @@ namespace Stock.Market.Sina
             client = new HttpClient(this.Cookie);
         }
 
+        Thread listenThread = null;
         public override void Run()
         {
-            while (true)
-            {
-                internalRun();
-                Thread.Sleep(3000);
-            }
+            listenThread = new Thread(new ThreadStart(internalRun));
+            listenThread.Start();
         }
 
         private List<string> s_codes = new List<string>();
         private  void internalRun()
         {
-            bool isSent = false;
-            int n = 150;
-            if (s_codes.Count == 0)
+            while (true)
             {
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < codes.Count; i++)
+                Thread.Sleep(2000);
+                bool isSent = false;
+                int n = 150;
+                if (s_codes.Count == 0)
                 {
-                    if ((i % n) < n)
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < codes.Count; i++)
                     {
-                        isSent = false;
-                        sb.Append(StockUtil.GetFullCode(codes[i]));
-                        sb.Append(",");
+                        if ((i % n) < n)
+                        {
+                            isSent = false;
+                            sb.Append(StockUtil.GetFullCode(codes[i]));
+                            sb.Append(",");
+                        }
+                        if (i % n == (n - 1))
+                        {
+                            sb.Remove(sb.Length - 1, 1);
+                            s_codes.Add(sb.ToString());
+                            sb.Clear();
+                            isSent = true;
+                        }
                     }
-                    if (i % n == (n - 1))
+                    if (!isSent)
                     {
                         sb.Remove(sb.Length - 1, 1);
                         s_codes.Add(sb.ToString());
-                        sb.Clear();
-                        isSent = true;
                     }
                 }
-                if (!isSent)
+
+                foreach (string item in s_codes)
                 {
-                    sb.Remove(sb.Length - 1, 1);
-                    s_codes.Add(sb.ToString());
+                    sendRequest(item);
                 }
             }
+        }
 
-            foreach (string item in s_codes)
+        public override void Close()
+        {
+            if (this.listenThread != null)
             {
-                sendRequest(item);
+                this.listenThread.Abort();
             }
         }
+
         private void sendRequest(string t_codes)
         {
             //string address = String.Format(dataurl, String.Join(",", t_codes.ToArray()));
-            string address = String.Format(dataurl, t_codes);
-            //Uri addr = new Uri(address);
-            // if (client.IsBusy) return;
-            //client = new HttpClient();
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
+            // string address = String.Format(dataurl, t_codes);
+            //Stopwatch watch = new Stopwatch();
+            //watch.Start();
             //string resp = client.Get(address);
-            string resp = client.Get(address);
+            string resp = client.Get(String.Format(dataurl, t_codes));
             if (resp == null)
             {
                 Console.WriteLine("没有获取到数据");
@@ -113,9 +122,11 @@ namespace Stock.Market.Sina
                 {
                     Bid bid = Parse(data[i]);
                     StockMarketManager.AddBid(bid);
+                    //if (bid.Code == "sz150153")
+                    //    Console.WriteLine("当前时间{0}： 数据为{1}", DateTime.Now, data[i]);
                 }
             }
-            Console.WriteLine("耗时{0}", watch.ElapsedMilliseconds);
+            //Console.WriteLine("耗时{0}", watch.ElapsedMilliseconds);
             //client.DownloadString(address);
             //client.Timeout = 700;
             //client.DownloadStringAsyncWithTimeout(addr);
@@ -198,6 +209,7 @@ namespace Stock.Market.Sina
             bid.AddSellGoodsData(new Bid.GoodsData(float.Parse(items[SELL_4_P]), int.Parse(items[SELL_4_A])));
             bid.AddSellGoodsData(new Bid.GoodsData(float.Parse(items[SELL_5_P]), int.Parse(items[SELL_5_A])));
 
+            bid.PushTime = items[31];
             return bid;
         }
     }

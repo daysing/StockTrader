@@ -31,7 +31,9 @@ using System.Windows.Forms;
 using System.Window;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Stock.Sqlite;
 using Stock.Common;
+using Stock.Account;
 
 namespace Stock.Trader.HuaTai
 {
@@ -131,6 +133,16 @@ namespace Stock.Trader.HuaTai
             Win32API.SendMessage(htvi, Win32Code.TVM_SELECTITEM, Win32Code.TVGN_CARET, hQueryZjgp);
         }
 
+        private void ClickQueryDrwtTreeViewItem()
+        {
+            Win32API.SendMessage(htvi, Win32Code.TVM_SELECTITEM, Win32Code.TVGN_CARET, hQueryDrwt);
+        }
+
+        private void ClickQueryDrcjTreeViewItem()
+        {
+            Win32API.SendMessage(htvi, Win32Code.TVM_SELECTITEM, Win32Code.TVGN_CARET, hQueryDrcj);
+        }
+
         private void ClickSzSgjjTreeViewItem()
         {
             Win32API.SendMessage(htvi, Win32Code.TVM_SELECTITEM, Win32Code.TVGN_CARET, hQtjyFjjjywJjsg);
@@ -186,6 +198,7 @@ namespace Stock.Trader.HuaTai
             hQtjySzLOFjjCd = Win32API.SendMessage(htvi, Win32Code.TVM_GETNEXTITEM, Win32Code.TVGN_NEXT, hQtjySzLOFjjFc);
             hQtjySzLOFjjCxdrwt = Win32API.SendMessage(htvi, Win32Code.TVM_GETNEXTITEM, Win32Code.TVGN_NEXT, hQtjySzLOFjjCd);
             hQtjySzLOFjjCxdrcj = Win32API.SendMessage(htvi, Win32Code.TVM_GETNEXTITEM, Win32Code.TVGN_NEXT, hQtjySzLOFjjCxdrwt);
+
         }
 
         private void InitQtjyFjjjFuncHandler()
@@ -250,6 +263,7 @@ namespace Stock.Trader.HuaTai
         }
 
         #endregion
+
         #endregion
 
         #region 接口实现
@@ -271,17 +285,17 @@ namespace Stock.Trader.HuaTai
             InitQueryFuncHandler();
 
             // 其他交易           
-            InitQtjyFuncHandler();
+            //InitQtjyFuncHandler();
 
             // 其他交易-分级基金业务
-            InitQtjyFjjjFuncHandler();
+            //InitQtjyFjjjFuncHandler();
 
             // 其他交易-上证LOF基金
-            InitQtjySzLOFjjFuncHandler();
+            //InitQtjySzLOFjjFuncHandler();
 
             // 登录Web 接口
-            // wst = new WebStockTrader();
-            // wst.Init();
+            //wst = new WebStockTrader();
+            //wst.Init();
 
         }
 
@@ -303,15 +317,16 @@ namespace Stock.Trader.HuaTai
             hCtrl = Win32API.GetDlgItem(hPanel, BUY_TXT_NUM);
             Win32API.SendMessage(hCtrl, Win32Code.WM_SETTEXT, 0, num.ToString());
 
-            // 点击买入按钮
+            // 点击卖出按钮
             hCtrl = Win32API.GetDlgItem(hPanel, BUY_BTN_OK);
-            Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
-            Win32API.SendMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
+            Win32API.PostMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
+            Win32API.PostMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
+
+
+            ClickQueryDrcjTreeViewItem();
 
             TraderResult result = new TraderResult();
             result.Code = TraderResultEnum.SUCCESS;
-
-            result.EntrustNo = new Random().Next(100000).ToString();
             return result;
         }
 
@@ -325,29 +340,27 @@ namespace Stock.Trader.HuaTai
             ClickBuyTreeViewItem();
 
             // 设定代码,价格,数量
-            //IntPtr hPanel = GetDetailPanel();
-            //IntPtr hCtrl = Win32API.GetDlgItem(hPanel, BUY_TXT_CODE);
-            //Win32API.SendMessage(hCtrl, Win32Code.WM_SETTEXT, 0, StockUtil.GetShortCode(code));
-            //hCtrl = Win32API.GetDlgItem(hPanel, BUY_TXT_PRICE);
-            //Win32API.SendMessage(hCtrl, Win32Code.WM_SETTEXT, 0, price.ToString());
-            //hCtrl = Win32API.GetDlgItem(hPanel, BUY_TXT_NUM);
-            //Win32API.SendMessage(hCtrl, Win32Code.WM_SETTEXT, 0, num.ToString());
+            IntPtr hPanel = GetDetailPanel();
+            IntPtr hCtrl = Win32API.GetDlgItem(hPanel, BUY_TXT_CODE);
+            Win32API.SendMessage(hCtrl, Win32Code.WM_SETTEXT, 0, StockUtil.GetShortCode(code));
+            hCtrl = Win32API.GetDlgItem(hPanel, BUY_TXT_PRICE);
+            Win32API.SendMessage(hCtrl, Win32Code.WM_SETTEXT, 0, price.ToString());
+            hCtrl = Win32API.GetDlgItem(hPanel, BUY_TXT_NUM);
+            Win32API.SendMessage(hCtrl, Win32Code.WM_SETTEXT, 0, num.ToString());
 
-            //// 点击买入按钮
-            //hCtrl = Win32API.GetDlgItem(hPanel, BUY_BTN_OK);
-            //Win32API.PostMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
-            //Win32API.PostMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
+            // 点击买入按钮
+            hCtrl = Win32API.GetDlgItem(hPanel, BUY_BTN_OK);
+            Win32API.PostMessage(hCtrl, Win32Code.WM_LBUTTONDOWN, 0, 0);
+            Win32API.PostMessage(hCtrl, Win32Code.WM_LBUTTONUP, 0, 0);
 
-            Thread.Sleep(100);
-            IntPtr pTip = THS.ThsApiWrapper.GetPriceTipInfoAndClickYes(hWnd);
+            ClickQueryDrcjTreeViewItem();
 
             TraderResult result = new TraderResult();
             result.Code = TraderResultEnum.SUCCESS;
-            result.EntrustNo = "123";
             return result;
         }
 
-        protected override TraderResult internalCancelStock(string entrustNo)
+        protected override TraderResult internalCancelStock(int entrustNo)
         {
             return wst.CancelStock(entrustNo);
             // ClickCancelTreeViewItem();
@@ -357,7 +370,7 @@ namespace Stock.Trader.HuaTai
         {
             // 刷新
             Win32API.PostMessage(hWnd, Win32Code.WM_KEYDOWN, Win32Code.VK_F5, 0);
-            // wst.Keep();
+            wst.Keep();
         }
 
         private IntPtr findWndClass(IntPtr hWnd, IntPtr child)
@@ -380,79 +393,25 @@ namespace Stock.Trader.HuaTai
 
         protected override TraderResult internalGetTradingAccountInfo()
         {
-            #region test
-            //Win32API.SendMessage(htvi, Win32Code.TVM_SELECTITEM, Win32Code.TVGN_CARET, hQueryZjgp);
-            
-            // TODO:发送复制命令,这里不能正常复制
-            IntPtr list = GetPositonList();
 
-            // Win32API.EnumChildWindows(hWnd, ADA_EnumWindowsProc, IntPtr.Zero);
-            // Win32API.EnumWindowsProc ewp = new Win32API.EnumWindowsProc(ADA_EnumWindowsProc);
-            // Win32API.EnumWindows(ewp, 0);
+            TraderResult result = new TraderResult();
+            result.Code = TraderResultEnum.SUCCESS;
 
-            // findWndClass(list, IntPtr.Zero);
-            //IntPtr hClip = Win32API.FindWindowEx(list, IntPtr.Zero, "CLIPBRDWNDCLASS", null);
-//            IntPtr hClip = Win32API.FindWindow("CLIPBRDWNDCLASS", null);
-
-            //Win32API.OpenClipboard(hClip);
-            //Win32API.SetClipboardData(Win32Code.CF_UNICODETEXT, IntPtr.Zero);
-            //Thread.Sleep(100);
-            //IntPtr hm = Win32API.GetClipboardData(13);
-            
-
-            //StringBuilder sb = new StringBuilder(2000);
-            //Win32API.SendMessage(list,Win32Code.WM_GETTEXT, 2000, sb);
-            //String s = Clipboard.GetDataObject().GetData(DataFormats.UnicodeText).ToString();
-            //MessageBox.Show(hm.ToString());
-            //Win32API.EmptyClipboard();
-            //Win32API.CloseClipboard();
-            //IntPtr p = Win32API.GetClipboardData(13);
-            // Win32API.SetClipboardViewer(new Form().Handle);
-
-//            String s = Clipboard.GetDataObject().GetData(DataFormats.UnicodeText).ToString();
-            //MessageBox.Show(s);
-            //Thread.Sleep(5000);
-            //POINT p = new POINT();
-            //p.x = 8000;
-            //p.y = 0;
-            //Win32API.PostMessage(list, Win32Code.WM_MOUSEMOVE, 0, ref p);
-            //Win32API.PostMessage(list, Win32Code.WM_LBUTTONDOWN, 0, ref p);
-            //Win32API.PostMessage(list, Win32Code.WM_LBUTTONUP, 0, ref p);
-            //Win32API.SendMessage(list, Win32Code.WM_RENDERFORMAT, Win32Code.CF_UNICODETEXT, 0);
-
-            //Win32API.SendMessage(new IntPtr(0x00270bb2), Win32Code.WM_RENDERFORMAT, Win32Code.CF_UNICODETEXT, 0);
-
-
-            //Win32API.PostMessage(list, Win32Code.WM_KEYDOWN, Win32Code.VK_CONTROL, 0x101D0001);
-            //Thread.Sleep(80);
-            //Win32API.PostMessage(list, Win32Code.WM_KEYDOWN, Win32Code.VK_C, 0x102E0001);
-            //Win32API.PostMessage(list, Win32Code.WM_CHAR, Win32Code.VK_C, 0x102E0001);
-            //Win32API.PostMessage(list, Win32Code.WM_KEYUP, Win32Code.VK_C, 0x102E0001);
-            //Thread.Sleep(80);
-            //Win32API.PostMessage(list, Win32Code.WM_KEYUP, Win32Code.VK_CONTROL, 0x101D0001);
-           
-            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018C6A0);
-            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018C654);
-            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBFC);
-            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBDC);
-            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018AD90);
-            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018AD44);
-            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBFC);
-            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBDC);
-            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018D098);
-            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018D04C);
-            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBFC);
-            //Win32API.SendMessage(hWnd, 0xC3C9, 0, 0x0018FBDC);
-            #endregion
-
-            // return wst.GetTradingAccountInfo();
-            return null;
+            return result;
 
         }
 
         protected override TraderResult internalGetTodayTradeList()
         {
-            throw new NotImplementedException();
+            TraderResult result = new TraderResult();
+            result.Code = TraderResultEnum.SUCCESS;
+
+            return result;
+        }
+
+        protected override TraderResult internalGetTodayEntrustList()
+        {
+            return base.internalGetTodayEntrustList();
         }
 
         #region 基金操作
@@ -611,5 +570,78 @@ namespace Stock.Trader.HuaTai
 
         #endregion
 
+        private List<EntrustRecord> GetEntrustList(String[] ps)
+        {
+            List<EntrustRecord> records = new List<EntrustRecord>();
+            for (int i = 1; i < ps.Length; i++)
+            {
+                Console.WriteLine(ps[i]);
+                String[] stocks = ps[i].Split(new string[] { "\t" }, StringSplitOptions.None);
+                EntrustRecord rec = new EntrustRecord
+                {
+                    Date = DateTime.Parse(stocks[0] + " " + stocks[6]),
+                    StockCode = stocks[1],
+                    StockName = stocks[2],
+                    OperType = stocks[3],
+                    Price = float.Parse(stocks[4]),
+                    Amount = int.Parse(stocks[5]),
+                    TransactAmount= int.Parse(stocks[7]),
+                    TransactPrice = float.Parse(stocks[8]),
+                    No = int.Parse(stocks[1]),
+               };
+                records.Add(rec);
+            }
+
+            return records;
+        }
+
+        private List<TransactionRecord> GetTransactionList(String[] ps)
+        {
+            List<TransactionRecord> records = new List<TransactionRecord>();
+            for (int i = 1; i < ps.Length; i++)
+            {
+                Console.WriteLine(ps[i]);
+                String[] stocks = ps[i].Split(new string[] { "\t" }, StringSplitOptions.None);
+                TransactionRecord rec = new TransactionRecord
+                {
+                    Date = DateTime.Parse(stocks[0]),
+                    EntrustNo = int.Parse(stocks[1]),
+                    StockCode = stocks[2],
+                    StockName = stocks[3],
+                    OperType = stocks[4],
+                    Amount = int.Parse(stocks[5]),
+                    Price = float.Parse(stocks[6]),
+                    Turnover = float.Parse(stocks[7]),
+                    TransactionNo = int.Parse(stocks[10])
+                };
+                records.Add(rec);
+            }
+
+            return records;
+        }
+
+        private void GetStocks(TradingAccount account, String[] ps)
+        {
+            for (int i = 1; i < ps.Length; i++)
+            {
+                String[] stocks = ps[i].Split(new string[] { "\t" }, StringSplitOptions.None);
+                StockHolderInfo shi = new StockHolderInfo
+                {
+                   StockCode = stocks[0],
+                   StockName = stocks[1],
+                   CurrentAmount = int.Parse(stocks[2]),
+                   EnableAmount = int.Parse(stocks[3]),
+                   IncomeAmount = int.Parse(stocks[4]),
+                   CostPrice = float.Parse(stocks[5]),
+                   KeepCostPrice = float.Parse(stocks[6]),
+                   LastPrice = float.Parse(stocks[7]),
+                   MarketValue = float.Parse(stocks[10]),
+                   ExchangeName = stocks[11],
+                   StockAccount = stocks[12]
+                };
+                account.AddStockHolder(shi);
+            }
+
+        }
     }
 }
